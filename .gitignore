@@ -1,0 +1,6 @@
+﻿!build/*.sln
+build/
+exo_debugger/
+.vs/
+docs/html/
+Thumbs.db*

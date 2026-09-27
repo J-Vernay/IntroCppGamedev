@@ -1,0 +1,6 @@
+--std=c++23
+-xc++
+-I.
+-I/usr/x86_64-w64-mingw32/include/
+-target
+x86_64-w64-mingw32

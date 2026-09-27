@@ -1,0 +1,8 @@
+---
+BasedOnStyle: Microsoft
+
+ColumnLimit: 100
+BinPackArguments: true
+AlignAfterOpenBracket: false
+PointerAlignment: Left
+AccessModifierOffset: -4
