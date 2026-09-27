@@ -1,5 +1,7 @@
-﻿!build/*.sln
-build/
+﻿build/*
+!build/*.sln
+!build/*.vcxproj
+!build/*.vcxproj.filters
 exo_debugger/
 .vs/
 docs/html/

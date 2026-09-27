@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="assets">
+      <UniqueIdentifier>{583885F2-44DA-AFC8-2D95-C31C19D63619}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="docs">
+      <UniqueIdentifier>{CECA957C-BA01-970D-63EE-7C104F04130F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="docs\cours">
+      <UniqueIdentifier>{A9FB82B2-95B3-C4FF-FEBA-9D5BEA915FF0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
+    <None Include="..\assets\CREDITS.md">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="..\docs\cours\aide_analyse_donnees.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\exo1.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\exo2.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\exo3.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\exo4.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\exo5.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\exo5_analyse.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\doxygen-awesome-sidebar-only.css">
+      <Filter>docs</Filter>
+    </None>
+    <None Include="..\docs\doxygen-awesome.css">
+      <Filter>docs</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\docs\Doxyfile">
+      <Filter>docs</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\docs\cours\exo1_coords.png">
+      <Filter>docs\cours</Filter>
+    </Image>
+    <Image Include="..\docs\cours\exo1_image.png">
+      <Filter>docs\cours</Filter>
+    </Image>
+    <Image Include="..\docs\cours\exo2_score.png">
+      <Filter>docs\cours</Filter>
+    </Image>
+    <Image Include="..\docs\cours\exo5_graphs.png">
+      <Filter>docs\cours</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

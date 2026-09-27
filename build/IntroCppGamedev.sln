@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Documentation", "Documentation.vcxproj", "{FF149C1F-6BD5-1756-3410-61D3A08F5C32}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo1", "Exo1.vcxproj", "{A2F2847C-8E29-860D-3716-6C10232C020F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo2", "Exo2.vcxproj", "{A3F2847C-8F29-860D-3816-6C10242C020F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo4", "Exo4.vcxproj", "{A5F2847C-9129-860D-3A16-6C10262C020F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo5", "Exo5.vcxproj", "{A6F2847C-9229-860D-3B16-6C10272C020F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JV", "JV.vcxproj", "{25745900-1100-880B-7AAE-880B6659880B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		DebugASAN|x64-windows = DebugASAN|x64-windows
+		Debug|x64-windows = Debug|x64-windows
+		Release|x64-windows = Release|x64-windows
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.Release|x64-windows.Build.0 = Release x64-windows|x64
+		{A2F2847C-8E29-860D-3716-6C10232C020F}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{A2F2847C-8E29-860D-3716-6C10232C020F}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{A2F2847C-8E29-860D-3716-6C10232C020F}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{A2F2847C-8E29-860D-3716-6C10232C020F}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{A2F2847C-8E29-860D-3716-6C10232C020F}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{A2F2847C-8E29-860D-3716-6C10232C020F}.Release|x64-windows.Build.0 = Release x64-windows|x64
+		{A3F2847C-8F29-860D-3816-6C10242C020F}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{A3F2847C-8F29-860D-3816-6C10242C020F}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{A3F2847C-8F29-860D-3816-6C10242C020F}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{A3F2847C-8F29-860D-3816-6C10242C020F}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{A3F2847C-8F29-860D-3816-6C10242C020F}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{A3F2847C-8F29-860D-3816-6C10242C020F}.Release|x64-windows.Build.0 = Release x64-windows|x64
+		{A5F2847C-9129-860D-3A16-6C10262C020F}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{A5F2847C-9129-860D-3A16-6C10262C020F}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{A5F2847C-9129-860D-3A16-6C10262C020F}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{A5F2847C-9129-860D-3A16-6C10262C020F}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{A5F2847C-9129-860D-3A16-6C10262C020F}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{A5F2847C-9129-860D-3A16-6C10262C020F}.Release|x64-windows.Build.0 = Release x64-windows|x64
+		{A6F2847C-9229-860D-3B16-6C10272C020F}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{A6F2847C-9229-860D-3B16-6C10272C020F}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{A6F2847C-9229-860D-3B16-6C10272C020F}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{A6F2847C-9229-860D-3B16-6C10272C020F}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{A6F2847C-9229-860D-3B16-6C10272C020F}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{A6F2847C-9229-860D-3B16-6C10272C020F}.Release|x64-windows.Build.0 = Release x64-windows|x64
+		{25745900-1100-880B-7AAE-880B6659880B}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{25745900-1100-880B-7AAE-880B6659880B}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{25745900-1100-880B-7AAE-880B6659880B}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{25745900-1100-880B-7AAE-880B6659880B}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{25745900-1100-880B-7AAE-880B6659880B}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{25745900-1100-880B-7AAE-880B6659880B}.Release|x64-windows.Build.0 = Release x64-windows|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

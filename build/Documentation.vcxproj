@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug x64-windows|x64">
+      <Configuration>Debug x64-windows</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugASAN x64-windows|x64">
+      <Configuration>DebugASAN x64-windows</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release x64-windows|x64">
+      <Configuration>Release x64-windows</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FF149C1F-6BD5-1756-3410-61D3A08F5C32}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Documentation</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64-windows|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugASAN x64-windows|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release x64-windows|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug x64-windows|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='DebugASAN x64-windows|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release x64-windows|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64-windows|x64'">
+    <OutDir>$(ProjectDir)x64-windows\Debug\</OutDir>
+    <IntDir>$(ProjectDir)obj\x64-windows\Debug\Documentation\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugASAN x64-windows|x64'">
+    <OutDir>$(ProjectDir)x64-windows\DebugASAN\</OutDir>
+    <IntDir>$(ProjectDir)obj\x64-windows\DebugASAN\Documentation\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release x64-windows|x64'">
+    <OutDir>$(ProjectDir)x64-windows\Release\</OutDir>
+    <IntDir>$(ProjectDir)obj\x64-windows\Release\Documentation\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64-windows|x64'">
+    <PostBuildEvent>
+      <Command>type nul &gt;&gt; "..\docs\Doxyfile" &amp;&amp; copy /b "..\docs\Doxyfile"+,, "..\docs\Doxyfile"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugASAN x64-windows|x64'">
+    <PostBuildEvent>
+      <Command>type nul &gt;&gt; "..\docs\Doxyfile" &amp;&amp; copy /b "..\docs\Doxyfile"+,, "..\docs\Doxyfile"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release x64-windows|x64'">
+    <PostBuildEvent>
+      <Command>type nul &gt;&gt; "..\docs\Doxyfile" &amp;&amp; copy /b "..\docs\Doxyfile"+,, "..\docs\Doxyfile"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
+    <None Include="..\assets\CREDITS.md" />
+    <None Include="..\docs\cours\aide_analyse_donnees.md" />
+    <None Include="..\docs\cours\exo1.md" />
+    <None Include="..\docs\cours\exo2.md" />
+    <None Include="..\docs\cours\exo3.md" />
+    <None Include="..\docs\cours\exo4.md" />
+    <None Include="..\docs\cours\exo5.md" />
+    <None Include="..\docs\cours\exo5_analyse.md" />
+    <None Include="..\docs\doxygen-awesome-sidebar-only.css" />
+    <None Include="..\docs\doxygen-awesome.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\docs\Doxyfile">
+      <FileType>Document</FileType>
+      <Command>chdir "..\docs"%
+"$(SolutionDir)..\tools\doxygen.exe"</Command>
+      <Outputs>../docs/html/index.html</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\docs\cours\exo1_coords.png" />
+    <Image Include="..\docs\cours\exo1_image.png" />
+    <Image Include="..\docs\cours\exo2_score.png" />
+    <Image Include="..\docs\cours\exo5_graphs.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
