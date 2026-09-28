@@ -98,8 +98,8 @@ void jv::game::Update(double absTime, float deltaTime)
     // Calcul de la position de la balle.
 
     // DEPLACEMENT DE LA BALLE
-    // g_ballPos.x = ...
-    // g_ballPos.y = ...
+    g_ballPos.x = g_ballPos.x + g_ballDir.x * g_ballSpeed * deltaTime;
+    g_ballPos.y = g_ballPos.y + g_ballDir.y * g_ballSpeed * deltaTime;
 
     bool bPlayerWin = false;
     bool bAiWin = false;
