@@ -24,6 +24,10 @@ private:
     Vec2 m_ballPos;
     Vec2 m_ballDir;
     float m_ballSpeed;
+
+    void _UpdateAI(double absTime, float deltaTime);
+    void _UpdatePlayer(double absTime, float deltaTime);
+    void _UpdateBall(double absTime, float deltaTime);
 };
 
 } // namespace exo2

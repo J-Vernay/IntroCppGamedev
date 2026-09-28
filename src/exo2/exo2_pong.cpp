@@ -55,11 +55,21 @@ exo2::Pong::Pong()
 
 void exo2::Pong::Update(double absTime, float deltaTime)
 {
+    _UpdateAI(absTime, deltaTime);
+    _UpdatePlayer(absTime, deltaTime);
+    _UpdateBall(absTime, deltaTime);
+}
+
+void exo2::Pong::_UpdateAI(double absTime, float deltaTime)
+{
     // Calcul de la position de la raquette de l'IA, à droite de l'écran.
     float f = std::fabsf(2 * std::fmodf(absTime, kAIPeriod) / kAIPeriod - 1);
     m_aiPos.x = kArenaSize.x - kAiSize.x;
     m_aiPos.y = (kArenaSize.y - kAiSize.y) * f;
+}
 
+void exo2::Pong::_UpdatePlayer(double absTime, float deltaTime)
+{
     // Calcul de la position de la raquette du joueur, en utilisant les flèches du clavier.
     jv::input::Gamepad keyboard;
     if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, keyboard))
@@ -74,7 +84,10 @@ void exo2::Pong::Update(double absTime, float deltaTime)
         m_playerPos.x = 0;
         m_playerPos.y = std::clamp(y, 0.f, kArenaSize.y - kPlayerSize.y);
     }
+}
 
+void exo2::Pong::_UpdateBall(double absTime, float deltaTime)
+{
     // Calcul de la position de la balle.
 
     // DEPLACEMENT DE LA BALLE
