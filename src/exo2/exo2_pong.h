@@ -8,9 +8,13 @@ namespace exo2
 class Pong
 {
 public:
+
     Pong();
 
     void Update(double absTime, float deltaTime);
+    void _UpdateAI(double absTime, float deltaTime);
+    void _UpdatePlayer(double absTime, float deltaTime);
+    void _UpdateBall(double absTime, float deltaTime);
 
     void Draw() const;
 

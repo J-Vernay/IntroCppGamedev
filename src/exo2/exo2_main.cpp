@@ -1,4 +1,5 @@
 ﻿#include <exo2/exo2_pong.h>
+#include <exo2/exo2_draw.h>
 
 exo2::Pong* g_pPong = nullptr;
 
