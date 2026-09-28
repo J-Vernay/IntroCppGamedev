@@ -98,42 +98,48 @@ void jv::game::Update(double absTime, float deltaTime)
     // Calcul de la position de la balle.
 
     // DEPLACEMENT DE LA BALLE
-    // g_ballPos.x = ...
-    // g_ballPos.y = ...
+    g_ballPos.x = g_ballSpeed * g_ballDir.x * deltaTime + g_ballPos.x;
+    g_ballPos.y = g_ballSpeed * g_ballDir.y * deltaTime + g_ballPos.y;
 
     bool bPlayerWin = false;
     bool bAiWin = false;
 
-    if (0)
+    if (g_ballPos.y <= 0)
     {
         // Rebond mur du haut
         g_ballPos.y = -g_ballPos.y;
         g_ballDir.y = -g_ballDir.y;
     }
-    else if (0)
+    else if (g_ballPos.y >= kArenaSize.y - kBallSize.y)
     {
         // Rebond mur du bas
         g_ballPos.y = 2 * kArenaSize.y - g_ballPos.y - 2 * kBallSize.y;
         g_ballDir.y = -g_ballDir.y;
     }
-    else if (0)
+    else if (g_ballPos.x <= kPlayerSize.x)
     {
         // Rebond joueur
         g_ballPos.x = kPlayerSize.x;
         g_ballDir = jv::util::RandomRotate({1, 0}, -60, 60);
         g_ballSpeed *= kFactor;
 
-        if (0)
+        bool isInPlayer = g_ballPos.y <= g_playerPos.y + kPlayerSize.y - kBallSize.y &&
+                          g_ballPos.y >= g_playerPos.y - kPlayerSize.y;
+
+        if (!isInPlayer)
             bAiWin = true;
     }
-    else if (0)
+    else if (g_ballPos.x + kBallSize.x >= kArenaSize.x - kAiSize.x)
     {
         // Rebond AI
         g_ballPos.x = kArenaSize.x - kAiSize.x - kBallSize.x;
         g_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
         g_ballSpeed *= kFactor;
 
-        if (0)
+        bool isInAi = g_ballPos.y <= g_aiPos.y + kAiSize.y - kBallSize.y &&
+            g_ballPos.y >= g_aiPos.y - kAiSize.y;
+
+        if (!isInAi)
             bPlayerWin = true;
     }
 
