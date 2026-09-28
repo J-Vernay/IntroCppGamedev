@@ -24,6 +24,8 @@ private:
     Vec2 m_ballPos;
     Vec2 m_ballDir;
     float m_ballSpeed;
+    int m_scorePlayer = 0;
+    int m_scoreAI = 0;
 
     void _UpdateAI(double absTime, float deltaTime);
     void _UpdatePlayer(double absTime, float deltaTime);

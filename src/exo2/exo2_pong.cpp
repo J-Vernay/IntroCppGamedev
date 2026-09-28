@@ -138,6 +138,10 @@ void exo2::Pong::_UpdateBall(double absTime, float deltaTime)
         m_ballDir = jv::util::RandomRotate({-1, 0}, -10, 10);
         m_ballSpeed = kBallInitSpeed;
     }
+    if (bPlayerWin)
+        m_scorePlayer += 1;
+    if (bAiWin)
+        m_scoreAI += 1;
 }
 
 void exo2::Pong::Draw() const
@@ -150,4 +154,9 @@ void exo2::Pong::Draw() const
     DrawRect(m_aiPos, kAiSize, kAIColor);
     DrawRect(m_playerPos, kPlayerSize, kPlayerColor);
     DrawRect(m_ballPos, kBallSize, kBallColor);
+
+    Vec2 scoreCenter = {kArenaSize.x / 2, kArenaSize.y / 4};
+    Vec2 pointSize = {10, 10};
+  
+    DrawScore(scoreCenter, pointSize, m_scorePlayer, kPlayerColor, m_scoreAI, kAIColor);
 }
