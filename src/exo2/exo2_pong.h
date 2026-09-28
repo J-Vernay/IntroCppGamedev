@@ -19,8 +19,11 @@ private:
     using Color = jv::util::Color;
 
     // VARIABLES
-    Color m_color;
-
+    Vec2 m_playerPos;
+    Vec2 m_aiPos;
+    Vec2 m_ballPos;
+    Vec2 m_ballDir;
+    float m_ballSpeed;
 };
 
 } // namespace exo2
