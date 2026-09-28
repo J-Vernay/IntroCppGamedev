@@ -16,21 +16,22 @@ cocher "Respecter le chemin / Match path".
 
 A) Chercher `IntroCppGamedev *.h`. Dans quel dossier se trouvent ces fichiers ?
 
-> ...
+> IntroCppGamedev/src
 
 B) Chercher `IntroCppGamedev *.cpp`. Dans quel dossier se trouvent ces fichiers ?
 
-> ...
+> IntroCppGamedev/src
 
 C) Chercher `IntroCppGamedev *.obj`. Dans quel dossier se trouvent ces fichiers ?
 Que remarquez-vous des noms des fichiers concernés ?
 
-> ...
+> IntroCppGamedev/build/obj
+Ce sont les noms de tout les fichiers .cpp du projet. Seul l'extension change pour .obj .
 
 D) Chercher `IntroCppGamedev *.lib`.
 Quel(s) fichier(s) apparait(ssent) ?
 
-> ...
+> IntroCppGamedev/build/obj/x64-windows/Debug
 
 Dans la barre de menu de Visual Studio :
 - Cliquer sur "Affichage / View" puis "Terminal"
@@ -38,7 +39,7 @@ Dans la barre de menu de Visual Studio :
 
 E) Que contient le fichier `JV.lib` ?
 
-> ...
+> Il contient les fichier d'implémentation du moteur de jeu compilés.
 
 F) Chercher `IntroCppGamedev !tools *.exe`. 
 Dans quel dossier se trouvent ces fichiers ?
@@ -57,7 +58,7 @@ pour savoir comment compiler notre base de code C++.
 
 G) Où sont définis les dossiers de sortie des fichiers `.obj` et `.exe` ?
 
-> ...
+> Les dossiers de sortie des fichiers .obj et .exe sont définis respectivement par les balises <IntDir> et <OutDir> pour chaque mode de compilation.
 
 H) Où est défini comment est résolu les chemins d'include tel que `<jv/jv.h>` ?
 
