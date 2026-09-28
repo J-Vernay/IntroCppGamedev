@@ -123,7 +123,7 @@ void jv::game::Update(double absTime, float deltaTime)
         g_ballDir = jv::util::RandomRotate({1, 0}, -60, 60);
         g_ballSpeed *= kFactor;
 
-        if (0)
+        if (g_ballPos.y + kBallSize.y < g_playerPos.y || g_ballPos.y > g_playerPos.y + kPlayerSize.y)
             bAiWin = true;
     }
     else if (g_ballPos.x + kBallSize.x > g_aiPos.x)
@@ -132,8 +132,8 @@ void jv::game::Update(double absTime, float deltaTime)
         g_ballPos.x = kArenaSize.x - kAiSize.x - kBallSize.x;
         g_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
         g_ballSpeed *= kFactor;
-
-        if (0)
+        
+        if (g_ballPos.y + kBallSize.y < g_aiPos.y || g_ballPos.y > g_aiPos.y + kAiSize.y)
             bPlayerWin = true;
     }
 
