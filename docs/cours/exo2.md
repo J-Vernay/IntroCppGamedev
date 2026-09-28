@@ -42,19 +42,19 @@ et les exemples dans le code :
 > IV. `Pong`
 > V. `Pong::Pong`
 > 
-> ...
+> A2IV, B4II, C5I, D3III, E1V
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> ...
+> on ne peut pas modifier de valeur dun attribut dedans car la fonction est const, sa permet de fiare de la const correctness, pour mieux organiser et proteger son code
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
 
-> ...
+>l'implementation de la fonction draw dans le .cpp.
 
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
