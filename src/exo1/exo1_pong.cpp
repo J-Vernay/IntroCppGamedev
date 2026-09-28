@@ -104,19 +104,19 @@ void jv::game::Update(double absTime, float deltaTime)
     bool bPlayerWin = false;
     bool bAiWin = false;
 
-    if (0)
+    if (g_ballPos.y < 0)
     {
         // Rebond mur du haut
         g_ballPos.y = -g_ballPos.y;
         g_ballDir.y = -g_ballDir.y;
     }
-    else if (0)
+    else if (g_ballPos.y + kBallSize.y > kArenaSize.y)
     {
         // Rebond mur du bas
         g_ballPos.y = 2 * kArenaSize.y - g_ballPos.y - 2 * kBallSize.y;
         g_ballDir.y = -g_ballDir.y;
     }
-    else if (0)
+    else if (g_ballPos.x < kPlayerSize.x)
     {
         // Rebond joueur
         g_ballPos.x = kPlayerSize.x;
@@ -126,7 +126,7 @@ void jv::game::Update(double absTime, float deltaTime)
         if (0)
             bAiWin = true;
     }
-    else if (0)
+    else if (g_ballPos.x + kBallSize.x > g_aiPos.x)
     {
         // Rebond AI
         g_ballPos.x = kArenaSize.x - kAiSize.x - kBallSize.x;
