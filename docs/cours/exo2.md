@@ -52,9 +52,9 @@ C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> Le compilateur émet une erreur car la fonction "Draw" est static, elle ne peut pas accéder à un attribut de classe car elle n'est pas jouer dans le contexte d'une instance.
+> Le compilateur émet une erreur car la fonction "Draw" est "const", elle ne peut pas modifer un attribut de la classe.
 > 
-> Cette fonctionnalité permet de jouer une fonction sans avoir besoin d'une instance.
+> Cette fonctionnalité permet de s'assurer que l'instance ne change pas.
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
@@ -79,7 +79,7 @@ I) Définissez les termes suivants :
 
 > Encapsulation : L'encapsulation correspond à la limitation d'accès aux méthodes et attributs d'une classe.
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : Un invaraiant d'une classe est une condition qui doit toujours être vraie pour considérer l'instance comme valide
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.

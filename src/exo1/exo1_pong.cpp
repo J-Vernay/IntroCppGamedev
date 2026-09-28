@@ -118,28 +118,22 @@ void jv::game::Update(double absTime, float deltaTime)
     }
     else if (g_ballPos.x < kPlayerSize.x)
     {
-        if (g_ballPos.y + kBallSize.y >= g_playerPos.y && g_ballPos.y <= g_playerPos.y + kPlayerSize.y)
-        {
-            // Rebond joueur
-            g_ballPos.x = kPlayerSize.x;
-            g_ballDir = jv::util::RandomRotate({1, 0}, -60, 60);
-            g_ballSpeed *= kFactor;
-        }
+        // Rebond joueur
+        g_ballPos.x = kPlayerSize.x;
+        g_ballDir = jv::util::RandomRotate({1, 0}, -60, 60);
+        g_ballSpeed *= kFactor;
 
-        if (g_ballPos.x < 0)
+        if (g_ballPos.y + kBallSize.y < g_playerPos.y || g_ballPos.y > g_playerPos.y + kPlayerSize.y)
             bAiWin = true;
     }
     else if (g_ballPos.x + kBallSize.x > g_aiPos.x)
     {
-        if (g_ballPos.y + kBallSize.y >= g_aiPos.y && g_ballPos.y <= g_aiPos.y + kAiSize.y)
-        {
-            // Rebond AI
-            g_ballPos.x = kArenaSize.x - kAiSize.x - kBallSize.x;
-            g_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
-            g_ballSpeed *= kFactor;
-        }
+        // Rebond AI
+        g_ballPos.x = kArenaSize.x - kAiSize.x - kBallSize.x;
+        g_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
+        g_ballSpeed *= kFactor;
 
-        if (g_ballPos.x > kArenaSize.x)
+        if (g_ballPos.y + kBallSize.y < g_aiPos.y || g_ballPos.y > g_aiPos.y + kAiSize.y)
             bPlayerWin = true;
     }
 
