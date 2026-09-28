@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dino", "Dino.vcxproj", "{8F26847C-7B5D-850D-244A-6B101060010F}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Documentation", "Documentation.vcxproj", "{FF149C1F-6BD5-1756-3410-61D3A08F5C32}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo1", "Exo1.vcxproj", "{A2F2847C-8E29-860D-3716-6C10232C020F}"
@@ -22,6 +24,12 @@ Global
 		Release|x64-windows = Release|x64-windows
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F26847C-7B5D-850D-244A-6B101060010F}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{8F26847C-7B5D-850D-244A-6B101060010F}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{8F26847C-7B5D-850D-244A-6B101060010F}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{8F26847C-7B5D-850D-244A-6B101060010F}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{8F26847C-7B5D-850D-244A-6B101060010F}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{8F26847C-7B5D-850D-244A-6B101060010F}.Release|x64-windows.Build.0 = Release x64-windows|x64
 		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
 		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
 		{FF149C1F-6BD5-1756-3410-61D3A08F5C32}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
