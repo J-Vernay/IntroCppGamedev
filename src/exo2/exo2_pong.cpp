@@ -60,17 +60,17 @@ exo2::Pong::Pong()
     g_ballSpeed = kBallInitSpeed;
 }
 
+void exo2::Pong::_UpdateAI(double absTime, float deltaTime){
 
-
-void exo2::Pong::Update(double absTime, float deltaTime)
-{
-
-
-    // Calcul de la position de la raquette de l'IA, à droite de l'écran.
+            // Calcul de la position de la raquette de l'IA, à droite de l'écran.
     float f = std::fabsf(2 * std::fmodf(absTime, kAIPeriod) / kAIPeriod - 1);
     g_aiPos.x = kArenaSize.x - kAiSize.x;
     g_aiPos.y = (kArenaSize.y - kAiSize.y) * f;
 
+
+}
+void exo2::Pong::_UpdatePlayer(double absTime, float deltaTime)
+{
     // Calcul de la position de la raquette du joueur, en utilisant les flèches du clavier.
     jv::input::Gamepad keyboard;
     if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, keyboard))
@@ -86,6 +86,10 @@ void exo2::Pong::Update(double absTime, float deltaTime)
         g_playerPos.y = std::clamp(y, 0.f, kArenaSize.y - kPlayerSize.y);
     }
 
+}
+
+void exo2::Pong::_UpdateBall(double absTime, float deltaTime)
+{
     // Calcul de la position de la balle.
     g_ballPos.x += g_ballDir.x * deltaTime * g_ballSpeed;
     g_ballPos.y += g_ballDir.y * deltaTime * g_ballSpeed;
@@ -130,11 +134,18 @@ void exo2::Pong::Update(double absTime, float deltaTime)
              (g_ballPos.y <= g_aiPos.y || g_ballPos.y > g_aiPos.y + kAiSize.y))
     {
         bAiWin = true;
+        m_scoreia++;
     }
 
     else if (g_ballPos.x <= kPlayerSize.x &&
              (g_ballPos.y <= g_playerPos.y || g_ballPos.y > g_playerPos.y + kPlayerSize.y))
+    {
         bPlayerWin = true;
+        m_scoreplayer++;
+    }
+
+    DrawScore({kArenaSize.x / 2, kArenaSize.y / 4}, {10,10}, m_scoreplayer, kPlayerColor, m_scoreia,
+        kAIColor);
 
     if (bPlayerWin || bAiWin)
     {
@@ -143,6 +154,13 @@ void exo2::Pong::Update(double absTime, float deltaTime)
         g_ballDir = jv::util::RandomRotate({-1, 0}, -10, 10);
         g_ballSpeed = kBallInitSpeed;
     }
+
+}
+
+void exo2::Pong::Update(double absTime, float deltaTime)
+{
+
+
 
 }
 
@@ -157,5 +175,8 @@ void exo2::Pong::Draw()
     DrawRect(g_aiPos, kAiSize, kAIColor);
     DrawRect(g_playerPos, kPlayerSize, kPlayerColor);
     DrawRect(g_ballPos, kBallSize, kBallColor);
+
+    Vec2 scoreCenter = {kArenaSize.x / 2, kArenaSize.y /4};
+    
 };
 

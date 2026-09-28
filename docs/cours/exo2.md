@@ -66,14 +66,15 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 `_UpdateAI()`, `_UpdatePlayer()` et `_UpdateBall()`.
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
+	A public utilisable a l'exterieur de la classe, private en interne
 
 > ...
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation :cacher l'etat interne pour exposer uniquement son comportement (fonction membre public)...
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : condition toutjours vrai sur l'etat interne de la classe, donc si un comportement est faux, on peux considerer qu'il y a un ug...
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.

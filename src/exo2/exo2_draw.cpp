@@ -21,3 +21,17 @@ void exo2::DrawRect(Vec2 pos, Vec2 size, Color color)
     jv::gpu::Draw(vb, nullptr, {});
     jv::gpu::DestroyVertexBuffer(vb);
 }
+
+void exo2::DrawScore(Vec2 center, Vec2 pointSize, int scorePlayer, Color colorPlayer, int scoreAI, Color colorAI)
+{
+    
+
+    Vec2 pos;
+    pos.x = center.x - pointSize.y * scorePlayer;
+    pos.y = center.y - pointSize.y / 2;
+    DrawRect(pos, {pointSize.x * scorePlayer, pointSize.y}, colorPlayer);
+
+        pos.x = center.x + pointSize.y * scoreAI;
+    pos.y = center.y - pointSize.y / 2;
+        DrawRect(pos, {pointSize.x * scoreAI, pointSize.y}, colorAI);
+}
