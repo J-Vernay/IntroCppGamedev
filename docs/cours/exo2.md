@@ -70,9 +70,9 @@ Les privées peuvent être utilisés par n'importe qui.
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : permet de protéger des variables ou méthodes en changeant leur visibilité (public, private, protected...)
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : condition qui doit être vrai pour qu'une fonction puisse continuer
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.
