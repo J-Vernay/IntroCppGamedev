@@ -22,11 +22,11 @@ B) Assembler le vocabulaire de POO avec leurs définitions
 et les exemples dans le code :
 
 > VOCABULAIRE :
-> a) Classe 
-> b) Méthode
-> c) Attribut
-> d) Instance
-> e) Constructeur
+> a) Classe 2
+> b) Méthode 4
+> c) Attribut 5
+> d) Instance 3
+> e) Constructeur 1
 > 
 > DEFINITIONS :
 > 1. Fonction membre responsable d'initialiser l'état
@@ -36,17 +36,18 @@ et les exemples dans le code :
 > 5. Variable membre faisant partie de l'état d'une classe
 > 
 > EXEMPLES :
-> I. `Pong::m_color`
-> II. `Pong::Update`
+> I. `Pong::Pong`
+> II.  `Pong`
 > III. `g_Pong`
-> IV. `Pong`
-> V. `Pong::Pong`
+> IV. `Pong::Update`
+> V.  `Pong::m_color`
 > 
 > ...
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
+	A la methode est const et modifier sa valeur non static
 
 > ...
 
@@ -59,6 +60,7 @@ Qu'est-ce qu'il manque ?
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
 F) Migrer le code de l'exercice 1 `exo1_main.cpp` vers l'exercice 2 dans `exo2_pong.cpp`.
+	A 
 
 G) Découper `Pong::Update()` en trois sous-fonctions :
 `_UpdateAI()`, `_UpdatePlayer()` et `_UpdateBall()`.
