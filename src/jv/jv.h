@@ -46,7 +46,7 @@ struct Vec2
 
 /// Représente une couleur de pixels, utilisée pour moduler l'affichage d'une texture.
 union Color {
-    struct
+    struct 
     {
         uint8_t r;
         uint8_t g;
