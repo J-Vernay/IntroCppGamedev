@@ -77,12 +77,14 @@
     <None Include="..\README.md" />
     <None Include="..\assets\CREDITS.md" />
     <None Include="..\docs\cours\aide_analyse_donnees.md" />
+    <None Include="..\docs\cours\evaluation.md" />
     <None Include="..\docs\cours\exo1.md" />
     <None Include="..\docs\cours\exo2.md" />
     <None Include="..\docs\cours\exo3.md" />
     <None Include="..\docs\cours\exo4.md" />
     <None Include="..\docs\cours\exo5.md" />
     <None Include="..\docs\cours\exo5_analyse.md" />
+    <None Include="..\docs\cours\exo6.md" />
     <None Include="..\docs\doxygen-awesome-sidebar-only.css" />
     <None Include="..\docs\doxygen-awesome.css" />
   </ItemGroup>

@@ -19,6 +19,9 @@
     <None Include="..\docs\cours\aide_analyse_donnees.md">
       <Filter>docs\cours</Filter>
     </None>
+    <None Include="..\docs\cours\evaluation.md">
+      <Filter>docs\cours</Filter>
+    </None>
     <None Include="..\docs\cours\exo1.md">
       <Filter>docs\cours</Filter>
     </None>
@@ -35,6 +38,9 @@
       <Filter>docs\cours</Filter>
     </None>
     <None Include="..\docs\cours\exo5_analyse.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\exo6.md">
       <Filter>docs\cours</Filter>
     </None>
     <None Include="..\docs\doxygen-awesome-sidebar-only.css">

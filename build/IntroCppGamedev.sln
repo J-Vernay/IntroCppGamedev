@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo4", "Exo4.vcxproj", "{A5
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo5", "Exo5.vcxproj", "{A6F2847C-9229-860D-3B16-6C10272C020F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exo6", "Exo6.vcxproj", "{A7F2847C-9329-860D-3C16-6C10282C020F}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JV", "JV.vcxproj", "{25745900-1100-880B-7AAE-880B6659880B}"
 EndProject
 Global
@@ -50,6 +52,12 @@ Global
 		{A6F2847C-9229-860D-3B16-6C10272C020F}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
 		{A6F2847C-9229-860D-3B16-6C10272C020F}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
 		{A6F2847C-9229-860D-3B16-6C10272C020F}.Release|x64-windows.Build.0 = Release x64-windows|x64
+		{A7F2847C-9329-860D-3C16-6C10282C020F}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
+		{A7F2847C-9329-860D-3C16-6C10282C020F}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
+		{A7F2847C-9329-860D-3C16-6C10282C020F}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
+		{A7F2847C-9329-860D-3C16-6C10282C020F}.Debug|x64-windows.Build.0 = Debug x64-windows|x64
+		{A7F2847C-9329-860D-3C16-6C10282C020F}.Release|x64-windows.ActiveCfg = Release x64-windows|x64
+		{A7F2847C-9329-860D-3C16-6C10282C020F}.Release|x64-windows.Build.0 = Release x64-windows|x64
 		{25745900-1100-880B-7AAE-880B6659880B}.DebugASAN|x64-windows.ActiveCfg = DebugASAN x64-windows|x64
 		{25745900-1100-880B-7AAE-880B6659880B}.DebugASAN|x64-windows.Build.0 = DebugASAN x64-windows|x64
 		{25745900-1100-880B-7AAE-880B6659880B}.Debug|x64-windows.ActiveCfg = Debug x64-windows|x64
