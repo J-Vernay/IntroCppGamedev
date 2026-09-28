@@ -30,98 +30,6 @@ constexpr Vec2 kBallSize = {10, 10};
 constexpr Vec2 kPlayerSize = {10, 40};
 constexpr Vec2 kAiSize = {10, 100};
 
-// Variables globales
-Vec2 g_playerPos;
-Vec2 g_aiPos;
-Vec2 g_ballPos;
-Vec2 g_ballDir;
-float g_ballSpeed;
-int g_playerScore;
-int g_aiScore;
-
-void _UpdateAI(double absTime, float deltaTime)
-{
-    // Calcul de la position de la raquette de l'IA, à droite de l'écran.
-    float f = std::fabsf(2 * std::fmodf(absTime, kAIPeriod) / kAIPeriod - 1);
-    g_aiPos.x = kArenaSize.x - kAiSize.x;
-    g_aiPos.y = (kArenaSize.y - kAiSize.y) * f;
-}
-
-void _UpdatePlayer(double absTime, float deltaTime)
-{
-    // Calcul de la position de la raquette du joueur, en utilisant les flèches du clavier.
-    jv::input::Gamepad keyboard;
-    if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, keyboard))
-    {
-        float dir = 0;
-        if (keyboard.dpad_up)
-            dir -= 1;
-        if (keyboard.dpad_down)
-            dir += 1;
-        float y = g_playerPos.y + deltaTime * dir * kPlayerSpeed;
-
-        g_playerPos.x = 0;
-        g_playerPos.y = std::clamp(y, 0.f, kArenaSize.y - kPlayerSize.y);
-    }
-}
-
-void _UpdateBall(double absTime, float deltaTime)
-{
-    // Calcul de la position de la balle.
-
-    // DEPLACEMENT DE LA BALLE
-    g_ballPos.x = g_ballPos.x + g_ballDir.x * g_ballSpeed * deltaTime;
-    g_ballPos.y = g_ballPos.y + g_ballDir.y * g_ballSpeed * deltaTime;
-
-    bool bPlayerWin = false;
-    bool bAiWin = false;
-
-    if (g_ballPos.y <= 0)
-    {
-        // Rebond mur du haut
-        g_ballPos.y = -g_ballPos.y;
-        g_ballDir.y = -g_ballDir.y;
-    }
-    else if (g_ballPos.y + kBallSize.y >= kArenaSize.y)
-    {
-        // Rebond mur du bas
-        g_ballPos.y = 2 * kArenaSize.y - g_ballPos.y - 2 * kBallSize.y;
-        g_ballDir.y = -g_ballDir.y;
-    }
-    else if (g_ballPos.x < g_playerPos.x + kPlayerSize.x)
-    {
-        // Rebond joueur
-        g_ballPos.x = kPlayerSize.x;
-        g_ballDir = jv::util::RandomRotate({1, 0}, -60, 60);
-        g_ballSpeed *= kFactor;
-
-        if (g_ballPos.y + kBallSize.y < g_playerPos.y ||
-            g_ballPos.y > g_playerPos.y + kPlayerSize.y)
-            bAiWin = true;
-    }
-    else if (g_ballPos.x + kBallSize.x > g_aiPos.x)
-    {
-        // Rebond AI
-        g_ballPos.x = kArenaSize.x - kAiSize.x - kBallSize.x;
-        g_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
-        g_ballSpeed *= kFactor;
-
-        if (g_ballPos.y + kBallSize.y < g_aiPos.y || g_ballPos.y > g_aiPos.y + kAiSize.y)
-            bPlayerWin = true;
-    }
-
-    if (bPlayerWin) g_playerScore++;
-    if (bAiWin) g_aiScore++;
-
-    if (bPlayerWin || bAiWin)
-    {
-        g_ballPos.x = (kArenaSize.x - kBallSize.x) / 2;
-        g_ballPos.y = (kArenaSize.y - kBallSize.y) / 2;
-        g_ballDir = jv::util::RandomRotate({-1, 0}, -10, 10);
-        g_ballSpeed = kBallInitSpeed;
-    }
-}
-
 } // namespace exo2
 
 exo2::Pong::Pong()
@@ -131,14 +39,14 @@ exo2::Pong::Pong()
     jv::gpu::SetRenderSize(kArenaSize);
 
     // Joueur
-    g_playerPos.x = 0;
-    g_playerPos.y = (kArenaSize.y - kPlayerSize.y) / 2;
+    m_playerPos.x = 0;
+    m_playerPos.y = (kArenaSize.y - kPlayerSize.y) / 2;
 
     // Balle
-    g_ballPos.x = (kArenaSize.x - kBallSize.x) / 2;
-    g_ballPos.y = (kArenaSize.y - kBallSize.y) / 2;
-    g_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
-    g_ballSpeed = kBallInitSpeed;
+    m_ballPos.x = (kArenaSize.x - kBallSize.x) / 2;
+    m_ballPos.y = (kArenaSize.y - kBallSize.y) / 2;
+    m_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
+    m_ballSpeed = kBallInitSpeed;
 }
 
 void exo2::Pong::Update(double absTime, float deltaTime)
@@ -150,6 +58,91 @@ void exo2::Pong::Update(double absTime, float deltaTime)
     _UpdateBall(absTime, deltaTime);
 }
 
+void exo2::Pong::_UpdateAI(double absTime, float deltaTime)
+{
+    // Calcul de la position de la raquette de l'IA, à droite de l'écran.
+    float f = std::fabsf(2 * std::fmodf(absTime, kAIPeriod) / kAIPeriod - 1);
+    m_aiPos.x = kArenaSize.x - kAiSize.x;
+    m_aiPos.y = (kArenaSize.y - kAiSize.y) * f;
+}
+
+void exo2::Pong::_UpdatePlayer(double absTime, float deltaTime)
+{
+    // Calcul de la position de la raquette du joueur, en utilisant les flèches du clavier.
+    jv::input::Gamepad keyboard;
+    if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, keyboard))
+    {
+        float dir = 0;
+        if (keyboard.dpad_up)
+            dir -= 1;
+        if (keyboard.dpad_down)
+            dir += 1;
+        float y = m_playerPos.y + deltaTime * dir * kPlayerSpeed;
+
+        m_playerPos.x = 0;
+        m_playerPos.y = std::clamp(y, 0.f, kArenaSize.y - kPlayerSize.y);
+    }
+}
+
+void exo2::Pong::_UpdateBall(double absTime, float deltaTime)
+{
+    // Calcul de la position de la balle.
+
+    // DEPLACEMENT DE LA BALLE
+    m_ballPos.x = m_ballPos.x + m_ballDir.x * m_ballSpeed * deltaTime;
+    m_ballPos.y = m_ballPos.y + m_ballDir.y * m_ballSpeed * deltaTime;
+
+    bool bPlayerWin = false;
+    bool bAiWin = false;
+
+    if (m_ballPos.y <= 0)
+    {
+        // Rebond mur du haut
+        m_ballPos.y = -m_ballPos.y;
+        m_ballDir.y = -m_ballDir.y;
+    }
+    else if (m_ballPos.y + kBallSize.y >= kArenaSize.y)
+    {
+        // Rebond mur du bas
+        m_ballPos.y = 2 * kArenaSize.y - m_ballPos.y - 2 * kBallSize.y;
+        m_ballDir.y = -m_ballDir.y;
+    }
+    else if (m_ballPos.x < m_playerPos.x + kPlayerSize.x)
+    {
+        // Rebond joueur
+        m_ballPos.x = kPlayerSize.x;
+        m_ballDir = jv::util::RandomRotate({1, 0}, -60, 60);
+        m_ballSpeed *= kFactor;
+
+        if (m_ballPos.y + kBallSize.y < m_playerPos.y ||
+            m_ballPos.y > m_playerPos.y + kPlayerSize.y)
+            bAiWin = true;
+    }
+    else if (m_ballPos.x + kBallSize.x > m_aiPos.x)
+    {
+        // Rebond AI
+        m_ballPos.x = kArenaSize.x - kAiSize.x - kBallSize.x;
+        m_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
+        m_ballSpeed *= kFactor;
+
+        if (m_ballPos.y + kBallSize.y < m_aiPos.y || m_ballPos.y > m_aiPos.y + kAiSize.y)
+            bPlayerWin = true;
+    }
+
+    if (bPlayerWin)
+        m_playerScore++;
+    if (bAiWin)
+        m_aiScore++;
+
+    if (bPlayerWin || bAiWin)
+    {
+        m_ballPos.x = (kArenaSize.x - kBallSize.x) / 2;
+        m_ballPos.y = (kArenaSize.y - kBallSize.y) / 2;
+        m_ballDir = jv::util::RandomRotate({-1, 0}, -10, 10);
+        m_ballSpeed = kBallInitSpeed;
+    }
+}
+
 void exo2::Pong::Draw() const
 {
     Vec2 delimPos = {kArenaSize.x / 2 - 1, 0};
@@ -159,8 +152,8 @@ void exo2::Pong::Draw() const
 
     DrawRect({0, 0}, kArenaSize, kArenaColor);
     DrawRect(delimPos, delimSize, kDelimColor);
-    DrawScore(scorePos, scoreSize, g_playerScore, kPlayerColor, g_aiScore, kAIColor);
-    DrawRect(g_aiPos, kAiSize, kAIColor);
-    DrawRect(g_playerPos, kPlayerSize, kPlayerColor);
-    DrawRect(g_ballPos, kBallSize, kBallColor);
+    DrawScore(scorePos, scoreSize, m_playerScore, kPlayerColor, m_aiScore, kAIColor);
+    DrawRect(m_aiPos, kAiSize, kAIColor);
+    DrawRect(m_playerPos, kPlayerSize, kPlayerColor);
+    DrawRect(m_ballPos, kBallSize, kBallColor);
 }

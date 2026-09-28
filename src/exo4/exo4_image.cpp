@@ -19,35 +19,41 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     uint32_t dataOffset = *(uint32_t*)(pFile + 0x000A);
 
     // Interprétation des données
-    uint32_t v1 = *(uint32_t*)(pFile + 0x0012);
-    uint32_t v2 = *(uint32_t*)(pFile + 0x0016);
+    uint32_t width = *(uint32_t*)(pFile + 0x0012);
+    uint32_t height = *(uint32_t*)(pFile + 0x0016);
 
-    uint16_t v3 = *(uint16_t*)(pFile + 0x001C);
-    if (v3 != 8 && v3!= 24)
+    uint16_t bitsPerPixel = *(uint16_t*)(pFile + 0x001C);
+    if (bitsPerPixel != 8 && bitsPerPixel!= 24)
         return {};
 
     // Destination
     std::vector<jv::util::Color> pixels;
-    pixels.resize(1);
+    pixels.resize(width * height);
     jv::util::Color* pPixels = pixels.data();
 
-    // A ENLEVER
-    float f = jv::util::RandomFloat(0, 6.28);
-    pPixels[0].r = 128;
-    pPixels[0].g = 127.5 + 127.5 * std::sin(f);
-    pPixels[0].b = 127.5 + 127.5 * std::cos(f);
-    pPixels[0].a = 255;
-
-    if (v3 == 24)
+    if (bitsPerPixel == 24)
     {
         // 3 octets par pixel, BGR
+        
+        for (uint32_t i = 0; i < width * height; i++)
+        {
+            uint32_t w = i % width;
+            uint32_t h = i / width;
+            uint32_t p = (height - h - 1) * width + w;
+            pPixels[p].b = *(uint32_t*)(pFile + 0x0036 + 3 * i);
+            pPixels[p].g = *(uint32_t*)(pFile + 0x0036 + 3 * i + 1);
+            pPixels[p].r = *(uint32_t*)(pFile + 0x0036 + 3 * i + 2);
+            pPixels[p].a = 255;
+        }
     }
-    else if (v3 == 8)
+    else if (bitsPerPixel == 8)
     {
         // 1 octet par pixel, index vers la "colortable"
+
+
     }
 
-    jv::util::Vec2 pxSize = {1, 1};
+    jv::util::Vec2 pxSize = {width, height};
     jv::gpu::Texture* pTexture = jv::gpu::CreateTexture(imageName, pxSize, pixels);
     return {pTexture, pxSize};
 }
