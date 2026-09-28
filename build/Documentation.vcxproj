@@ -77,6 +77,9 @@
     <None Include="..\README.md" />
     <None Include="..\assets\CREDITS.md" />
     <None Include="..\docs\cours\aide_analyse_donnees.md" />
+    <None Include="..\docs\cours\dino.md" />
+    <None Include="..\docs\cours\dino_cahier_des_charges.md" />
+    <None Include="..\docs\cours\dino_uv_ref.md" />
     <None Include="..\docs\cours\evaluation.md" />
     <None Include="..\docs\cours\exo1.md" />
     <None Include="..\docs\cours\exo2.md" />
@@ -97,6 +100,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\docs\cours\dinoranch_image.png" />
     <Image Include="..\docs\cours\exo1_coords.png" />
     <Image Include="..\docs\cours\exo1_image.png" />
     <Image Include="..\docs\cours\exo2_score.png" />

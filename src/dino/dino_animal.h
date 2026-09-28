@@ -12,14 +12,14 @@ public:
     /// Initialise l'animal avec un type au hasard.
     Animal(Vec2 pos, double absTime);
     
+    /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
 
+    /// Affiche l'animal
     void Draw() const;
 
-    void Shut();
-
-    /// Nom de la texture qui contient les animaux.
-    static const std::string TEXTURE_NAME;
+    /// Détruit les ressources associées à l'animal.
+    ~Animal();
 
 private:
     Vec2 m_pos;

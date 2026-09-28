@@ -19,6 +19,15 @@
     <None Include="..\docs\cours\aide_analyse_donnees.md">
       <Filter>docs\cours</Filter>
     </None>
+    <None Include="..\docs\cours\dino.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\dino_cahier_des_charges.md">
+      <Filter>docs\cours</Filter>
+    </None>
+    <None Include="..\docs\cours\dino_uv_ref.md">
+      <Filter>docs\cours</Filter>
+    </None>
     <None Include="..\docs\cours\evaluation.md">
       <Filter>docs\cours</Filter>
     </None>
@@ -56,6 +65,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\docs\cours\dinoranch_image.png">
+      <Filter>docs\cours</Filter>
+    </Image>
     <Image Include="..\docs\cours\exo1_coords.png">
       <Filter>docs\cours</Filter>
     </Image>

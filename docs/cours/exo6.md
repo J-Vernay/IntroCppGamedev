@@ -1,10 +1,10 @@
-﻿# EXERCICE 6
+﻿# Exercice 6
 
-**OBJECTIF :**  
+**OBJECTIF**  
 - Première découverte des templates
 - Comprendre les différences mémoire des conteneurs.
 
-**RESSOURCES :**
+**RESSOURCES**
 - [Containers](https://en.cppreference.com/cpp/container)
 - [Dessin de statistiques](https://www.csvplot.com/)
 
@@ -83,3 +83,4 @@ par rapport au nombre d'éléments ?
 
 > ...
 
+**Fin des exercices, on attaque le projet, cf. `dino.md`**

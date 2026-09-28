@@ -12,10 +12,9 @@ dino::Animal::Animal(Vec2 pos, double absTime)
     m_pTexture = dino::LoadImageAsset("animals.bmp");
 }
 
-void dino::Animal::Shut()
+dino::Animal::~Animal()
 {
     jv::gpu::DestroyTexture(m_pTexture);
-    m_pTexture = 0;
 }
 
 void dino::Animal::Update(double absTime, float deltaTime)
@@ -34,33 +33,6 @@ void dino::Animal::Update(double absTime, float deltaTime)
 void dino::Animal::Draw() const
 {
     float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
-
-    if (m_dir.x >= 0)
-    {
-        // L'animal va vers la droite, et le sprite est orienté vers la gauche -> On inverse la
-        // coordonnée U du sprite.
-        u1 = 32;
-        u2 = 0;
-    }
-
-    if (fabsf(m_dir.x) > fabsf(m_dir.y))
-    {
-        // L'animal se déplace surtout horizontalement.
-        v1 = 0;
-        v2 = 32;
-    }
-    else if (m_dir.y >= 0)
-    {
-        // L'animal va vers le bas.
-        v1 = 32;
-        v2 = 64;
-    }
-    else
-    {
-        // L'animal va vers le haut.
-        v1 = 64;
-        v2 = 96;
-    }
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;

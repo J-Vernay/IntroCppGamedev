@@ -4,6 +4,8 @@
 #include <dino/dino_animal.h>
 #include <dino/dino_terrain.h>
 
+#include <deque>
+
 namespace dino
 {
 
@@ -21,7 +23,7 @@ private:
 
     Terrain m_Terrain;
 
-    std::vector<Animal> m_animals;
+    std::deque<Animal> m_animals;
     double m_animalSpawnTime = 0;
 
     void _UpdateAnimals(double absTime, float deltaTime);
