@@ -27,11 +27,11 @@ private:
     int m_scorePlayer = 0;
     int m_scoreAi = 0;
 
-    Vec2 g_playerPos;
-    Vec2 g_aiPos;
-    Vec2 g_ballPos;
-    Vec2 g_ballDir;
-    float g_ballSpeed;
+    Vec2 m_playerPos;
+    Vec2 m_aiPos;
+    Vec2 m_ballPos;
+    Vec2 m_ballDir;
+    float m_ballSpeed;
 
     Color m_color;
 
