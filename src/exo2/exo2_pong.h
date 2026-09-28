@@ -18,6 +18,7 @@ public:
 
     void Draw() const;
 
+  
 
 private:
     using Vec2 = jv::util::Vec2;
@@ -26,7 +27,12 @@ private:
     int m_scorePlayer = 0;
     int m_scoreAi = 0;
 
-    // VARIABLES
+    Vec2 g_playerPos;
+    Vec2 g_aiPos;
+    Vec2 g_ballPos;
+    Vec2 g_ballDir;
+    float g_ballSpeed;
+
     Color m_color;
 
 };

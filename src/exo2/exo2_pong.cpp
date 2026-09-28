@@ -30,14 +30,6 @@ constexpr Vec2 kBallSize = {10, 10};
 constexpr Vec2 kPlayerSize = {10, 40};
 constexpr Vec2 kAiSize = {10, 100};
 
-// Variables globales
-Vec2 g_playerPos;
-Vec2 g_aiPos;
-Vec2 g_ballPos;
-Vec2 g_ballDir;
-float g_ballSpeed;
-
-
 } // namespace exo2
 
 exo2::Pong::Pong()
