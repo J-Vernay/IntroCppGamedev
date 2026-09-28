@@ -123,10 +123,10 @@ void jv::game::Update(double absTime, float deltaTime)
         g_ballDir = jv::util::RandomRotate({1, 0}, -60, 60);
         g_ballSpeed *= kFactor;
 
-        bool isInPlayer = g_ballPos.y <= g_playerPos.y + kPlayerSize.y - kBallSize.y &&
-                          g_ballPos.y >= g_playerPos.y - kPlayerSize.y;
+        bool isOutOfPlayer = g_ballPos.y + kBallSize.y < g_playerPos.y ||
+                          g_ballPos.y > g_playerPos.y + kPlayerSize.y;
 
-        if (!isInPlayer)
+        if (isOutOfPlayer)
             bAiWin = true;
     }
     else if (g_ballPos.x + kBallSize.x >= kArenaSize.x - kAiSize.x)
@@ -136,10 +136,10 @@ void jv::game::Update(double absTime, float deltaTime)
         g_ballDir = jv::util::RandomRotate({-1, 0}, -60, 60);
         g_ballSpeed *= kFactor;
 
-        bool isInAi = g_ballPos.y <= g_aiPos.y + kAiSize.y - kBallSize.y &&
-            g_ballPos.y >= g_aiPos.y - kAiSize.y;
+        bool isOutOfAi = g_ballPos.y + kBallSize.y < g_aiPos.y ||
+            g_ballPos.y > g_aiPos.y + kAiSize.y;
 
-        if (!isInAi)
+        if (isOutOfAi)
             bPlayerWin = true;
     }
 
