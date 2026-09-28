@@ -22,7 +22,7 @@ B) Assembler le vocabulaire de POO avec leurs définitions
 et les exemples dans le code :
 
 > VOCABULAIRE :
-> a) Classe
+> a) Classe 
 > b) Méthode
 > c) Attribut
 > d) Instance
