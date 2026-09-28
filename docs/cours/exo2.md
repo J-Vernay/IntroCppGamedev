@@ -42,19 +42,19 @@ et les exemples dans le code :
 > IV. `Pong`
 > V. `Pong::Pong`
 > 
-> ...
+> a 2 IV / b 4 II / c 5 I / d 3 III / e 1 V
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> ...
+> La fonction est const et ne permet donc pas de modifier des valeurs. Elle est désirable pour proteger le code et le rendre plus lisible. La const correctness.
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
 
-> ...
+> Il n'y a pas d'implementation de la fonction il en manque une. 
 
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
@@ -65,13 +65,13 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> ...
+> Ils servent a préciser a qui est accessible la variable ou la methode (private il n'y a que la classe qui y a accès et public tout le monde peut le voir par ex). C'est plus lisible.
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : Le fait de bien mettre les differents modificateurs d'accès au bon endroit afin de rendre le code plus solide et sécurisé
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : Ce sont des conditions qui sont toujours vraies sur l'état interne de la classe 
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.

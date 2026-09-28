@@ -16,21 +16,21 @@ cocher "Respecter le chemin / Match path".
 
 A) Chercher `IntroCppGamedev *.h`. Dans quel dossier se trouvent ces fichiers ?
 
-> ...
+> Dans src puis dans leurs dossiers exo/JV respectifs
 
 B) Chercher `IntroCppGamedev *.cpp`. Dans quel dossier se trouvent ces fichiers ?
 
-> ...
+> Dans src puis dans leurs dossiers exo/JV respectifs
 
 C) Chercher `IntroCppGamedev *.obj`. Dans quel dossier se trouvent ces fichiers ?
 Que remarquez-vous des noms des fichiers concernés ?
 
-> ...
+> Dans debug puis dans leurs dossiers exo/JV respectifs
 
 D) Chercher `IntroCppGamedev *.lib`.
 Quel(s) fichier(s) apparait(ssent) ?
 
-> ...
+> JV.lib
 
 Dans la barre de menu de Visual Studio :
 - Cliquer sur "Affichage / View" puis "Terminal"
@@ -38,12 +38,12 @@ Dans la barre de menu de Visual Studio :
 
 E) Que contient le fichier `JV.lib` ?
 
-> ...
+> Les fichiers .obj du moteur
 
 F) Chercher `IntroCppGamedev !tools *.exe`. 
 Dans quel dossier se trouvent ces fichiers ?
 
-> ...
+> dans le dossier Debug 
 
 Dans Visual Studio, dans la fenêtre "Explorateur de solutions / Solution Explorer" à droite :
 

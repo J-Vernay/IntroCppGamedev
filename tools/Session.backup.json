@@ -1,13 +1,12 @@
 [
 	{
-		"is_closed":0,
-		"window_x":547,
-		"window_y":170,
+		"is_closed":1,
+		"window_x":563,
+		"window_y":184,
 		"window_wide":794,
 		"window_high":664,
-		"maximized":1,
+		"maximized":0,
 		"ontop":0,
-		"order":0,
 		"filters_visible":0,
 		"filters_wide":128,
 		"filters_right_align":1,
@@ -43,7 +42,7 @@
 		[
 			{
 				"is_closed":0,
-				"search":"IntroCppGamedev !tools *.exe",
+				"search":"IntroCppGamedev *.exe !tools",
 				"match_case":0,
 				"match_path":1,
 				"match_whole_word":0,
@@ -70,8 +69,8 @@
 				"is_secondary_sort_folders_first":0,
 				"omit_results":0,
 				"temp_omit_results":0,
-				"listview_item_focus":"C:\\Users\\l.kominiarz\\source\\repos\\IntroCppGamedev\\build\\x64-windows\\Debug\\Exo2.exe",
-				"listview_selection":["C:\\Users\\l.kominiarz\\source\\repos\\IntroCppGamedev\\build\\x64-windows\\Debug\\Exo2.exe"],
+				"listview_item_focus":"",
+				"listview_selection":[],
 				"folders_sidebar_expanded":[],
 				"folders_sidebar_item_focus":"",
 				"folders_sidebar_selection":[],

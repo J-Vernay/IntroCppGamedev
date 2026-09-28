@@ -5,6 +5,7 @@ exo2::Pong* g_pPong = nullptr;
 void jv::game::Init()
 {
     g_pPong = new exo2::Pong;
+    
 }
 
 void jv::game::Update(double absTime, float deltaTime)
