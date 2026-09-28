@@ -48,13 +48,13 @@ C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> ...
+> Le Compilateur reconnait que Draw est en const, ce qui veut dire que la fonction n'est pas modifiable.
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
 
-> ...
+> le exo2.h déclare drawRect mais il ny a aucune definition de drawRect.
 
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
@@ -65,7 +65,7 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> ...
+> public = donne accès aux autres classes qui héritent de celle ci, private = accès uniquement a la classe ou elle est déclaré.
 
 I) Définissez les termes suivants :
 
