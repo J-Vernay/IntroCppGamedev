@@ -72,7 +72,7 @@ dans les fichiers `jv_win64_main.cpp` et `jv_win64_window.cpp`:
 >
 > // Finalisation du moteur de jeu.
 
-C) Quelles sont les 4 fonctions qu'un jeu doit fournir au moteur de jeu ?
+C) Quelles sont les 4 fonctions qu'un jeu doit fournir au moteur de jeu JV ?
 
 > ...
 

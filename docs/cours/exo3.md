@@ -11,8 +11,8 @@
 
 Ouvrir le logiciel "Everything" dans le dossier `tools` du dépôt de code.
 
-Dans la barre de menu en haut, dans "Recherche",
-vérifier que "Respecter le chemin" est coché.
+Dans la barre de menu en haut, dans "Recherche / Search",
+cocher "Respecter le chemin / Match path".
 
 A) Chercher `IntroCppGamedev *.h`. Dans quel dossier se trouvent ces fichiers ?
 
@@ -33,7 +33,7 @@ Quel(s) fichier(s) apparait(ssent) ?
 > ...
 
 Dans la barre de menu de Visual Studio :
-- Cliquer sur "Affichage" puis "Terminal"
+- Cliquer sur "Affichage / View" puis "Terminal"
 - Entrer la commande `lib /list .\x64-windows\Debug\JV.lib | findstr obj`
 
 E) Que contient le fichier `JV.lib` ?
@@ -45,12 +45,12 @@ Dans quel dossier se trouvent ces fichiers ?
 
 > ...
 
-Dans Visual Studio, dans la fenêtre "Explorateur de solutions" à droite :
+Dans Visual Studio, dans la fenêtre "Explorateur de solutions / Solution Explorer" à droite :
 
 - Clic-droit sur "Exo2"
-- Cliquer sur "Décharger le projet"
+- Cliquer sur "Décharger le projet / Unload project"
 - Clic-droit sur "Exo2"
-- Cliquer sur "Modifier le fichier projet"
+- Cliquer sur "Modifier le fichier projet / Edit project file"
 
 Le fichier ainsi affiché sert de configuration à Visual Studio
 pour savoir comment compiler notre base de code C++.
@@ -74,7 +74,7 @@ J) Où sont définis quels fichiers C++ sont compilés pour l'exercice 2 ?
 Dans Visual Studio, dans la fenêtre "Explorateur de solutions" à droite :
 
 - Clic-droit sur "Exo2"
-- Cliquer sur "Recharger le projet"
+- Cliquer sur "Recharger le projet / Reload project"
 
 K) Quels sont les liens entre :
 

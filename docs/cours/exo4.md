@@ -52,7 +52,7 @@ en cliquant sur l'icône directement à droite du nom du type.
 Mettre un point d'arrêt (breakpoint) sur la ligne définissant `pxSize`.
 Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 
-F) Dans la fenêtre "Espion 1" en bas, affichez les valeurs numéraires
+F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
 > `pFile` : ...
