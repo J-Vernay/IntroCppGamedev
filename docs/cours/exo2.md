@@ -42,19 +42,27 @@ et les exemples dans le code :
 > IV. `Pong`
 > V. `Pong::Pong`
 > 
-> ...
+> Classe | Type encapsulant un comportement et l'état nécessaire à ce comportement | `Pong`
+> Méthode | Fonction membre qui peut accéder implicitement à l'état d'une classe | `Pong::Update`
+> Attribut | Variable membre faisant partie de l'état d'une classe | `Pong::m_color`
+> Instance | Zone mémoire allouée pour stocker l'état d'une classe | `g_Pong`
+> Constructeur | Fonction membre responsable d'initialiser l'état | `Pong::Pong`
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> ...
+> Le compilateur émet une erreur car la fonction "Draw" est static, elle ne peut pas accéder à un attribut de classe car elle n'est pas jouer dans le contexte d'une instance.
+> 
+> Cette fonctionnalité permet de jouer une fonction sans avoir besoin d'une instance.
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
 
-> ...
+> Le compilateur émet une erreur car la fonction n'est pas implémenter
+>
+> Il manque une implémentation de la fonction exo2::DrawRect() dans exo2_draw.cpp.
 
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
@@ -65,11 +73,11 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> ...
+> Les modificateurs public et private permettent d'autoriser ou non l'appel d'une fonction d'une classe depuis l'extérieur de la classe.
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : L'encapsulation correspond à la limitation d'accès aux méthodes et attributs d'une classe.
 >
 > Invariant d'une classe : ...
 
