@@ -33,4 +33,6 @@ void exo2::Pong::Draw() const
 {
     // DRAW
     jv::gpu::SetBackgroundColor(m_color);
+
+    exo2::DrawRect({}, {5, 5}, {0, 0, 0, 255});
 }
