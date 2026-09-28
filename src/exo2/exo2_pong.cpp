@@ -29,6 +29,7 @@ constexpr Vec2 kArenaSize = {300, 200};
 constexpr Vec2 kBallSize = {10, 10};
 constexpr Vec2 kPlayerSize = {10, 40};
 constexpr Vec2 kAiSize = {10, 100};
+constexpr Vec2 kScoreSize = {10, 10};
 
 } // namespace exo2
 
@@ -70,6 +71,7 @@ void exo2::Pong::Draw() const
     DrawRect(g_aiPos, kAiSize, kAIColor);
     DrawRect(g_playerPos, kPlayerSize, kPlayerColor);
     DrawRect(g_ballPos, kBallSize, kBallColor);
+    exo2::DrawScore(kArenaSize.x / 2, kScoreSize, scorePlayer, kPlayerColor, scoreAi, kAIColor);
 }
 
 void exo2::Pong::_UpdatePlayer(float deltaTime)
@@ -117,7 +119,11 @@ void exo2::Pong::_UpdateBall(float deltaTime)
         g_ballSpeed *= kFactor;
 
         if (g_ballPos.y < g_playerPos.y || g_ballPos.y > g_playerPos.y + kPlayerSize.y)
+        {
             bAiWin = true;
+            scoreAi++;
+        }
+            
     }
     else if (g_ballPos.x >= kArenaSize.x - kAiSize.x)
     {
@@ -127,7 +133,11 @@ void exo2::Pong::_UpdateBall(float deltaTime)
         g_ballSpeed *= kFactor;
 
         if (g_ballPos.y < g_aiPos.y || g_ballPos.y > g_aiPos.y + kAiSize.y)
+        {
             bPlayerWin = true;
+            scorePlayer++;
+        }
+            
     }
 
     if (bPlayerWin || bAiWin)

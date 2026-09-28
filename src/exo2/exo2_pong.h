@@ -32,6 +32,9 @@ private:
     void _UpdatePlayer(float deltaTime);
     void _UpdateBall(float deltaTime);
 
+    int scorePlayer = 0;
+    int scoreAi = 0;
+
 };
 
 } // namespace exo2

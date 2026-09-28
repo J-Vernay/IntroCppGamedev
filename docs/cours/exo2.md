@@ -65,13 +65,13 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> ...
+> Cela definit si un membre d'une autre classe pourra acceder a l'objet, lattributt ou la methode, si elle est public tout le monde peut y acceder, si elle est private seul la classe elle meme peut acceder a ses propres methode ou attributs.
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : l'encapsulation est le principe de proteger ces data, en donnant acces au reste du mondea celle ci quen les definissant public sinon les mettre priver pour quelle ne reste visible que parl instance qui les creer
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : un ivariant est une condition quon se fixe a sois meme, quon decide de pas change rpour eviter qu'un objet ne devienne plus valide
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.
