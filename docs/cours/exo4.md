@@ -24,25 +24,34 @@ B) Quelle est la taille du type `jv::util::Color` ?
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
 
+l'inspecteur nous indique size : 4 sois 4 octet.
+un struct alloue un emplacement en mémoire ou chaque un de ses membre
+un union alloue tout ses membres sur le meme en placemement de son membre le plus grands en rajoutant autant d'octet pour remplir
+
+
 > ...
 
 C) À quoi correspond un `std::vector<unsigned char>`?
 
+on considere cela comme un octet interpréter de maniere non signé, il as 256 possibiliter
+
 > ...
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
+	A 
+	c'est un pointeur de u char, il stocke son adresse en mémoire
 
 > ...
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : ... on prend l'adresse de l'octet, puis on y ajouter 0x0012 en hex, sois 18 octet, on recuppere donc l'adresse situer a +18octet du pointeur
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : ...on cast notre pointeur u char en u int32
 >
-> `*pointeur` : ...
+> `*pointeur` : ... on récuppere la valeur pointer
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : ... pareille, on cast notre pointeur u char en u int32
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
@@ -55,19 +64,24 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : ...0x000001e52c22c080
 >
-> `pFile + 1` : ...
+> `pFile + 1` : ...0x000001e52c22c081
 >
-> `pPixels` : ...
+> `pPixels` : ...0x000001e5257090b0
 >
-> `pPixels + 1` : ...
+> `pPixels + 1` : ...0x000001e5257090b4
+
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
+	A 
+	pFile est un u char, + 1 l'incrémente de 1 octet, sois sa valeur de base, la valeur de base d'un pPixels est de 4 octet (1xRGBA) donc on avance de 4 en 4
 
 > ...
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
+
+on recuppere la valeur pointer par l'adrresse situer a [nombre] d'octet du "pointeur"
 
 > ...
 
@@ -75,11 +89,11 @@ I)  Prenez connaissance de la spécification du format de fichier BMP.
 
 J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : ...notre largeur
 >
-> `v2` : ...
+> `v2` : ...notre hauteur
 >
-> `v3` : ...
+> `v3` : ...notre de bit par pixel
 
 Renommer ces variables de façon appropriée.
 
