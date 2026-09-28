@@ -22,8 +22,8 @@ B) Assembler le vocabulaire de POO avec leurs définitions
 et les exemples dans le code :
 
 > VOCABULAIRE :
-> a) Classe
-> b) Méthode
+> a) Classe 
+> b) Méthode 
 > c) Attribut
 > d) Instance
 > e) Constructeur
@@ -42,17 +42,25 @@ et les exemples dans le code :
 > IV. `Pong`
 > V. `Pong::Pong`
 > 
+Classe / 2 / Pong
+Méthode / 4 / Pong::Update
+Attribut / 5 / Pong::m_color
+Instance / 3 / g_Pong
+Constructeur / 1 / Pong::Pong
 > ...
+
+
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
-
+Car métode const et interdiction de modifier un attribut de la classe, const correctness.
 > ...
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
+Délcaré mais pas pas defini.
 
 > ...
 
@@ -64,14 +72,14 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 `_UpdateAI()`, `_UpdatePlayer()` et `_UpdateBall()`.
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
-
+ public et private servent à contrôler la visibilité et l'accessibilité des membres d'une classe.
 > ...
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : Regrouper les données et les méthodes qui manipulent ces données dans une classe pour protéger l'état de l'objet .
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : Une condition si plus respecter alors l'object est dans un état invalide.
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.
