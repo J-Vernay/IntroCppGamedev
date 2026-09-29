@@ -15,7 +15,7 @@
 Le but de ce TD est de charger en RAM des fichiers images BMP et les afficher.
 
 Dans l'explorateur de solutions, à droite, clic-droit sur "Exo 4",
-puis clic sur "Définir en tant que projet de démarrage".
+puis clic sur "Définir en tant que projet de démarrage / Set as Startup Project".
 
 A) Prendre connaissance des fichiers fournis et exécutez le programme.
 Vous devriez pouvoir utiliser les flèches gauche et droite pour faire défiler des carrés colorés.
