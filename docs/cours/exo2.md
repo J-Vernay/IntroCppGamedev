@@ -22,56 +22,56 @@ B) Assembler le vocabulaire de POO avec leurs définitions
 et les exemples dans le code :
 
 > VOCABULAIRE :
-> a) Classe
-> b) Méthode
-> c) Attribut
-> d) Instance
+> a) Classe /
+> b) Méthode /
+> c) Attribut /
+> d) Instance /
 > e) Constructeur
 > 
 > DEFINITIONS :
 > 1. Fonction membre responsable d'initialiser l'état
-> 2. Type encapsulant un comportement et l'état nécessaire à ce comportement
-> 3. Zone mémoire allouée pour stocker l'état d'une classe
-> 4. Fonction membre qui peut accéder implicitement à l'état d'une classe
-> 5. Variable membre faisant partie de l'état d'une classe
+> 2. Type encapsulant un comportement et l'état nécessaire à ce comportement /
+> 3. Zone mémoire allouée pour stocker l'état d'une classe /
+> 4. Fonction membre qui peut accéder implicitement à l'état d'une classe /
+> 5. Variable membre faisant partie de l'état d'une classe /
 > 
 > EXEMPLES :
-> I. `Pong::m_color`
+> I. `Pong::m_color` /
 > II. `Pong::Update`
-> III. `g_Pong`
-> IV. `Pong`
-> V. `Pong::Pong`
+> III. `g_Pong`/
+> IV. `Pong` /
+> V. `Pong::Pong` /
 > 
-> ...
+> C_5_I / A_2_IV / B_4_V / D_3_III / E_1_II
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> ...
+> La fonction draw ne peut pas modifier car elle est const
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
 
-> ...
+> Il n'y a aucune définition de DrawRect()
 
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
-F) Migrer le code de l'exercice 1 `exo1_main.cpp` vers l'exercice 2 dans `exo2_pong.cpp`.
+F) Migrer le code de l'exercice 1 `exo1_pong.cpp` vers l'exercice 2 dans `exo2_pong.cpp`.
 
 G) Découper `Pong::Update()` en trois sous-fonctions :
 `_UpdateAI()`, `_UpdatePlayer()` et `_UpdateBall()`.
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> ...
+> Permet de limiter l'acces au variables , et de ne les rendre accesible qua la classe meme
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : c'est le fait de cacher l'etat interne d'une classe pour n'exposer que sont comportement
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : une condition qui doit tout le temps être vrai pour avoir une idée de l'état de la classe
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.
