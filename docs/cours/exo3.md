@@ -20,7 +20,7 @@ A) Chercher `IntroCppGamedev *.h`. Dans quel dossier se trouvent ces fichiers ?
 
 B) Chercher `IntroCppGamedev *.cpp`. Dans quel dossier se trouvent ces fichiers ?
 
-> ... IntroCppGameDev\src
+>  IntroCppGameDev\src
 
 C) Chercher `IntroCppGamedev *.obj`. Dans quel dossier se trouvent ces fichiers ?
 Que remarquez-vous des noms des fichiers concernés ?
@@ -29,19 +29,19 @@ Que remarquez-vous des noms des fichiers concernés ?
 
 D) Chercher `IntroCppGamedev *.lib`.
 Quel(s) fichier(s) apparait(ssent) ?
-	jv.lib
+> jv.lib
 
 Dans la barre de menu de Visual Studio :
 - Cliquer sur "Affichage / View" puis "Terminal"
 - Entrer la commande `lib /list .\x64-windows\Debug\JV.lib | findstr obj`
 
 E) Que contient le fichier `JV.lib` ?
-	J'ai l'impression qu'il prend tous les fichiers `.obj` de la compilation et les met dans un seul fichier `.
+> J'ai l'impression qu'il prend tous les fichiers `.obj` de la compilation et les met dans un seul fichier `.
 
 F) Chercher `IntroCppGamedev !tools *.exe`. 
 Dans quel dossier se trouvent ces fichiers ?
 
-Ils sont dans `x64-windows\Debug`
+> Ils sont dans `x64-windows\Debug`
 
 Dans Visual Studio, dans la fenêtre "Explorateur de solutions / Solution Explorer" à droite :
 
@@ -55,15 +55,15 @@ pour savoir comment compiler notre base de code C++.
 
 G) Où sont définis les dossiers de sortie des fichiers `.obj` et `.exe` ?
 
-Ils sont défini dans `<OutDir>$(ProjectDir)x64-windows\Debug\</OutDir>`
+> Ils sont défini dans `<OutDir>$(ProjectDir)x64-windows\Debug\</OutDir>` destinations fichier exe et intdir obj
 
 H) Où est défini comment est résolu les chemins d'include tel que `<jv/jv.h>` ?
 
-<AdditionalIncludeDirectories>..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+> <AdditionalIncludeDirectories>..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 
 I) Chercher `LanguageStandard`. Quel est la version du standard C++ que nous utilisons ?
 
-Version cpp 20
+> Version cpp 20
 
 J) Où sont définis quels fichiers C++ sont compilés pour l'exercice 2 ?
 
@@ -96,17 +96,15 @@ K) Quels sont les liens entre :
 
 L) Quel est le rôle du préprocesseur ?
 Comment reconnait-on les directives de préprocesseur ?
- Préprocesseur a pour but de faire le linkage avec les includes et autres et condition genre #if.
- On reconnait les directives grâce au symbol #
+ 
+ > Le rôle du propresseur transforme des fichiers en d'autre fichier pour gérér les includes et autre #
+ > On reconnait les directives grâce au symbol #
 
-> ...
 
 M) Quel est le rôle de l'éditeur de liens ?
 Quels sont les deux types de fichiers qu'il peut produire ?
 Quelle différence majeure ?
- Après compilation il génère dll exe. Assemble les obj en exe/dll
- Exe fait tourner le code alors que le dll lui a le code utiliser pas les programs.
-
-> ...
+> Après compilation il génère dll exe. Assemble les obj en exe/dll
+> Exe fait tourner le code alors que le dll lui a le code utiliser pas les programs.
 
 **Prochain exercice : exo4.md**
