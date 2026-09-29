@@ -2,7 +2,10 @@
 !build/*.sln
 !build/*.vcxproj
 !build/*.vcxproj.filters
+!build/*.cpp
+!build/*.h
 exo_debugger/
 .vs/
 docs/html/
 Thumbs.db*
+Everything.db

@@ -9,21 +9,21 @@ Cours par Julien Vernay. Pour me contacter : `edu@jvernay.fr`
 Avant toute chose, écrivez un message dans ce fil de discussion : [https://github.com/J-Vernay/IntroCppGamedev/issues/1](https://github.com/J-Vernay/IntroCppGamedev/issues/1)
 
 1. Ouvrir Visual Studio 2022
-2. Cliquer sur "Cloner un dépôt"
-  - Emplacement du dépôt : `git@github.com:J-Vernay/IntroCppGamedev.git`
-  - Chemin : Parcourir -> Bureau -> Nouveau dossier - > `IntroCppGamedev`
-3. Appuyer sur "Cloner"
-4. Dans la fenêtre de droite "Modifications Git" :
+2. Cliquer sur "Cloner un dépôt / Clone a repository"
+  - Emplacement du dépôt / Repository location : `https://github.com/J-Vernay/IntroCppGamedev.git`
+  - Chemin / Path : [...] -> Bureau / Desktop -> Nouveau dossier/New folder - > `IntroCppGamedev`
+3. Appuyer sur "Cloner / Clone"
+4. Dans la fenêtre de droite "Modifications Git / Git Changes" :
   - Cliquer sur "main"
-  - Cliquer sur "Nouvelle branche"
+  - Cliquer sur "Nouvelle branche / New branch"
 	- Spécifier "NOM_Prenom" comme nom de branche
-	- Vérifier que "Checkout la branche" est cochée
+	- Vérifier que "Checkout la branche / Checkout branch" est cochée
   - Cliquer sur "Create"
-5. Dans la fenêtre "Explorateur de solutions" à droite :
+5. Dans la fenêtre "Explorateur de solutions / Solution Explorer" à droite :
   - Clic-droit sur "Exo1"
-  - Cliquer sur "Définir en tant que projet de démarrage"
+  - Cliquer sur "Définir en tant que projet de démarrage / Set as Startup Project"
 6. Dans la barre d'outils en haut :
-  - Cliquer sur la flèche verte "Débogueur Windows local"
+  - Cliquer sur la flèche verte "Débogueur Windows local / Local Windows Debugger"
 
 Vous devriez obtenir cette fenêtre :
 
