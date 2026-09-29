@@ -24,25 +24,26 @@ B) Quelle est la taille du type `jv::util::Color` ?
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
 
-> ...
+> il fait 4 octets, dans une struct chaque membre prend de lespace dans la memoire, sa taille depend du nombre de membre et de leurs taille,
+alors quun union prend  que la taille de son objet le plus grand
 
 C) À quoi correspond un `std::vector<unsigned char>`?
 
-> ...
+> c'est une list de chiffre pouvant aller de 0 a 255
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
 
-> ...
+> elle sert a dire que cette variable est un pinteur qui pointe vers ladresse memoire de file.data()
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : cela represente une adresse, on part de file puis on rajoute une adresse derriere
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : c'est un cast de ce qui se trouve dans cette adresse
 >
-> `*pointeur` : ...
+> `*pointeur` : permet d'acceder a la valeur stocker a cet adresse
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : tu accede a la valeur stocker a ladresse du pinteur cast en uint32
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
@@ -55,31 +56,33 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : 0x000001d604616080
 >
-> `pFile + 1` : ...
+> `pFile + 1` :0x000001d604616081
+
+> `pPixels` : 0x000001d604286d70
 >
-> `pPixels` : ...
->
-> `pPixels + 1` : ...
+> `pPixels + 1` : 0x000001d604286d74
+
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
 
-> ...
+> probalbement car il font pas la meme taille en memoire
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
 
-> ...
+> c la meme chose que faire *(pointeur +1), c pour acceder a la valeur de la case dapres en memoire
 
 I)  Prenez connaissance de la spécification du format de fichier BMP.
+	c un fichier non compresser qui sert a guarder des images de grandes qualiters
 
 J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : c la taille horizental du bitmap en pixel
 >
-> `v2` : ...
+> `v2` : c la taille verticale du bitmap en pixel
 >
-> `v3` : ...
+> `v3` : le nombre de bits par pixel et de couleurs possible
 
 Renommer ces variables de façon appropriée.
 

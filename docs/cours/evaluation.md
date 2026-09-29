@@ -1,4 +1,4 @@
-﻿# Modalités d'évaluation
+﻿        # Modalités d'évaluation
 
 **Veillez à travailler dans une branche Git à votre nom : NOM_Prenom**.
 
