@@ -19,35 +19,73 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     uint32_t dataOffset = *(uint32_t*)(pFile + 0x000A);
 
     // Interprétation des données
-    uint32_t v1 = *(uint32_t*)(pFile + 0x0012);
-    uint32_t v2 = *(uint32_t*)(pFile + 0x0016);
+    uint32_t pxWidth = *(uint32_t*)(pFile + 0x0012);
+    uint32_t pxHeight = *(uint32_t*)(pFile + 0x0016);
 
-    uint16_t v3 = *(uint16_t*)(pFile + 0x001C);
-    if (v3 != 8 && v3!= 24)
+    uint16_t BitsPerPixels = *(uint16_t*)(pFile + 0x001C);
+    if (BitsPerPixels != 8 && BitsPerPixels!= 24)
         return {};
 
     // Destination
     std::vector<jv::util::Color> pixels;
-    pixels.resize(1);
+    pixels.resize(pxWidth * pxHeight);
     jv::util::Color* pPixels = pixels.data();
 
-    // A ENLEVER
-    float f = jv::util::RandomFloat(0, 6.28);
-    pPixels[0].r = 128;
-    pPixels[0].g = 127.5 + 127.5 * std::sin(f);
-    pPixels[0].b = 127.5 + 127.5 * std::cos(f);
-    pPixels[0].a = 255;
+    
 
-    if (v3 == 24)
+    if (BitsPerPixels == 24)
     {
-        // 3 octets par pixel, BGR
+        for (uint32_t row = 0; row < pxHeight; row += 1)
+        {
+
+            uint32_t invrow = pxHeight - 1 - row;
+
+            for (uint32_t col = 0; col < pxWidth; col += 1)
+            {
+                uint32_t src_i = invrow * pxWidth + col;
+               pPixels->b = *(pFile + dataOffset + src_i * 3);
+                pPixels->g = *(pFile + dataOffset + src_i * 3 + 1);
+               pPixels->r = *(pFile + dataOffset + src_i * 3 + 2);
+                pPixels->a = 255;
+               pPixels += 1;
+            }
+        }  
     }
-    else if (v3 == 8)
+           
+    else if (BitsPerPixels == 8)
     {
-        // 1 octet par pixel, index vers la "colortable"
+        for (uint32_t row = 0; row < pxHeight; row += 1)
+        {
+
+            uint32_t invrow = pxHeight - 1 - row;
+
+            for (uint32_t col = 0; col < pxWidth; col += 1)
+            {
+                uint32_t src_i = invrow * pxWidth + col;
+                uint8_t idxColor = *(pFile + dataOffset + src_i);
+
+
+                pPixels->b = *(pFile + 0x0036 + idxColor * 4);
+                pPixels->g = *(pFile + 0x0036 + idxColor * 4 + 1);
+                pPixels->r = *(pFile + 0x0036 + idxColor * 4 + 2);
+                pPixels->a = 255;
+                pPixels += 1;
+            }
+        }  
     }
 
-    jv::util::Vec2 pxSize = {1, 1};
+    for (jv::util::Color& c : pixels)
+    {
+        if (c.r == 255 && c.g == 0 && c.b == 255 && c.a == 255)
+        {
+            c.r = 0;
+            c.g = 0; 
+            c.b = 0;
+            c.a = 0;
+        }
+    }
+
+    jv::util::Vec2 pxSize = {pxWidth, pxHeight};
     jv::gpu::Texture* pTexture = jv::gpu::CreateTexture(imageName, pxSize, pixels);
     return {pTexture, pxSize};
 }

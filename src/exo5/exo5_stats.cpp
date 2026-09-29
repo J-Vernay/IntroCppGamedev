@@ -9,35 +9,36 @@ std::vector<exo5::Play> exo5::FindAllPlays(String const& moliere)
     String remaining{moliere};
     while (true)
     {
-        // COMMENTAIRE
+        // On cherche la position du premier caractère de la prochaine occurrence de "#DEBUT#"
         size_t idx = remaining.find("#DEBUT#");
         if (idx == String::npos)
             break;
         exo5::Play& play = plays.emplace_back();
 
-        // COMMENTAIRE
+      // On enlève tout ce qui est avant "#DEBUT#" (inclus)
         remaining = remaining.substr(idx + 7);
 
-        // COMMENTAIRE
+        // Le début de remaining correspond au titre de la pièce.
+        // On cherche le prochain '#', qui indique la fin du titre.
         idx = remaining.find("#");
 
-        // COMMENTAIRE
+         // On récupère le nom du titre de la pièce.
         play.name = remaining.substr(0, idx);
 
-        // COMMENTAIRE
+        // Le début de remaining correspond au type de pièce (ex: COMEDIE).
         remaining = remaining.substr(idx + 1);
 
-        // COMMENTAIRE
+        // On retire le titre de la pièce et le "#" d'après.
         idx = remaining.find("#");
         play.kind = remaining.substr(0, idx);
         remaining = remaining.substr(idx + 1);
 
-        // COMMENTAIRE
+         // Il y a le contenu de la pièce, jusqu'à "#FIN#"
         idx = remaining.find("#FIN#");
         play.content = remaining.substr(0, idx);
         remaining = remaining.substr(idx + 5);
 
-        // COMMENTAIRE
+        // Retour au début, où l'on cherche le prochain #DEBUT#
     }
 
     return plays;
@@ -45,7 +46,15 @@ std::vector<exo5::Play> exo5::FindAllPlays(String const& moliere)
 
 int64_t exo5::CountLetters(String const& play)
 {
-    return 0;
+    int64_t count = 0;
+    for (char c : play)
+    {
+        if (std::isalpha(c))
+        {
+            count += 1;
+        }
+    }
+    return count;
 }
 
 exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
