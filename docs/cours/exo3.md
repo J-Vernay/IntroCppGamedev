@@ -16,16 +16,16 @@ cocher "Respecter le chemin / Match path".
 
 A) Chercher `IntroCppGamedev *.h`. Dans quel dossier se trouvent ces fichiers ?
 
-> Dans src puis dans leurs dossiers exo/JV respectifs
+> Dans src puis dans leurs dossiers exo/JV respectifs.
 
 B) Chercher `IntroCppGamedev *.cpp`. Dans quel dossier se trouvent ces fichiers ?
 
-> Dans src puis dans leurs dossiers exo/JV respectifs
+> Dans src puis dans leurs dossiers exo/JV respectifs.
 
 C) Chercher `IntroCppGamedev *.obj`. Dans quel dossier se trouvent ces fichiers ?
 Que remarquez-vous des noms des fichiers concernés ?
 
-> Dans debug puis dans leurs dossiers exo/JV respectifs
+> Dans debug puis dans leurs dossiers exo/JV respectifs. Ils ont le nom des programmes .cpp que j'ai déjà lancés.
 
 D) Chercher `IntroCppGamedev *.lib`.
 Quel(s) fichier(s) apparait(ssent) ?
@@ -43,7 +43,7 @@ E) Que contient le fichier `JV.lib` ?
 F) Chercher `IntroCppGamedev !tools *.exe`. 
 Dans quel dossier se trouvent ces fichiers ?
 
-> dans le dossier Debug 
+> dans build x64 windows Debug 
 
 Dans Visual Studio, dans la fenêtre "Explorateur de solutions / Solution Explorer" à droite :
 
@@ -57,20 +57,19 @@ pour savoir comment compiler notre base de code C++.
 
 G) Où sont définis les dossiers de sortie des fichiers `.obj` et `.exe` ?
 
-> ...
+> Dans le .vcxproj
 
 H) Où est défini comment est résolu les chemins d'include tel que `<jv/jv.h>` ?
 
-> ...
+> Dans le .vcxproj avec additionalIncludeDirectories qui va chercher dans src
 
 I) Chercher `LanguageStandard`. Quel est la version du standard C++ que nous utilisons ?
 
-> ...
+> stdcpp20 (c++ 20 standart)
 
 J) Où sont définis quels fichiers C++ sont compilés pour l'exercice 2 ?
 
-> ...
-
+> Dans le .vcxproj
 Dans Visual Studio, dans la fenêtre "Explorateur de solutions" à droite :
 
 - Clic-droit sur "Exo2"
@@ -78,27 +77,27 @@ Dans Visual Studio, dans la fenêtre "Explorateur de solutions" à droite :
 
 K) Quels sont les liens entre :
 
-> **Fichiers `.h` et `.cpp` :** ...
+> **Fichiers `.h` et `.cpp` :** Dans le .h, on déclare les variables et fonction et dans le .cpp on les implémentent
 >
-> **Fichiers `.cpp` et `.obj` :** ...
+> **Fichiers `.cpp` et `.obj` :** Les .cpp sont compilés en .obj (fichiers binaires)
 >
-> **Fichiers `.obj` et `.lib` :** ...
+> **Fichiers `.obj` et `.lib` :** Les .obj constituent les .lib
 >
-> **Fichiers `.obj` et `.dll` :** ...
+> **Fichiers `.obj` et `.dll` :** Les .obj sont assemblés en .dll
 >
-> **Fichiers `.obj` et `.exe` :** ...
+> **Fichiers `.obj` et `.exe` :** Un .exe est assemblé de plusieurs .obj par l'éditeur de lien
 >
-> **Fichiers `.dll` et `.exe` :** ...
+> **Fichiers `.dll` et `.exe` :** Les .dll permettent de donner des fonctions au .exe qui peut les utiliser comme si c'était a lui
 
 L) Quel est le rôle du préprocesseur ?
 Comment reconnait-on les directives de préprocesseur ?
 
-> ...
+> Il permet de préparer toutes les références / includes avant la compilation. On les reconnais car elles commencent par #.
 
 M) Quel est le rôle de l'éditeur de liens ?
 Quels sont les deux types de fichiers qu'il peut produire ?
 Quelle différence majeure ?
 
-> ...
+> Il permet de fusionner les .obj en dll et exe. Un exe peut se lancer seul alors qu'un dll est plutot comme une bibliotheque de fonction.
 
 **Prochain exercice : exo4.md**

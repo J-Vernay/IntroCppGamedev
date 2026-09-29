@@ -24,25 +24,25 @@ B) Quelle est la taille du type `jv::util::Color` ?
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
 
-> ...
+> jv::util::Color fait 4 octets. Union ça allour un seul espace pour tous ses membres alors que struct ça garde un espace mémoire pour chaques variable 
 
 C) À quoi correspond un `std::vector<unsigned char>`?
 
-> ...
+> C'est un tableau de caractères (char) non signés.
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
 
-> ...
+> C'est un pointeur.
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : Pointeur vers le 18e octet
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : C'est une multiplication
 >
-> `*pointeur` : ...
+> `*pointeur` : C'est pour déréférencer. Pour récupérer la valeur que pointe le pointeur
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : Pointeur vers uint 32 a l'emplacement du 18e octet 
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
@@ -55,31 +55,31 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : "BMN-\x15"
 >
-> `pFile + 1` : ...
+> `pFile + 1` : "MN-\x15"
 >
-> `pPixels` : ...
+> `pPixels` : r = 128 , g = 75, b =11 
 >
-> `pPixels + 1` : ...
+> `pPixels + 1` : r = 253, g = 253, b = 253
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
 
-> ...
+> Parce que on déplace l'endroit où on regarde dans la mémoire.
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
 
-> ...
+> C'est une addition
 
 I)  Prenez connaissance de la spécification du format de fichier BMP.
 
 J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : La largeure horizontale de la bitmap
 >
-> `v2` : ...
+> `v2` : La hauteur verticale de la bitmap
 >
-> `v3` : ...
+> `v3` : Bits par pixels
 
 Renommer ces variables de façon appropriée.
 
