@@ -50,9 +50,9 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
             for (uint32_t x = 0; x < width; x++)
             {
                 jv::util::Color color = {
-                    *(unsigned char*)(pData + (y * width + x) * (bpp / 8) + 2),
-                    *(unsigned char*)(pData + (y * width + x) * (bpp / 8) + 1),
-                    *(unsigned char*)(pData + (y * width + x) * (bpp / 8)),
+                    *(unsigned char*)(pData + (y * scanLineWidth + x) * (bpp / 8) + 2),
+                    *(unsigned char*)(pData + (y * scanLineWidth + x) * (bpp / 8) + 1),
+                    *(unsigned char*)(pData + (y * scanLineWidth + x) * (bpp / 8)),
                     255
                 };
                 if (color.rgba == 4294902015 /* 255 0 255 255*/)
@@ -73,7 +73,7 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
         {
             for (uint32_t x = 0; x < width; x++)
             {
-                jv::util::Color color = ColorTable[*(unsigned char*)(pData + (y * width + x) * (bpp / 8))];
+                jv::util::Color color = ColorTable[*(unsigned char*)(pData + (y * scanLineWidth + x) * (bpp / 8))];
                 color.a = 255;
 
                 if (color.rgba == 4294902015 /* 255 0 255 255*/)
