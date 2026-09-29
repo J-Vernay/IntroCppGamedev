@@ -45,7 +45,12 @@ std::vector<exo5::Play> exo5::FindAllPlays(String const& moliere)
 
 int64_t exo5::CountLetters(String const& play)
 {
-    return 0;
+    // for-range
+    int64_t count = 0;
+    for (char c : play)
+        if (std::isalpha(c))
+            count += 1;
+    return count;
 }
 
 exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
