@@ -50,8 +50,31 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     }
     else if (v3 == 8)
     {
-        
+        for (uint32_t row = 0; row < pxHeight; row += 1)
+        {
+            uint32_t invrow = pxHeight - 1 - row;
+            for (uint32_t col = 0; col < pxWidth; col += 1)
+            {
+                uint32_t src_i = invrow * pxWidth + col;
+                uint8_t idxColor = *(pFile + dataOffset + src_i);
+
+                pPixels->b = *(pFile + 0x0036 + idxColor * 4);
+                pPixels->g = *(pFile + 0x0036 + idxColor * 4 + 1);
+                pPixels->r = *(pFile + 0x0036 + idxColor * 4 + 2);
+                pPixels->a = 255;
+                pPixels += 1;
+            }
+        }
     }
+
+   for (jv::util::Color& c : pixels ){
+       if (c.r == 255 && c.g == 0 && c.b == 255 && c.a == 255){
+           c.r = 0;
+           c.g = 0;
+           c.b = 0;
+           c.a = 0;
+       }
+   }
 
     jv::util::Vec2 pxSize = {pxWidth, pxHeight};
     jv::gpu::Texture* pTexture = jv::gpu::CreateTexture(imageName, pxSize, pixels);

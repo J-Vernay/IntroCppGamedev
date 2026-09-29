@@ -28,7 +28,7 @@ enlever la ligne `std::setlocale(LC_ALL, ".UTF8");`.
 Quel effet cela produit sur la sortie texte dans la console ?
 Puis remettre la ligne.
 
-> ...
+> Tous les caractères spéciaux comme les accents par exemple sont remplacés par d'autres caractères.
 
 C) Dans `exo5_main.cpp`, dans la fonction `GetUserDocumentsFolder()`,
 remplacer `#if _WIN64/#else/#endif` par `if(_WIN64)/else`.
@@ -36,7 +36,7 @@ Pourquoi le code ne compile pas ?
 En déduire une particularité entre `#if` et `if`.
 Puis remettre l'état initial.
 
-> ...
+> Parce que #if est une instruction au compilateur alors que if est un code qui doit être compilé. Sans le #if du code qui ne doit pas être compilé se retrouve compilé donc ça provoque une erreur.
 
 D) Dans `exo5_main.cpp`, dans la fonction `main()`, remplacer `#if 0` par `#if 1`.
 Relancer le programme. Une section doit apparaître pour chaque pièce de théâtre,
@@ -48,27 +48,28 @@ est de retrouver toutes les pièces de théâtre présentes dans le fichier
 
 E) Replacez les commentaires suivants au bon endroit dans la fonction `exo5::FindAllPlays()`.
  
-> // On récupère le nom du titre de la pièce.
+> // On récupère le nom du titre de la pièce. /
 > 
-> // Il y a le contenu de la pièce, jusqu'à "#FIN#"
+> // Il y a le contenu de la pièce, jusqu'à "#FIN#" /
 > 
 > // Le début de remaining correspond au titre de la pièce.
-> // On cherche le prochain '#', qui indique la fin du titre.
+> // On cherche le prochain '#', qui indique la fin du titre. / 
 > 
-> // Retour au début, où l'on cherche le prochain #DEBUT#
+> // Retour au début, où l'on cherche le prochain #DEBUT# /
 > 
-> // On retire le titre de la pièce et le "#" d'après.
+> // On retire le titre de la pièce et le "#" d'après. /
 > 
-> // On enlève tout ce qui est avant "#DEBUT#" (inclus)
+> // On enlève tout ce qui est avant "#DEBUT#" (inclus) /
 > 
-> // On cherche la position du premier caractère de la prochaine occurrence de "#DEBUT#"
+> // On cherche la position du premier caractère de la prochaine occurrence de "#DEBUT#" /
 > 
-> // Le début de remaining correspond au type de pièce (ex: COMEDIE).
+> // Le début de remaining correspond au type de pièce (ex: COMEDIE). /
 
 F) En utilisant le tableau disponible en-dessous de cette page de documentation
 [cette page de documentation](https://en.cppreference.com/cpp/string/byte/isalpha),
 trouver la fonction appropriée pour détecter si un caractère est une lettre de l'alphabet latin.
 
+> isalpha
 
 **IMPORTANT**  
 Pour les implémentations de fonction ci-dessous, bien utiliser les types définis dans `exo5_stats.h`
@@ -78,7 +79,7 @@ G) Implémenter `exo5::CountLetters()`.
 Utiliser la syntaxe `for (char c : play)`.
 Comment s'appelle cette syntaxe ?
 
-> ...
+> Une boucle foreach. ça fait un parcours sur les éléments.
 
 H) Implémenter `exo5::GetSortedLetterCount()` dans un premier temps sans vous soucier du tri par fréquence.
 Quelle fonction standard disponible dans cctype (documentation : [https://en.cppreference.com/cpp/header/cctype](https://en.cppreference.com/cpp/header/cctype))
