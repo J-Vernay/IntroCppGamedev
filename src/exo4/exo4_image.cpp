@@ -49,8 +49,22 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     else if (bitsPerPixel == 8)
     {
         // 1 octet par pixel, index vers la "colortable"
-
-
+        
+        unsigned char* colorTable = (unsigned char*)(pFile + 0x0036);
+        for (uint32_t i = 0; i < width * height; i++)
+        {
+            uint32_t w = i % width;
+            uint32_t h = i / width;
+            uint32_t p = (height - h - 1) * width + w;
+            pPixels[p].b = *(colorTable + 4 * *(unsigned char*)(pFile + 0x0436 + i));
+            pPixels[p].g = *(colorTable + 4 * *(unsigned char*)(pFile + 0x0436 + i) + 1);
+            pPixels[p].r = *(colorTable + 4 * *(unsigned char*)(pFile + 0x0436 + i) + 2);
+            pPixels[p].a = 255;
+            if (pPixels[p].r == 255 && pPixels[p].g == 0 && pPixels[p].b == 255)
+            {
+                pPixels[p] = {0, 0, 0, 0};
+            }
+        }
     }
 
     jv::util::Vec2 pxSize = {width, height};

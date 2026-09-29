@@ -17,11 +17,11 @@ namespace exo5
 
 using String = std::string_view;
 
-using StringList = std::vector<String>;
+using StringList = std::list<String>;
 using CharCount = std::pair<char, int64_t>;
 using StringCount = std::pair<String, int64_t>;
-using CharCountList = std::vector<CharCount>;
-using StringCountList = std::vector<StringCount>;
+using CharCountList = std::list<CharCount>;
+using StringCountList = std::list<StringCount>;
 
 struct Play
 {
@@ -43,5 +43,9 @@ StringList FindWords(String const& play);
 StringList FindUniqueWords(StringList const& words);
 
 StringCountList GetSortedWordCount(StringList const& words);
+
+bool _OrderCharCount(CharCount const& a, CharCount const& b);
+
+bool _OrderWordCount(StringCount const& a, StringCount const& b);
 
 } // namespace exo5

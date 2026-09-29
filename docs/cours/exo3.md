@@ -38,7 +38,7 @@ Dans la barre de menu de Visual Studio :
 
 E) Que contient le fichier `JV.lib` ?
 
-> Le chemin des fichiers compilés du moteur de jeu.
+> D'autres fichiers compilés du moteur de jeu.
 
 F) Chercher `IntroCppGamedev !tools *.exe`. 
 Dans quel dossier se trouvent ces fichiers ?
@@ -61,7 +61,7 @@ G) Où sont définis les dossiers de sortie des fichiers `.obj` et `.exe` ?
 
 H) Où est défini comment est résolu les chemins d'include tel que `<jv/jv.h>` ?
 
-> Dans des <ClInclude>.
+> Dans des <AdditionalIncludeDirectories>.
 
 I) Chercher `LanguageStandard`. Quel est la version du standard C++ que nous utilisons ?
 

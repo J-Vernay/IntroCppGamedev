@@ -22,25 +22,25 @@ Vous devriez avoir la console qui apparaît avec diverses informations pour plus
 B) Quelle est la particularité de la fonction `TestContainer` ?
 Que déclare le code `template <int N> struct Struct` ?
 
-> ...
+> Un struct avec un tableau de char de taile N.
 
 C) Quelle méthode `TestContainer` teste sur chaque conteneur étudié ?
 
-> ...
+> resize()
 
 D) Que signifie la syntaxe `&v` ?
 
-> ...
+> Une valeur du tableau générique
 
 E) Analyser la sortie `=== vector-char ===` (première section).
 À chaque fois, soustrayez l'adresse de la dernière valeur par l'adresse de la première valeur.
 Quel motif observez-vous ?
 
-> ...
+> La différence entre ces deux valeurs est de <taille du vecteur> - 1.
 
 F) Retrouvez-vous ce motif avec `deque<char>`, `list<char>`, `string` ?
 
-> ...
+> Non, non, oui. 
 
 G) Retrouvez-vous ce motif avec `vector<Struct<4096>>` ? Quelle différence ?
 
