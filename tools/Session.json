@@ -1,9 +1,9 @@
 [
 	{
 		"is_closed":1,
-		"window_x":563,
-		"window_y":184,
-		"window_wide":794,
+		"window_x":-1185,
+		"window_y":238,
+		"window_wide":981,
 		"window_high":664,
 		"maximized":0,
 		"ontop":0,
@@ -42,7 +42,7 @@
 		[
 			{
 				"is_closed":0,
-				"search":"IntroCppGamedev *.exe !tools",
+				"search":"IntroCppGamedev !tools *.exe",
 				"match_case":0,
 				"match_path":1,
 				"match_whole_word":0,
