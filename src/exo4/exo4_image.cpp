@@ -71,6 +71,15 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
 
                 int indexColor = (pFile + dataOffset)[indexY];
 
+                if (((pFile + 0x0036)[4 * indexColor]) == 255 &&
+                    (pFile + 0x0036)[4 * indexColor + 2] == 255 && (pFile + 0x0036)[4 * indexColor + 1] == 0)
+                {
+                    pPixels[index].b = 0;
+                    pPixels[index].g = 0;
+                    pPixels[index].r = 0;
+                    continue;
+                }
+
                 pPixels[index].b = (pFile + 0x0036)[4*indexColor];
                 pPixels[index].g = (pFile + 0x0036)[4*indexColor + 1];
                 pPixels[index].r = (pFile + 0x0036)[4*indexColor  + 2];
