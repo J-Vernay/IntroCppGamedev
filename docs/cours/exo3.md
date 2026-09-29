@@ -106,7 +106,7 @@ K) Quels sont les liens entre :
 >
 > **Fichiers `.obj` et `.lib`:** Les fichier .lib sont une combinaison en un seul fichier de fichiers .obj.
 >
-> **Fichiers `.obj` et `.dll`:** Les fichier .dll sont une combinaison en un seul fichier de fichiers .obj qui peuvent être partagé (une seul copie) vers d'autre projets.
+> **Fichiers `.obj` et `.dll`:** Les fichier .dll sont une combinaison en un seul fichier de fichiers .obj qui peuvent être partagé/utilisé (une seul copie) par d'autre programmes/projets.
 >
 > **Fichiers `.obj` et `.exe`:** Les fichiers .exe sont une combinaison en un seul fichier éxécutable (avec Main ou WinMain en point d'entrée) de fichiers .obj.
 >
@@ -115,7 +115,7 @@ K) Quels sont les liens entre :
 L) Quel est le rôle du préprocesseur ?
 Comment reconnait-on les directives de préprocesseur ?
 
-> Il intervient avant la compilation et permet notamment l'inclusion du code source provenant d'autre fichier et de préparer le fichier en fonction de la compilation conditionnelle
+> Il intervient avant la compilation et permet notamment l'inclusion du code source provenant d'autre fichier et de préparer le fichier pour la compilation en fonction de la "compilation conditionnelle"
 > Les directives de préprocesseur commencent par "#" (#include, #define, #if...)
 
 M) Quel est le rôle de l'éditeur de liens ?
