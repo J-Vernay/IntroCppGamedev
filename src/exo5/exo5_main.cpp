@@ -100,7 +100,7 @@ int main()
 #if 1
 
     std::vector<Play> plays = FindAllPlays(moliere);
-
+        
     std::vector<PlayStats> stats;
 
     PlayStats moyenne{"!!! MOYENNE !!!", "MOYENNE"};

@@ -44,4 +44,6 @@ StringList FindUniqueWords(StringList const& words);
 
 StringCountList GetSortedWordCount(StringList const& words);
 
+bool _OrderCharCount(std::pair<char, uint64_t> firstElt, std::pair<char, uint64_t> secondElt);
+
 } // namespace exo5
