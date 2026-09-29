@@ -44,4 +44,6 @@ StringList FindUniqueWords(StringList const& words);
 
 StringCountList GetSortedWordCount(StringList const& words);
 
+static bool _OrderCharCount(CharCount a, CharCount b);
+
 } // namespace exo5

@@ -28,7 +28,7 @@ enlever la ligne `std::setlocale(LC_ALL, ".UTF8");`.
 Quel effet cela produit sur la sortie texte dans la console ?
 Puis remettre la ligne.
 
-> ...
+> Les caractères spéciaux (é, à, û...) n'apparaissent pas correctement.
 
 C) Dans `exo5_main.cpp`, dans la fonction `GetUserDocumentsFolder()`,
 remplacer `#if _WIN64/#else/#endif` par `if(_WIN64)/else`.
@@ -36,7 +36,7 @@ Pourquoi le code ne compile pas ?
 En déduire une particularité entre `#if` et `if`.
 Puis remettre l'état initial.
 
-> ...
+> Le code ne compile pas car path n'est pas défini. #if ne crée pas de sous bloc de code et donc les variable sont défini dans le scope parent (en l'occurence la fonction) alors que if () crée un sous scope et donc path n'y est défini que dedans.
 
 D) Dans `exo5_main.cpp`, dans la fonction `main()`, remplacer `#if 0` par `#if 1`.
 Relancer le programme. Une section doit apparaître pour chaque pièce de théâtre,
@@ -69,6 +69,7 @@ F) En utilisant le tableau disponible en-dessous de cette page de documentation
 [cette page de documentation](https://en.cppreference.com/cpp/string/byte/isalpha),
 trouver la fonction appropriée pour détecter si un caractère est une lettre de l'alphabet latin.
 
+> std::isaplha
 
 **IMPORTANT**  
 Pour les implémentations de fonction ci-dessous, bien utiliser les types définis dans `exo5_stats.h`
@@ -78,14 +79,14 @@ G) Implémenter `exo5::CountLetters()`.
 Utiliser la syntaxe `for (char c : play)`.
 Comment s'appelle cette syntaxe ?
 
-> ...
+> Boucle for-range
 
 H) Implémenter `exo5::GetSortedLetterCount()` dans un premier temps sans vous soucier du tri par fréquence.
 Quelle fonction standard disponible dans cctype (documentation : [https://en.cppreference.com/cpp/header/cctype](https://en.cppreference.com/cpp/header/cctype))
 peut-on utiliser pour ne pas se soucier des différences majuscule/minuscule ?
 Vérifier à l'aide du débogueur qu'à la fin du traitement, le tableau `res` ne possède au maximum 26 entrées.
 
-> ...
+> tolower (ou toupper) pour changer les charactère majuscule en minuscule (et vice-versa).
 
 Dans `exo5::GetSortedLetterCount()`, remplacer `#if 0` par `#if 1`.
 La fonction ne compile plus car la fonction `_OrderCharCount()` n'est pas définie.
@@ -96,7 +97,7 @@ Que doit indiquer sa valeur de retour ?
 
 ([Documentation de std::sort](https://en.cppreference.com/cpp/algorithm/sort))
 
-> ...
+> Les 2 arguments sont de type CharCount, la fonction retourne un bool (false si élément 1 est égal à b ou inferieur, true sinon)
 
 J) Définir et implémenter la fonction `_OrderCharCount()`.
 Exécuter le programme.
