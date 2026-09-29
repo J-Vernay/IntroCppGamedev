@@ -43,7 +43,7 @@
 		[
 			{
 				"is_closed":0,
-				"search":"IntroCppGamedev *.obj",
+				"search":"IntroCppGamedev !tools *.exe",
 				"match_case":0,
 				"match_path":1,
 				"match_whole_word":0,

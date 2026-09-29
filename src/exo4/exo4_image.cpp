@@ -19,35 +19,61 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     uint32_t dataOffset = *(uint32_t*)(pFile + 0x000A);
 
     // Interprétation des données
-    uint32_t v1 = *(uint32_t*)(pFile + 0x0012);
-    uint32_t v2 = *(uint32_t*)(pFile + 0x0016);
+    uint32_t pixWidth = *(uint32_t*)(pFile + 0x0012);
+    uint32_t pixHeight = *(uint32_t*)(pFile + 0x0016);
 
-    uint16_t v3 = *(uint16_t*)(pFile + 0x001C);
-    if (v3 != 8 && v3!= 24)
+    uint16_t bitsPerPixel = *(uint16_t*)(pFile + 0x001C);
+    if (bitsPerPixel != 8 && bitsPerPixel != 24)
         return {};
 
     // Destination
     std::vector<jv::util::Color> pixels;
-    pixels.resize(1);
+    pixels.resize(pixWidth*pixHeight);
+
     jv::util::Color* pPixels = pixels.data();
 
-    // A ENLEVER
-    float f = jv::util::RandomFloat(0, 6.28);
-    pPixels[0].r = 128;
-    pPixels[0].g = 127.5 + 127.5 * std::sin(f);
-    pPixels[0].b = 127.5 + 127.5 * std::cos(f);
-    pPixels[0].a = 255;
+    uint32_t BytesPerPixel = bitsPerPixel / 8;
+    unsigned char* colorTable = pFile + 0x0036;
 
-    if (v3 == 24)
+    for (uint32_t row = 0; row < pixHeight; row++)
     {
-        // 3 octets par pixel, BGR
-    }
-    else if (v3 == 8)
-    {
-        // 1 octet par pixel, index vers la "colortable"
+        uint32_t invrow = (pixHeight - 1) - row;
+
+        for (uint32_t col = 0; col < pixWidth; col++)
+        {
+            uint32_t pixelIndex = pixWidth * invrow + col;
+            unsigned char* pixelPtr = pFile + dataOffset + (pixelIndex * BytesPerPixel);
+
+            const unsigned char* colorData = nullptr;
+
+            if (bitsPerPixel == 8)
+                colorData = colorTable + (*pixelPtr * 4);
+            else if (bitsPerPixel == 24)
+                colorData = pixelPtr;
+            else
+                return {};
+
+            pPixels->b = colorData[0];
+            pPixels->g = colorData[1];
+            pPixels->r = colorData[2];
+            pPixels->a = 255;
+
+            pPixels += 1;
+        }
     }
 
-    jv::util::Vec2 pxSize = {1, 1};
+    for (jv::util::Color& c : pixels)
+    {
+        if (c.r == 255 && c.g == 0 && c.b == 255 && c.a == 255)
+        {
+            c.r = 0;
+            c.g = 0;
+            c.b = 0;
+            c.a = 0;
+        }
+    }
+
+    jv::util::Vec2 pxSize = {pixWidth, pixHeight};
     jv::gpu::Texture* pTexture = jv::gpu::CreateTexture(imageName, pxSize, pixels);
     return {pTexture, pxSize};
 }
