@@ -57,31 +57,31 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : 0x000001a772ab0080
 >
-> `pFile + 1` : ...
+> `pFile + 1` : 0x000001a772ab0081
 >
-> `pPixels` : ...
+> `pPixels` : 0x000001a7728d0120
 >
-> `pPixels + 1` : ...
+> `pPixels + 1` : 0x000001a7728d0124
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
 
-> ...
+> +1 fait un offset sur la prochaine value en mémoire, et tout dépend du nombre byte utilisé
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
 
-> ...
+> indique que le ptr pointe vers un array de x éléments
 
 I)  Prenez connaissance de la spécification du format de fichier BMP.
 
 J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : largeur de la bitmap
 >
-> `v2` : ...
+> `v2` : hauteur bitmap
 >
-> `v3` : ...
+> `v3` : bite/pixl
 
 Renommer ces variables de façon appropriée.
 
