@@ -20,6 +20,11 @@ puis clic sur "Définir en tant que projet de démarrage / Set as Startup Projec
 A) Prendre connaissance des fichiers fournis et exécutez le programme.
 Vous devriez pouvoir utiliser les flèches gauche et droite pour faire défiler des carrés colorés.
 
+Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
+puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
+Dans la fenêtre apparue, alternez entre les deux vues disponibles
+en cliquant sur l'icône directement à droite du nom du type.
+
 B) Quelle est la taille du type `jv::util::Color` ?
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
@@ -43,11 +48,6 @@ E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 > `*pointeur` : ...
 >
 > `*(uint32_t*)(pointeur)` : ...
-
-Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
-puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
-Dans la fenêtre apparue, alternez entre les deux vues disponibles
-en cliquant sur l'icône directement à droite du nom du type.
 
 Mettre un point d'arrêt (breakpoint) sur la ligne définissant `pxSize`.
 Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
