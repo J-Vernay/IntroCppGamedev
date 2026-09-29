@@ -17,7 +17,7 @@ Le but de ce TD est de lire un fichier texte contenant des pièces de théâtre 
 et d'en retirer des statistiques.
 
 Dans l'explorateur de solutions, à droite, clic-droit sur "Exo 5",
-puis clic sur "Définir en tant que projet de démarrage
+puis clic sur "Définir en tant que projet de démarrage / Set as Startup Project".
 
 A) Prendre connaissance des fichiers fournis et exécutez le programme.
 Vous devriez avoir un affichage texte qui apparaît ("la console")
