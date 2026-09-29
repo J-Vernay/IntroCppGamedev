@@ -104,6 +104,6 @@ Dans ce cas, chaque octet de pixel correspond à un index pour référencer
 une couleur dans un tableau appelé la "ColorTable".
 
 M) Faire en sorte de remplacer la couleur magenta pur (255, 0, 255, 255)
-par une couleur de transparence (0, 0, 0, 255).
+par une couleur de transparence (0, 0, 0, 0).
 
 **Prochain exercice : exo5.md**
