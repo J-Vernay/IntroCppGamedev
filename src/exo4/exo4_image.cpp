@@ -19,8 +19,8 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     uint32_t dataOffset = *(uint32_t*)(pFile + 0x000A);
 
     // Interprétation des données
-    uint32_t v1 = *(uint32_t*)(pFile + 0x0012);
-    uint32_t v2 = *(uint32_t*)(pFile + 0x0016);
+    uint32_t L = *(uint32_t*)(pFile + 0x0012);
+    uint32_t H = *(uint32_t*)(pFile + 0x0016);
 
     uint16_t v3 = *(uint16_t*)(pFile + 0x001C);
     if (v3 != 8 && v3!= 24)
@@ -28,26 +28,66 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
 
     // Destination
     std::vector<jv::util::Color> pixels;
-    pixels.resize(1);
+    pixels.resize(L*H);
     jv::util::Color* pPixels = pixels.data();
-
-    // A ENLEVER
-    float f = jv::util::RandomFloat(0, 6.28);
-    pPixels[0].r = 128;
-    pPixels[0].g = 127.5 + 127.5 * std::sin(f);
-    pPixels[0].b = 127.5 + 127.5 * std::cos(f);
-    pPixels[0].a = 255;
 
     if (v3 == 24)
     {
-        // 3 octets par pixel, BGR
+
+        for (uint32_t y = 0; y < H; y++)
+        {
+            for (uint32_t x = 0; x < L; x++)
+            {
+                uint32_t index = (y * L + x) * 3;
+                pPixels[((H - y - 1) * L) + x].b = *(pFile + dataOffset + index);
+                pPixels[((H - y - 1) * L) + x].g = *(pFile + dataOffset + index + 1);
+                pPixels[((H - y - 1) * L) + x].r = *(pFile + dataOffset + index + 2);
+                pPixels[((H - y - 1) * L) + x].a = 255;
+            }
+        }
     }
     else if (v3 == 8)
     {
-        // 1 octet par pixel, index vers la "colortable"
+
+        unsigned char* ColorTable = (pFile + 0x0036);
+
+        for (int i = 0; i < 256; i++)
+        {
+            unsigned char* index = (ColorTable + i * 4);
+            if (*index == 255 && *(index + 1) == 0 && *(index + 2) == 255 && *(index + 3) == 255)
+            {
+                *(index) = 0;
+                *(index + 2) = 0;
+            }
+        }
+
+        for (uint32_t y = 0; y < H; y++)
+        {
+            for (uint32_t x = 0; x < L; x++)
+            {
+                uint32_t index = (y * L + x);
+                uint32_t colorIndex = *(pFile + dataOffset + index);
+                unsigned char* finalIndex = (ColorTable + colorIndex * 4);
+                if (*finalIndex == 255 && *(finalIndex + 1) == 0 && *(finalIndex + 2) == 255 &&
+                    *(finalIndex + 3) == 255)
+                {
+                    pPixels[((H - y - 1) * L) + x].b = 0;
+                    pPixels[((H - y - 1) * L) + x].g = 0;
+                    pPixels[((H - y - 1) * L) + x].r = 0;
+                    pPixels[((H - y - 1) * L) + x].a = 255;
+                }
+                else
+                {
+                    pPixels[((H - y - 1) * L) + x].b = *finalIndex;
+                    pPixels[((H - y - 1) * L) + x].g = *(finalIndex + 1);
+                    pPixels[((H - y - 1) * L) + x].r = *(finalIndex + 2);
+                    pPixels[((H - y - 1) * L) + x].a = 255;
+                }
+            }
+        }
     }
 
-    jv::util::Vec2 pxSize = {1, 1};
+    jv::util::Vec2 pxSize = {L, H};
     jv::gpu::Texture* pTexture = jv::gpu::CreateTexture(imageName, pxSize, pixels);
     return {pTexture, pxSize};
 }
