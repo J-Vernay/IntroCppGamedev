@@ -21,28 +21,30 @@ A) Prendre connaissance des fichiers fournis et exécutez le programme.
 Vous devriez pouvoir utiliser les flèches gauche et droite pour faire défiler des carrés colorés.
 
 B) Quelle est la taille du type `jv::util::Color` ?
+	4bytes
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
+	les membres d'un struct on une case memoire / union case mémoire partagée.
 
 > ...
 
 C) À quoi correspond un `std::vector<unsigned char>`?
 
-> ...
+> c'est une liste d'octets vides non négatifs
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
 
-> ...
+> a définir un pointeur de type char sur ma var pFile.
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : avoir une incrémentation en adresse mémoire 
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : c'est un cast de la valeur en Type
 >
-> `*pointeur` : ...
+> `*pointeur` : récupère la valeur stocké par le pointeur
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : on récupère la valeur passé en cast en pointeur (type uint32_t*) de la var pointeur
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
