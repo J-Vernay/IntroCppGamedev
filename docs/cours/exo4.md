@@ -24,25 +24,27 @@ B) Quelle est la taille du type `jv::util::Color` ?
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
 
-> ...
-
+> jv::util::Color fait 4 Bytes.
+>
+> Un union ne peut contenir qu'un membre "actif" à la fois. Par exemple pour color, soit rgba est "actif", soit la struct contenant r g b a, la taille alloué d'un union est la taille son plus grand membre.
+> Une struct possède à tout moment une adresse pour chacun de ses membres, ils sont tous "actif".
 C) À quoi correspond un `std::vector<unsigned char>`?
 
-> ...
+> Un "std::vector<unsigned char>" correspond à une liste/array dynamique d'élément de taille 1 byte, positif (0 - 255)
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
 
-> ...
+> L'astérisque indique que la variable pFile est un pointeur, en l'occurance vers un unsigned char (1 byte).
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : pFile est une adresse, donc pFile + 0x0012 est la même adresse avec un offset de 0x0012 dans la mémoire
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : (Type) indique au compilateur le type de valeur qu'est (valeur).
 >
-> `*pointeur` : ...
+> `*pointeur` : *pointeur récupère la valeur présente à l'adresse du pointeur
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : (uint32_t*)(pointeur) indique que le pointeur est un pointeur vers une valeur de type uint32_t et l'astérisque à gauche récupère la valeur (uint32_t) présente à cette endroit.
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
@@ -55,31 +57,33 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : 0x000001a772ab0080
 >
-> `pFile + 1` : ...
+> `pFile + 1` : 0x000001a772ab0081
 >
-> `pPixels` : ...
+> `pPixels` : 0x000001a7728d0120
 >
-> `pPixels + 1` : ...
+> `pPixels + 1` : 0x000001a7728d0124
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
 
-> ...
+> "+ 1" réalise un offset vers la prochaine valeur dans la mémoire en prenant en compte la taille en mémoire de la valeur, 
+*pFile (unsigned char) prends 1 byte, et donc pFile + 1 est un déplacement d'un byte, 
+alors que *pPixels (jv::util::Color) prends 4 bytes et donc pPixels + 1 est un déplacement de 4 bytes.
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
 
-> ...
+> "pointeur[nombre]" indique que le pointeur pointe vers un array de "nombre" éléments.
 
 I)  Prenez connaissance de la spécification du format de fichier BMP.
 
 J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : Largeur de la bitmap (en pixel)
 >
-> `v2` : ...
+> `v2` : Hauteut de la bitmap (en pixel)
 >
-> `v3` : ...
+> `v3` : Nombre de bits par pixel
 
 Renommer ces variables de façon appropriée.
 
