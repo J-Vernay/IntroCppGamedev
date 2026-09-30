@@ -10,7 +10,7 @@ class Animal
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Animal(Vec2 pos, double absTime);
+    Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex);
     
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
@@ -20,6 +20,8 @@ public:
 
     /// Détruit les ressources associées à l'animal.
     ~Animal();
+
+    Animal(const Animal&) = delete;
 
 private:
     Vec2 m_pos;

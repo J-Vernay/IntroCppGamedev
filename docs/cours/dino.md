@@ -26,7 +26,14 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> Animal créée les animaux qui se déplacent et les affiche avec leur animation.
+
+Terrain affiche le terrain, ses animations et ses changement d'état (saison) et permet aux autres objets de clamp
+leur position pour rester sur le terrain.
+
+scene appelle les fonctions de animal et terrain pour les initialiser, appeler leur update (pour l'animal le déplacement)
+et leur fonctions d'affichage.
+
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,34 +41,39 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> il y en a 53, 1 pour le terrain, 1 pour les stats de delta time et 1 pour chaque animal.
+il y a 54 textures, "white" pour la couleur du texte,"monogram bitmap" pour la police d'écriture, "terrain" pour le terrain, 1 "animal" pour chaque animal
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
 
-> ...
+> C'est le destructor, la fonction appelé a la destruction de l'objet.
+Il n'est appelé que quand on arrête le programme.
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
-> ...
+> L'esperluette fait un passage par référence, l'enlever donne a la place une copie. Lorsque la copie est détruite,
+elle appelle son destructeur qui ici, détruit le pointeur de la texture qui est le même pour la copie et
+l'objet original, ce qui provoque un crash.
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ...
+> On peut supprimer le constructeur de copie de Animal, ce qui nous donnera une erreur si on essaye de faire une copie
+ de Animal.
 
 Remettre l'esperluette.
 
 G) Comment faire pour qu'il n'y ait qu'une unique texture `animal.bmp` chargée en VRAM ?
 Le faire.
 
-> ...
+> Il faut charger la texture dans la scene, puis passer en parametre du constructeur des animaux cette texture.
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
 
-> ...
+> Elles représentent les coordonnées des textures.
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.

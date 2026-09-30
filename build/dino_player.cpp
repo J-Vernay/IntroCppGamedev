@@ -1,9 +1,9 @@
-﻿
-#include <dino/dino_animal.h>
+
+#include <dino/dino_player.h>
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex)
+dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* tex)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
@@ -12,12 +12,12 @@ dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex)
     m_pTexture = tex;
 }
 
-dino::Animal::~Animal()
+dino::Player::~Player()
 {
     //jv::gpu::DestroyTexture(m_pTexture);
 }
 
-void dino::Animal::Update(double absTime, float deltaTime)
+void dino::Player::Update(double absTime, float deltaTime)
 {
     float speed = 30;
     m_pos.x += m_dir.x * deltaTime * speed;
@@ -30,7 +30,7 @@ void dino::Animal::Update(double absTime, float deltaTime)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
 
-void dino::Animal::Draw() const
+void dino::Player::Draw() const
 {
     float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
 
