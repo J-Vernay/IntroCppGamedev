@@ -116,23 +116,28 @@ exo5::StringList exo5::FindWords(String const& play)
 {
     exo5::StringList l;
 
-    std::string s = "";
-    String sView;
     bool isInWord = false;
-    for (char c : play)
+
+    int indexDebut = 0;
+    int indexFin = 0;
+
+    for (int i = 0; i < play.size(); i++)
     {
-        if (std::isalpha(c))
+        if (std::isalpha(play[i]))
         {
-            isInWord = true;
-            s += std::tolower(c);
+            if (!isInWord)
+            {
+                isInWord = true;
+                indexDebut = i;
+            
+            }
         }
         else
         {
             if (isInWord)
             {
-                sView = {s};
-                l.push_back(sView);
-                s = "";
+                indexFin = i;
+                l.push_back(play.substr(indexDebut, indexFin - indexDebut));
                 isInWord = false;
             }
         }
@@ -144,29 +149,43 @@ exo5::StringList exo5::FindWords(String const& play)
 exo5::StringList exo5::FindUniqueWords(StringList const& words)
 {
     StringList l;
-    bool isInList = false;
+    std::unordered_set<String> hash;
+
     for (String s : words)
     {
-        for (String s2 : l)
-        {
-            if (s == s2)
-            {
-                isInList = true;
-            }
-        }
-        if (!isInList)
-        {
-            l.push_back(s);
-        }
-        isInList = false;
+        hash.insert(s);
     }
+
+    for (String s : hash)
+    {
+        l.push_back(s);
+    }
+
+    
 
     return l;
 }
 
 exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
-    return {};
+    StringCountList l;
+    std::unordered_map<String, int> map;
+
+    for (String s : words)
+    {
+        map[s] += 1;
+    }
+    for (const std::pair<String, int> elt : map) 
+    {
+        l.push_back(elt);
+    }
+
+    std::sort(l.begin(), l.end(), [](StringCount firstElt, StringCount secondElt) {
+        return (firstElt.second > secondElt.second);
+    });
+
+
+    return l;
 }
 
 bool exo5::_OrderCharCount(std::pair<char, uint64_t> firstElt, std::pair<char, uint64_t> secondElt)
