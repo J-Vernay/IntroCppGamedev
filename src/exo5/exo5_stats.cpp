@@ -203,7 +203,7 @@ exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
             }
         }
 
-        if (!bNewWord)
+        if (bNewWord)
         {
             // Non: on rajoute un élément.
             StringCount cc{word, 1};

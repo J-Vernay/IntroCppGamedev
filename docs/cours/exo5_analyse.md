@@ -14,18 +14,22 @@ On reste encore sur le projet "Exo 5" pour cette partie.
 A) Exécutez le programme en vérifiant que "Debug" est bien sélectionné en haut dans Visual Studio, à gauche de "x64-windows".
 Notez le temps d'exécution moyen de GetSortedWordCount(), en millisecondes (affiché à la fin de la console).
 
-> ...
+> 192.173ms
 
 B Sélectionner "Release" à la place de "Debug", et notez le temps d'exécution moyen de GetSortedWordCount().
 Pourquoi y a-t-il une différence ? Laisser en "Release" pour la suite.
 
-> ...
+> 19.2384ms
 
 C) Exécutez le programme 5 fois, en notant à chaque fois le temps d'exécution moyen (toutes pièces confondues)
 de GetSortedWordCount(), en millisecondes (affiché à la fin de la console).
 Quelle est l'ordre de grandeur de la variabilité ?
 
-> ...
+> 15.4466ms
+> 19.1081ms
+> 18.5799ms
+> 18.799ms
+> 19.5688ms
 
 Il est donc important de se mettre en Release pour mesurer les performances,
 et d'observer plusieurs fois le comportement du programme avant de conclure sur les performances.
