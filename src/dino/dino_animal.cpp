@@ -3,18 +3,19 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture, Terrain* terrain)
+    : Entity(terrain, pos)
 {
-    m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-    m_pTexture = dino::LoadImageAsset("animals.bmp");
+    m_pTexture = texture;
+    m_terrain = terrain;
 }
 
 dino::Animal::~Animal()
 {
-    jv::gpu::DestroyTexture(m_pTexture);
+    // jv::gpu::DestroyTexture(m_pTexture);
 }
 
 void dino::Animal::Update(double absTime, float deltaTime)
@@ -22,6 +23,20 @@ void dino::Animal::Update(double absTime, float deltaTime)
     float speed = 30;
     m_pos.x += m_dir.x * deltaTime * speed;
     m_pos.y += m_dir.y * deltaTime * speed;
+
+    Vec2 clampedPos = m_terrain->ClampPos(m_pos);
+
+    if (m_pos.x != clampedPos.x || m_pos.y != clampedPos.y)
+    {
+        m_pos = clampedPos;
+        // TODO OnOutsideTerrain()
+        //
+        //
+        //
+        //
+        //
+        //
+    }
 
     m_idxFrame = int32_t(absTime * 8) % 4;
 
@@ -32,6 +47,7 @@ void dino::Animal::Update(double absTime, float deltaTime)
 
 void dino::Animal::Draw() const
 {
+    // L'animal se déplace visuellement vers la gauche par défaut.
     float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
@@ -39,6 +55,26 @@ void dino::Animal::Draw() const
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;
+
+    if (abs(m_dir.y) > abs(m_dir.x)) // L'animal se déplace principalement verticalement.
+    {
+        if (m_dir.y > 0) // L'animal se déplace vers le haut.
+        {
+            v1 = 32;
+            v2 = 64;
+        }
+        else // L'animal se déplace vers le bas.
+        {
+            v1 = 64;
+            v2 = 96;
+        }
+    }
+    else if (m_dir.x > 0) // L'animal se déplace vers la droite.
+    {
+        float temp = u1;
+        u1 = u2;
+        u2 = temp;
+    }
 
     std::vector<jv::gpu::Vertex> vs;
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
@@ -51,4 +87,9 @@ void dino::Animal::Draw() const
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Animal", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Animal::OnOutsideTerrain()
+{
+    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
 }

@@ -1,9 +1,9 @@
 [
 	{
 		"is_closed":1,
-		"window_x":2050,
-		"window_y":259,
-		"window_wide":1031,
+		"window_x":563,
+		"window_y":184,
+		"window_wide":794,
 		"window_high":664,
 		"maximized":0,
 		"ontop":0,
@@ -42,7 +42,7 @@
 		[
 			{
 				"is_closed":0,
-				"search":"IntroCppGamedev !tools *.exe",
+				"search":"IntroCppGamedev *.exe !tools",
 				"match_case":0,
 				"match_path":1,
 				"match_whole_word":0,
@@ -53,7 +53,7 @@
 				"ignore_whitespace":0,
 				"match_regex":0,
 				"filter":"",
-				"sort":"Name",
+				"sort":"Date Modified",
 				"sort_ascending":0,
 				"secondary_sort":"",
 				"secondary_sort_ascending":1,
@@ -85,7 +85,7 @@
 				"filelist_slot7":[],
 				"filelist_slot8":[],
 				"filelist_slot9":[],
-				"columns":[{"name":"Name","width":256},{"name":"Path","width":488},{"name":"Size","width":96},{"name":"Date Modified","width":153}]
+				"columns":[{"name":"Name","width":256},{"name":"Path","width":256},{"name":"Size","width":96},{"name":"Date Modified","width":153}]
 			}
 		]
 	}

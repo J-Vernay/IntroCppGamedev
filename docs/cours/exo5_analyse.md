@@ -78,8 +78,8 @@ Quel type de lien relie ces deux variables ? Pourquoi ?
 I) Mettre "msFindUniqueWords" en ordonnée et "NbMots" en abscisse.
 Quel type de lien relie ces deux variables ? Pourquoi ?
 
-> Linéaire
-> Plus de mots -> plus de temps pour compter tous les mots uniques.
+> Sur-linéaire.
+> Plus de mots -> plus de temps pour compter tous les mots uniques avec double for.
 
 ## TD - Analyse des performances d'un programme
 

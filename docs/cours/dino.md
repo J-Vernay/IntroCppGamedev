@@ -26,7 +26,9 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> Animal : gère le comportement d'un animal et son affichage.
+> Scene : gère l'environnement du jeu global et son affichage.
+> Terrain : gère le terrain, sa saison, ses apparitions, son affichage.
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,34 +36,37 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> Il y a 41 vertex buffers (jv::gpu::VertexBuffer), un "Terrain", un "dTime", et de nombreux "Animal".
+> Il y a 42 textures (jv::gpu::Texture), "white", "terrain.bmp", "monogram-bitmap.bmp", et de nombreux "animals.bmp".
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
 
-> ...
+> C'est le destructeur de la classe Animal, le code qui sera appelé lorsqu'un objet Animal sera libéré.
+> Il est appelé à la destruction de la scène par ~Scene, par jv::game::Shut().
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
-> ...
+> Cela donne une erreur et aucun animal apparaît visuellement à l'écran, car, sans &, le foreach sur m_animals est fait par copie, ce qui fait que la fonction
+> animal.Update() n'a aucun effet sur les animaux présents dans m_animals, uniquement sur une copie de ceux-ci.
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ...
+> ?
 
 Remettre l'esperluette.
 
 G) Comment faire pour qu'il n'y ait qu'une unique texture `animal.bmp` chargée en VRAM ?
 Le faire.
 
-> ...
+> Déclarer la texture dans Scene, la charger une seule fois, et la passer en argument dans le constructeur d'Animal.
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
 
-> ...
+> À définir le type d'animal en tant que position dans la texture, et animer l'animal en déplaçant les coordonnées.
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.
@@ -121,29 +126,30 @@ Quand ils atteignent le bord du terrain, ils prennent une nouvelle direction al�
 
 C) Comment détecter si deux cercles à des positions données sont en collision ?
 
-> ...
+> Vérifier si la distance qui sépare leurs positions respectives est inférieure à la somme de leurs rayons.
 
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> ...
+> Les pousser tous dans la direction opposée par rapport à la collision, de la moitié de la longueur de la collision.
+> Ce n'est pas résoluble si les deux cercles ont la même position.
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
 F) Implémenter : "Les animaux se repoussent entre eux, et aussi les animaux et les dinosaures entre eux."
 Pourquoi y a-t-il duplication de code ?
 
-> ...
+> Car les animaux et les dinosaures ont un comportement en commun sans partager le code.
 
 G) Quelle fonctionnalité du C++ permet de dédupliquer la logique commune entre `dino::Player` et `dino::Animal` ?
 L'appliquer dans la base de code.
 
-> ...
+> L'héritage permet de partager une logique commune entre `dino::Player` et `dino::Animal` grâce à une classe parent partagée.
 
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.
 
-> ...
+> L'`override` de méthodes. 
 
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
