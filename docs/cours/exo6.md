@@ -22,29 +22,29 @@ Vous devriez avoir la console qui apparaît avec diverses informations pour plus
 B) Quelle est la particularité de la fonction `TestContainer` ?
 Que déclare le code `template <int N> struct Struct` ?
 
-> ...
+> Cette fonction peut prendre n'importe quel type en paramètre
 
 C) Quelle méthode `TestContainer` teste sur chaque conteneur étudié ?
 
-> ...
+> resize
 
 D) Que signifie la syntaxe `&v` ?
 
-> ...
+> c'est l'adresse mémoire de v
 
 E) Analyser la sortie `=== vector-char ===` (première section).
 À chaque fois, soustrayez l'adresse de la dernière valeur par l'adresse de la première valeur.
 Quel motif observez-vous ?
 
-> ...
+> on obtient la taille du resize -1.
 
 F) Retrouvez-vous ce motif avec `deque<char>`, `list<char>`, `string` ?
 
-> ...
+> Oui pour string
 
 G) Retrouvez-vous ce motif avec `vector<Struct<4096>>` ? Quelle différence ?
 
-> ...
+> c'est la (taille du resize - 1) * 4096
 
 H) Assurez-vous d'avoir configuré la compilation avec le profil "Release",
 puis exécuter le programme.
@@ -54,26 +54,26 @@ dans le dossier `Documents`.
 I) En lisant le code de `TestContainer`, de quel code étudie-t-on les performances ?
 Combien de mesures sont prises à chaque fois ? Comment sont-elles agrégées ?
 
-> ...
+> On étudie les perfs de l'itération sur le type souhaité 10 fois, de 10k a 100k éléments.
  
 I) Mettre "Container" en légende à droite, "TestName" en abscisse, et "IterTimeMs" en ordonnée.
 Quel type de conteneur semble particulièrement peu efficace ?
 
-> ...
+> Les list de struct
 
 J) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "string" dans la légende pour n'afficher que cette courbe.
 Puis cliquer sur "deque-char", "vector-char" et "list-char".
 De quel autre conteneur les performances de "string" se rapprochent-elles ?
 
-> ...
+> vector char
 
 K) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "vector-char" dans la légende pour n'afficher que cette courbe.
 Puis cliquer sur "vector-Struct256", "vector-Struct1024", "vector-Struct4096".
 Pourquoi les performances de l'itération sur `vector` dépendent du type stocké ?
 
-> ...
+> Le temps d'itération est beaucoup plus court sur des types qui prennent peut d'octets
 
 L) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMS" en ordonnée.
 Double-cliquer sur "vector-Struct4096" dans la légende pour n'afficher que cette courbe.
@@ -81,6 +81,6 @@ Puis cliquer sur "deque-Struct4096" et "list-Struct4096".
 Pourquoi les performances de `vector` et `deque` ne sont pas linéaires
 par rapport au nombre d'éléments ?
 
-> ...
+> Ces types stockent les éléments de manière continue contrairement a la list.
 
 **Fin des exercices, on attaque le projet, cf. `dino.md`**

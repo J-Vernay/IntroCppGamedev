@@ -117,7 +117,7 @@ utilisant `std::deque` par `std::list`. Les appels à `std::sort()` ne fonctionn
 Remplacez `std::sort(res.begin, res.end(), FUNC)` par `res.sort(FUNC)`.
 Quel est le temps d'exécution moyen de GetSortedWordCount() ?
 
-> ...
+> ...1.00398ms
 
 Conclusion : beaucoup de paramètres peuvent affecter les performances d'un programme.
 Le choix d'un conteneur a aussi des implications dans ses performances.
