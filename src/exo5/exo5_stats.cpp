@@ -91,9 +91,8 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
         }
     }
     
-#if 1
-    std::sort(res.begin(), res.end(), _OrderCharCount);
-#endif
+    res.sort(_OrderCharCount);
+    //std::sort(res.begin(), res.end(), _OrderCharCount);
     return res;
 }
 
@@ -211,6 +210,7 @@ exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
         }
     }
 
-    std::sort(res.begin(), res.end(), _OrderStringCount);
+    res.sort(_OrderStringCount);
+    //std::sort(res.begin(), res.end(), _OrderStringCount);
     return res;
 }
