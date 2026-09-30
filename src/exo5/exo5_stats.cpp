@@ -155,10 +155,62 @@ exo5::StringList exo5::FindWords(String const& play)
 
 exo5::StringList exo5::FindUniqueWords(StringList const& words)
 {
-    return {};
+    StringList res;
+
+    // On passe sur tous les mots de la pièce de théâtre.
+    for (String word : words)
+    {
+        // Est-ce que c'est un mot qu'on a déjà vu ?
+        bool bNewWord = true;
+        for (String oldWord : res)
+        {
+            if (word == oldWord)
+            {
+                bNewWord = false;
+                break;
+            }
+        }
+
+        // Sinon, ajouter le mot.
+        if (bNewWord)
+            res.push_back(word);
+    }
+
+    return res;
+}
+
+bool _OrderStringCount(exo5::StringCount a, exo5::StringCount b)
+{
+    return a.second > b.second;
 }
 
 exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
-    return {};
+    StringCountList res;
+
+    for (String word : words)
+    {
+        // Est-ce que le mot a déjà été vu ?
+        bool bNewWord = true;
+        for (StringCount& cc : res)
+        {
+            if (word ==cc.first)
+            {
+                // Oui: on incrémente le compte
+                cc.second += 1;
+                bNewWord = false;
+                break;
+            }
+        }
+
+        if (!bNewWord)
+        {
+            // Non: on rajoute un élément.
+            StringCount cc{word, 1};
+            res.push_back(cc);
+        }
+    }
+
+    std::sort(res.begin(), res.end(), _OrderStringCount);
+    return res;
 }
