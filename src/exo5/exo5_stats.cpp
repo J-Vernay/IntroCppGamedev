@@ -96,21 +96,108 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
 
 int64_t exo5::CountWords(String const& play)
 {
-    
-    return 0;
+    int64_t count = 0;
+
+    bool bPrevLetter = false;
+    for (char c : play)
+    {
+        if (std::isalpha(c))
+        {
+            if (!bPrevLetter)
+                count += 1;
+
+        }
+        bPrevLetter = std::isalpha(c);
+    }
+    return count;
 }
 
 exo5::StringList exo5::FindWords(String const& play)
 {
-    return {};
+    exo5::StringList words;
+    bool bPrevLetter = false;
+    size_t idxWordBegin = 0;
+    size_t idxWordEnd = 0;
+
+    for (size_t idx = 0; idx < play.size(); idx += 1)
+    {
+        char c = play[idx];
+
+        if (std::isalpha(c))
+        {
+            if (!bPrevLetter)
+            {
+                idxWordBegin = idx;
+            }
+        }
+        else
+        {
+            if (bPrevLetter)
+            {
+                idxWordEnd = idx;
+
+                String word = play.substr(idxWordBegin, idxWordEnd - idxWordBegin);
+                words.push_back(word);
+            }
+        }
+
+        bPrevLetter = std::isalpha(c);
+    }
+
+    return words;
 }
 
 exo5::StringList exo5::FindUniqueWords(StringList const& words)
 {
-    return {};
+    StringList res;
+
+    for (String word : words)
+    {
+        bool bNewWord = true;
+        for (String oldWord : res)
+        {
+            if (word == oldWord)
+            {
+                bNewWord = false;
+                break;
+            }
+        }
+        if (bNewWord)
+            res.push_back(word);
+    }
+
+    return res;
+}
+
+bool _OrderStringCount(exo5::StringCount a, exo5::StringCount b)
+{
+    return a.second > b.second;
 }
 
 exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
-    return {};
+    StringCountList res;
+
+    for (String word : words)
+    {
+        bool bNewWord = true;
+        for (StringCount& cc : res)
+        {
+            if (word == cc.first)
+            {
+                cc.second += 1;
+                bNewWord = false;
+                break;
+            }
+        }
+
+        if (!bNewWord)
+        {
+            StringCount cc{word, 1};
+            res.push_back(cc);
+        }
+    }
+
+    std::sort(res.begin(), res.end(), _OrderStringCount);
+    return res;
 }

@@ -98,7 +98,7 @@ Que doit indiquer sa valeur de retour ?
 
 ([Documentation de std::sort](https://en.cppreference.com/cpp/algorithm/sort))
 
-> 
+> la valeur de retour sera true si le premier argument est plus petit que le second
 
 J) Définir et implémenter la fonction `_OrderCharCount()`.
 Exécuter le programme.
