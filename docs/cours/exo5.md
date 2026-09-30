@@ -28,7 +28,7 @@ enlever la ligne `std::setlocale(LC_ALL, ".UTF8");`.
 Quel effet cela produit sur la sortie texte dans la console ?
 Puis remettre la ligne.
 
-> ...
+> les caractères spéciaux ne sont pas affichés
 
 C) Dans `exo5_main.cpp`, dans la fonction `GetUserDocumentsFolder()`,
 remplacer `#if _WIN64/#else/#endif` par `if(_WIN64)/else`.
@@ -36,11 +36,12 @@ Pourquoi le code ne compile pas ?
 En déduire une particularité entre `#if` et `if`.
 Puis remettre l'état initial.
 
-> ...
+> car le if et le IF ne sont pas la meme chose, le IF est utilisée pour la compilation et le if est pour utilisation dans le code
 
 D) Dans `exo5_main.cpp`, dans la fonction `main()`, remplacer `#if 0` par `#if 1`.
 Relancer le programme. Une section doit apparaître pour chaque pièce de théâtre,
 ainsi qu'une section finale ayant des statistiques en moyenne et sur le temps pris.
+
 
 Dans `exo5_stats.cpp`, le rôle de la fonction `exo5::FindAllPlays()`
 est de retrouver toutes les pièces de théâtre présentes dans le fichier
@@ -68,7 +69,8 @@ E) Replacez les commentaires suivants au bon endroit dans la fonction `exo5::Fin
 F) En utilisant le tableau disponible en-dessous de cette page de documentation
 [cette page de documentation](https://en.cppreference.com/cpp/string/byte/isalpha),
 trouver la fonction appropriée pour détecter si un caractère est une lettre de l'alphabet latin.
-
+ 
+  > int isalpha( int ch );
 
 **IMPORTANT**  
 Pour les implémentations de fonction ci-dessous, bien utiliser les types définis dans `exo5_stats.h`
@@ -78,14 +80,14 @@ G) Implémenter `exo5::CountLetters()`.
 Utiliser la syntaxe `for (char c : play)`.
 Comment s'appelle cette syntaxe ?
 
-> ...
+> ca s'appel un foreach
 
 H) Implémenter `exo5::GetSortedLetterCount()` dans un premier temps sans vous soucier du tri par fréquence.
 Quelle fonction standard disponible dans cctype (documentation : [https://en.cppreference.com/cpp/header/cctype](https://en.cppreference.com/cpp/header/cctype))
 peut-on utiliser pour ne pas se soucier des différences majuscule/minuscule ?
 Vérifier à l'aide du débogueur qu'à la fin du traitement, le tableau `res` ne possède au maximum 26 entrées.
 
-> ...
+> isalpha est la bonne fonction
 
 Dans `exo5::GetSortedLetterCount()`, remplacer `#if 0` par `#if 1`.
 La fonction ne compile plus car la fonction `_OrderCharCount()` n'est pas définie.
@@ -96,7 +98,7 @@ Que doit indiquer sa valeur de retour ?
 
 ([Documentation de std::sort](https://en.cppreference.com/cpp/algorithm/sort))
 
-> ...
+> 
 
 J) Définir et implémenter la fonction `_OrderCharCount()`.
 Exécuter le programme.
