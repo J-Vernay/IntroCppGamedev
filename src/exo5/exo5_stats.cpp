@@ -191,7 +191,7 @@ exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
             }
         }
 
-        if (!bNewWord)
+        if (bNewWord)
         {
             StringCount cc{word, 1};
             res.push_back(cc);

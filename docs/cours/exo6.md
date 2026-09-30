@@ -22,21 +22,22 @@ Vous devriez avoir la console qui apparaît avec diverses informations pour plus
 B) Quelle est la particularité de la fonction `TestContainer` ?
 Que déclare le code `template <int N> struct Struct` ?
 
-> ...
+> d'après le code la fonction est un template. 
+> elle déclare un tableau de char qui contient des int
 
 C) Quelle méthode `TestContainer` teste sur chaque conteneur étudié ?
 
-> ...
+> elle execute vs.resize();
 
 D) Que signifie la syntaxe `&v` ?
 
-> ...
+> ca veux dire que on cherche a récupèrer une copie sans modifier en mémoire la valeur de v.
 
 E) Analyser la sortie `=== vector-char ===` (première section).
 À chaque fois, soustrayez l'adresse de la dernière valeur par l'adresse de la première valeur.
 Quel motif observez-vous ?
 
-> ...
+> 
 
 F) Retrouvez-vous ce motif avec `deque<char>`, `list<char>`, `string` ?
 
