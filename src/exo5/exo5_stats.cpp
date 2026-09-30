@@ -9,35 +9,36 @@ std::vector<exo5::Play> exo5::FindAllPlays(String const& moliere)
     String remaining{moliere};
     while (true)
     {
-        // COMMENTAIRE
+        // On cherche la position du premier caractère de la prochaine occurrence de "#DEBUT#"
         size_t idx = remaining.find("#DEBUT#");
         if (idx == String::npos)
             break;
         exo5::Play& play = plays.emplace_back();
 
-        // COMMENTAIRE
+        // On enlève tout ce qui est avant "#DEBUT#" (inclus)
         remaining = remaining.substr(idx + 7);
 
-        // COMMENTAIRE
+        // Le début de remaining correspond au titre de la pièce.
+        // On cherche le prochain '#', qui indique la fin du titre.
         idx = remaining.find("#");
 
-        // COMMENTAIRE
+        // On récupère le nom du titre de la pièce.
         play.name = remaining.substr(0, idx);
 
-        // COMMENTAIRE
+        // On retire le titre de la pièce et le "#" d'après.
         remaining = remaining.substr(idx + 1);
 
-        // COMMENTAIRE
+        // Le début de remaining correspond au type de pièce (ex: COMEDIE).
         idx = remaining.find("#");
         play.kind = remaining.substr(0, idx);
         remaining = remaining.substr(idx + 1);
 
-        // COMMENTAIRE
+        // Il y a le contenu de la pièce, jusqu'à "#FIN#"
         idx = remaining.find("#FIN#");
         play.content = remaining.substr(0, idx);
         remaining = remaining.substr(idx + 5);
 
-        // COMMENTAIRE
+        // Retour au début, où l'on cherche le prochain #DEBUT#
     }
 
     return plays;
@@ -45,36 +46,136 @@ std::vector<exo5::Play> exo5::FindAllPlays(String const& moliere)
 
 int64_t exo5::CountLetters(String const& play)
 {
-    return 0;
+    int numChar = 0;
+    for (char c : play)
+    {
+        if (std::isalpha(c) != 0)
+        {
+            numChar;
+        }
+    }
+    return numChar;
 }
 
 exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
-{ 
+{
+    bool found;
     CharCountList res;
-    // TODO
-    
-#if 0
+    for (char c : play)
+    {
+        if (std::isalpha(c) != 0 && std::toupper(c))
+        {
+            found = false;
+            for (size_t i = 0; i < res.size(); i++)
+            {
+                if (res[i].first == std::toupper(c))
+                {
+                    found = true;
+                    res[i].second++;
+                }
+            }
+            if (!found)
+                res.push_back(CharCount(std::toupper(c), 1));
+        }
+    }
+
+#if 1
     std::sort(res.begin(), res.end(), _OrderCharCount);
 #endif
     return res;
 }
 
+bool exo5::_OrderCharCount(exo5::CharCount element1, exo5::CharCount element2)
+{
+    if (element1.second > element2.second)
+        return true;
+    return false;
+}
+
 int64_t exo5::CountWords(String const& play)
 {
-    return 0;
+    int numWords = 0;
+    char lastLetter = 'a';
+    for (char c : play)
+    {
+        if (!std::isalpha(c) && std::isalpha(lastLetter))
+        {
+            numWords++;
+        }
+        lastLetter = c;
+    }
+
+    return numWords;
 }
 
 exo5::StringList exo5::FindWords(String const& play)
 {
-    return {};
+    exo5::StringList listString;
+    int lastStart;
+    int index= -1;
+    char lastLetter = '2';
+
+    for (char c : play)
+    {
+        index++;
+        if (!std::isalpha(c) && std::isalpha(lastLetter))
+        {
+            listString.push_back(play.substr(lastStart, index-lastStart));
+        }
+        else if (std::isalpha(c) && !std::isalpha(lastLetter))
+        {
+            lastStart = index;
+        }
+        lastLetter = c;
+    }
+        return listString;
 }
 
 exo5::StringList exo5::FindUniqueWords(StringList const& words)
 {
-    return {};
+    StringList uniqueWords;
+    for (size_t i = 0; i < words.size(); i++)
+    {
+        exo5::String currentWord = words[i];
+        int cnt = std::count(uniqueWords.begin(), uniqueWords.end(), currentWord);
+
+        if (cnt >= 1)
+            continue;
+        else
+            uniqueWords.push_back(currentWord);
+    }
+    return uniqueWords;
 }
 
 exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
-    return {};
+    StringCountList wordsSorted;
+    bool find = false;
+    for (size_t i = 0; i < words.size(); i++)
+    {
+        exo5::String currentWord = words[i];
+        find = false;
+        for (size_t i = 0; i < wordsSorted.size(); i++)
+        {
+            if (wordsSorted[i].first == currentWord)
+            {
+                wordsSorted[i].second++;
+                find = true;
+            }
+        }
+        if (!find)
+        {
+            wordsSorted.push_back(StringCount(currentWord, 1));
+        }
+    }
+
+    std::sort(wordsSorted.begin(), wordsSorted.end(), _OrderWordCount);
+    return wordsSorted;
+}
+
+bool exo5::_OrderWordCount(exo5::StringCount element1, exo5::StringCount element2)
+{
+    if (element1.second > element2.second)
+        return true;
+    return false;
 }

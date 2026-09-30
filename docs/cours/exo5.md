@@ -28,7 +28,7 @@ enlever la ligne `std::setlocale(LC_ALL, ".UTF8");`.
 Quel effet cela produit sur la sortie texte dans la console ?
 Puis remettre la ligne.
 
-> ...
+> touts les charactere speciaux (avec des accens ou autres) maruchent pas
 
 C) Dans `exo5_main.cpp`, dans la fonction `GetUserDocumentsFolder()`,
 remplacer `#if _WIN64/#else/#endif` par `if(_WIN64)/else`.
@@ -36,11 +36,13 @@ Pourquoi le code ne compile pas ?
 En déduire une particularité entre `#if` et `if`.
 Puis remettre l'état initial.
 
-> ...
+> les #if etc s'execute a la preconpilation donc sa ne marche plus si on les enleve car ce n'est pas du code fait pour etre executer a la compilation
 
 D) Dans `exo5_main.cpp`, dans la fonction `main()`, remplacer `#if 0` par `#if 1`.
 Relancer le programme. Une section doit apparaître pour chaque pièce de théâtre,
 ainsi qu'une section finale ayant des statistiques en moyenne et sur le temps pris.
+
+ oui 
 
 Dans `exo5_stats.cpp`, le rôle de la fonction `exo5::FindAllPlays()`
 est de retrouver toutes les pièces de théâtre présentes dans le fichier
@@ -48,28 +50,27 @@ est de retrouver toutes les pièces de théâtre présentes dans le fichier
 
 E) Replacez les commentaires suivants au bon endroit dans la fonction `exo5::FindAllPlays()`.
  
-> // On récupère le nom du titre de la pièce.
 > 
-> // Il y a le contenu de la pièce, jusqu'à "#FIN#"
+>
+>
 > 
-> // Le début de remaining correspond au titre de la pièce.
-> // On cherche le prochain '#', qui indique la fin du titre.
 > 
-> // Retour au début, où l'on cherche le prochain #DEBUT#
 > 
-> // On retire le titre de la pièce et le "#" d'après.
 > 
-> // On enlève tout ce qui est avant "#DEBUT#" (inclus)
 > 
-> // On cherche la position du premier caractère de la prochaine occurrence de "#DEBUT#"
 > 
-> // Le début de remaining correspond au type de pièce (ex: COMEDIE).
+> 
+> 
+
+
+>
 
 F) En utilisant le tableau disponible en-dessous de cette page de documentation
 [cette page de documentation](https://en.cppreference.com/cpp/string/byte/isalpha),
 trouver la fonction appropriée pour détecter si un caractère est une lettre de l'alphabet latin.
 
-
+ A la fonction est std::isalpha
+ ()
 **IMPORTANT**  
 Pour les implémentations de fonction ci-dessous, bien utiliser les types définis dans `exo5_stats.h`
 et non pas directement les types standard, ce qui servira plus tard à la fin du TD.
@@ -78,14 +79,14 @@ G) Implémenter `exo5::CountLetters()`.
 Utiliser la syntaxe `for (char c : play)`.
 Comment s'appelle cette syntaxe ?
 
-> ...
+> boucle foreach?
 
 H) Implémenter `exo5::GetSortedLetterCount()` dans un premier temps sans vous soucier du tri par fréquence.
 Quelle fonction standard disponible dans cctype (documentation : [https://en.cppreference.com/cpp/header/cctype](https://en.cppreference.com/cpp/header/cctype))
 peut-on utiliser pour ne pas se soucier des différences majuscule/minuscule ?
 Vérifier à l'aide du débogueur qu'à la fin du traitement, le tableau `res` ne possède au maximum 26 entrées.
 
-> ...
+> c bon
 
 Dans `exo5::GetSortedLetterCount()`, remplacer `#if 0` par `#if 1`.
 La fonction ne compile plus car la fonction `_OrderCharCount()` n'est pas définie.
@@ -96,7 +97,7 @@ Que doit indiquer sa valeur de retour ?
 
 ([Documentation de std::sort](https://en.cppreference.com/cpp/algorithm/sort))
 
-> ...
+> elle doit renvoyer un boolean et  prendre en parametre deux elements du tableau res
 
 J) Définir et implémenter la fonction `_OrderCharCount()`.
 Exécuter le programme.

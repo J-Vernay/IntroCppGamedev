@@ -30,6 +30,10 @@ struct Play
     String content;
 };
 
+bool _OrderCharCount(exo5::CharCount element1, exo5::CharCount element2);
+
+bool _OrderWordCount(exo5::StringCount element1, exo5::StringCount element2);
+
 std::vector<Play> FindAllPlays(String const& moliere);
 
 int64_t CountLetters(String const& play);
