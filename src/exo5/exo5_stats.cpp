@@ -69,12 +69,12 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
         {
             char letter = std::tolower(c);
             bool found = false;
-            for (CharCount& cc : res)
+            for (char index = 0; index < res.size(); index++)
             {
-                if (cc.first == letter)
+                if (res[index].first == letter)
                 {
                     found = true;
-                    cc.second++;
+                    res[index].second++;
                     break;
                 }
             }
@@ -82,7 +82,9 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
                 res.push_back({letter, 1});
         }
     
+#if 1
     std::sort(res.begin(), res.end(), _OrderCharCount);
+#endif
     return res;
 }
 
@@ -131,9 +133,9 @@ exo5::StringList exo5::FindUniqueWords(StringList const& words)
     for (String word : words)
     {
         bool found = false;
-        for (String& str : res)
+        for (int i = 0; i < res.size(); i++)
         {
-            if (str == word)
+            if (res[i] == word)
             {
                 found = true;
                 break;
@@ -157,11 +159,12 @@ exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
     for (String word : words)
     {
         bool found = false;
-        for (StringCount& sc: res) {
-            if (sc.first == word)
+        for (int i = 0; i < res.size(); i++)
+        {
+            if (res[i].first == word)
             {
                 found = true;
-                sc.second++;
+                res[i].second++;
                 break;
             }
         }
