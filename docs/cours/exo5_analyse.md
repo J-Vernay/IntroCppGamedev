@@ -89,7 +89,7 @@ K) Remettez `using String = std::string_view;`. Dans `exo5::FindAllPlays()`,
 remplacez `String remaining{moliere};` par `std::string remaining{moliere};`.
 Pourquoi le logiciel crashe-t-il ?
 
-> ...
+> Le logiciel crash car il accède à de la mémoire non authorisée.
 
 L) Expliquer la différence entre `std::string_view` et `std::string`.
 
