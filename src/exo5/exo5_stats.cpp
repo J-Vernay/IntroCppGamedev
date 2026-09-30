@@ -84,7 +84,8 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
     }
 
 #if 1
-    std::sort(res.begin(), res.end(), _OrderCharCount);
+    res.sort(_OrderCharCount);
+    //std::sort(res.begin(), res.end(), _OrderCharCount);
 #endif
     return res;
 }
@@ -161,8 +162,6 @@ exo5::StringList exo5::FindUniqueWords(StringList const& words)
         l.push_back(s);
     }
 
-    
-
     return l;
 }
 
@@ -175,15 +174,18 @@ exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
     {
         map[s] += 1;
     }
-    for (const std::pair<String, int> elt : map) 
+    for (const std::pair<String, int>& elt : map) 
     {
         l.push_back(elt);
     }
-
-    std::sort(l.begin(), l.end(), [](StringCount firstElt, StringCount secondElt) {
+    l.sort([](StringCount firstElt, StringCount secondElt) {
         return (firstElt.second > secondElt.second);
     });
 
+    /*
+    std::sort(l.begin(), l.end(), [](StringCount firstElt, StringCount secondElt) {
+        return (firstElt.second > secondElt.second);
+    });*/
 
     return l;
 }

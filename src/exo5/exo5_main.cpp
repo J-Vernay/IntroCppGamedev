@@ -131,14 +131,15 @@ int main()
         tic = Clock::now();
         stat.words = FindWords(play.content);
         stat.msFindWords = Clock::now() - tic;
+       
+        tic = Clock::now();
+        stat.wordCounts = GetSortedWordCount(stat.words);
+        stat.msGetSortedWordCount = Clock::now() - tic;
 
         tic = Clock::now();
         stat.uniqueWords = FindUniqueWords(stat.words);
         stat.msFindUniqueWords = Clock::now() - tic;
 
-        tic = Clock::now();
-        stat.wordCounts = GetSortedWordCount(stat.words);
-        stat.msGetSortedWordCount = Clock::now() - tic;
 
         moyenne.charCount += stat.charCount;
         moyenne.letterCount += stat.letterCount;
