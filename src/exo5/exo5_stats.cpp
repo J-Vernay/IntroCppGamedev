@@ -55,6 +55,11 @@ int64_t exo5::CountLetters(String const& play)
     return count;
 }
 
+bool _OrderCharCount(exo5::CharCount a, exo5::CharCount b)
+{
+    return a.second > b.second;
+}
+
 exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
 { 
     CharCountList res;
@@ -63,18 +68,17 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
         if (std::isalpha(c))
         {
             char letter = std::tolower(c);
-            char i = -1;
+            bool found = false;
             for (char index = 0; index < res.size(); index++)
             {
                 if (res[index].first == letter)
                 {
-                    i = index;
+                    found = true;
+                    res[index].second++;
                     break;
                 }
             }
-            if (i != -1)
-                res[i].second++;
-            else
+            if (!found)
                 res.push_back({letter, 1});
         }
     
@@ -104,23 +108,21 @@ int64_t exo5::CountWords(String const& play)
 exo5::StringList exo5::FindWords(String const& play)
 {
     StringList res;
-    std::string currentWord;
     
     for (int i = 0; i < play.size(); i++)
     {
-        if (std::isalpha(play[i]))
-            currentWord.push_back(play[i]);
-        else
+        int indexStart = i;
+        // get every letter in the word
+        while (i < play.size() && std::isalpha(play[i]))
         {
-            if (currentWord != "")
-            {
-                res.push_back(currentWord);
-            }
-
-            currentWord = {};
+            i++;
+        }
+        // push the word to the word list
+        if (i != indexStart)
+        {
+            res.push_back(play.substr(indexStart, i - indexStart));
         }
     }
-    std::cout << res[0] << "\n";
     return res;
 }
 
@@ -145,17 +147,32 @@ exo5::StringList exo5::FindUniqueWords(StringList const& words)
 
     return res;
 }
+bool _OrderWordCount(exo5::StringCount a, exo5::StringCount b)
+{
+    return a.second > b.second;
+}
 
 exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
-    return {};
-}
+    StringCountList res;
 
-static bool exo5::_OrderCharCount(CharCount a, CharCount b)
-{
-    if (a.second == b.second)
-        return false;
-    if (a.second < b.second)
-        return false;
-    return true;
+    for (String word : words)
+    {
+        bool found = false;
+        for (int i = 0; i < res.size(); i++)
+        {
+            if (res[i].first == word)
+            {
+                found = true;
+                res[i].second++;
+                break;
+            }
+        }
+        if (!found)
+            res.push_back({word, 1});
+    }
+
+    std::sort(res.begin(), res.end(), _OrderWordCount);
+
+    return res;
 }
