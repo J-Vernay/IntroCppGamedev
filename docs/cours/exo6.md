@@ -22,29 +22,34 @@ Vous devriez avoir la console qui apparaît avec diverses informations pour plus
 B) Quelle est la particularité de la fonction `TestContainer` ?
 Que déclare le code `template <int N> struct Struct` ?
 
-> ...
+> type générique def struct parametre par N 
+modele parametrer par type implementant une fonction
 
 C) Quelle méthode `TestContainer` teste sur chaque conteneur étudié ?
 
-> ...
+> il teste resize
 
 D) Que signifie la syntaxe `&v` ?
 
-> ...
+> prendre adresse 
 
 E) Analyser la sortie `=== vector-char ===` (première section).
 À chaque fois, soustrayez l'adresse de la dernière valeur par l'adresse de la première valeur.
 Quel motif observez-vous ?
 
-> ...
+> ça ajoute la valeur de resize. 
+données std::vector sont stocke en contigu (cote a cote en mémoire)
 
 F) Retrouvez-vous ce motif avec `deque<char>`, `list<char>`, `string` ?
 
-> ...
+> pour les premieres oui mais une fois que c'est trop grand non pour deque effet de seuil
+on ne retrouve pas dutout le motif pour list. 
+pour string on retrouve le meme pattern que pour std::vector donc caracteres contigus peut faire de l'arithmétique de pointeur, compatible avec du c (ex : appels systeme windows)
+
 
 G) Retrouvez-vous ce motif avec `vector<Struct<4096>>` ? Quelle différence ?
 
-> ...
+> il y a 4096 entre chaque élément et sur les plus haut on multiplie par le principe de contigu en rajoutant 4096.
 
 H) Assurez-vous d'avoir configuré la compilation avec le profil "Release",
 puis exécuter le programme.
@@ -54,26 +59,28 @@ dans le dossier `Documents`.
 I) En lisant le code de `TestContainer`, de quel code étudie-t-on les performances ?
 Combien de mesures sont prises à chaque fois ? Comment sont-elles agrégées ?
 
-> ...
+> le code de clock, elles sont prises 3 fois a chaue fois et elles sont agrégées 
+pour tous les elements on va prendre leur adresse on va convertir en pointeur d'octet et lire 
  
 I) Mettre "Container" en légende à droite, "TestName" en abscisse, et "IterTimeMs" en ordonnée.
 Quel type de conteneur semble particulièrement peu efficace ?
 
-> ...
+>  std::list est particulierement long a parcourir
 
 J) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "string" dans la légende pour n'afficher que cette courbe.
 Puis cliquer sur "deque-char", "vector-char" et "list-char".
 De quel autre conteneur les performances de "string" se rapprochent-elles ?
 
-> ...
+> vector char a à peu pres les memes performances que string
 
 K) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "vector-char" dans la légende pour n'afficher que cette courbe.
 Puis cliquer sur "vector-Struct256", "vector-Struct1024", "vector-Struct4096".
 Pourquoi les performances de l'itération sur `vector` dépendent du type stocké ?
 
-> ...
+> données en ram, la ram est decoupé en tronçon, tronçon = cache line donc dans les coeurs de calculs on a des caches lines, cache line = 64 octets, L1 = 4096 en gros 100k , L2 = 10M, L3 = 100MB, RAM = 16gb
+
 
 L) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMS" en ordonnée.
 Double-cliquer sur "vector-Struct4096" dans la légende pour n'afficher que cette courbe.

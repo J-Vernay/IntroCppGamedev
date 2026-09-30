@@ -57,12 +57,44 @@ int64_t exo5::CountLetters(String const& play)
     return count;
 }
 
+bool _OrderCharCount(exo5::CharCount a, exo5::CharCount b)
+{
+    // On doit retourner VRAI si a doit être ordonné avant b
+    return a.second > b.second;
+}
+
 exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
 { 
     CharCountList res;
-    // TODO
+    for (char c : play)
+    {
+        if (std::isalpha(c))
+        {
+            // Mise en majuscule pour ne pas différencier minuscule/majuscule
+            c = std::toupper(c);
+
+            // Est-ce que le caractère a déjà été vu ?
+            bool bFound = false;
+            for (CharCount& cc : res)
+            {
+                if (cc.first == c)
+                {
+                    // Oui: on incrémente le compte
+                    cc.second += 1;
+                    bFound = true;
+                }
+            }
+
+            if (!bFound)
+            {
+                // Non: on rajoute un élément.
+                CharCount cc{c, 1};
+                res.push_back(cc);
+            }
+        }
+    }
     
-#if 0
+#if 1
     std::sort(res.begin(), res.end(), _OrderCharCount);
 #endif
     return res;
@@ -70,20 +102,118 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
 
 int64_t exo5::CountWords(String const& play)
 {
-    return 0;
+    int64_t count = 0;
+
+    bool bPrevLetter = false;
+    for (char c : play)
+    {
+        if (std::isalpha(c)) // Si 'c' est une lettre
+        {
+            if (!bPrevLetter) // Si 'c' est précédée par une non-lettre
+                count += 1;   // Alors on commence un nouveau mot
+            // Sinon, on est déjà à l'intérieur d'un mot
+        }
+        // Sinon, on est pas dans un mot
+
+        bPrevLetter = std::isalpha(c);
+    }
+    return count;
 }
 
 exo5::StringList exo5::FindWords(String const& play)
 {
-    return {};
+    exo5::StringList words;
+
+    bool bPrevLetter = false;
+    size_t idxWordBegin = 0;
+    size_t idxWordEnd = 0;
+
+    for (size_t idx = 0; idx < play.size(); idx += 1)
+    {
+        char c = play[idx];
+
+        if (std::isalpha(c)) // Si 'c' est une lettre...
+        {
+            if (!bPrevLetter) // ... précédée par une non-lettre
+            {
+                idxWordBegin = idx;
+            }
+        }
+        else // Si 'c' est une non-lettre ...
+        {
+            if (bPrevLetter) // ... précédée par une lettre
+            {
+                idxWordEnd = idx;
+
+                String word = play.substr(idxWordBegin, idxWordEnd - idxWordBegin);
+                words.push_back(word);
+            }
+        }
+
+        bPrevLetter = std::isalpha(c);
+    }
+
+    return words;
 }
 
 exo5::StringList exo5::FindUniqueWords(StringList const& words)
 {
-    return {};
+    StringList res;
+
+    // On passe sur tous les mots de la pièce de théâtre.
+    for (String word : words)
+    {
+        // Est-ce que c'est un mot qu'on a déjà vu ?
+        bool bNewWord = true;
+        for (String oldWord : res)
+        {
+            if (word == oldWord)
+            {
+                bNewWord = false;
+                break;
+            }
+        }
+
+        // Sinon, ajouter le mot.
+        if (bNewWord)
+            res.push_back(word);
+    }
+
+    return res;
+}
+
+bool _OrderStringCount(exo5::StringCount a, exo5::StringCount b)
+{
+    return a.second > b.second;
 }
 
 exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
-    return {};
+    StringCountList res;
+
+    for (String word : words)
+    {
+        // Est-ce que le mot a déjà été vu ?
+        bool bNewWord = true;
+        for (StringCount& cc : res)
+        {
+            if (word == cc.first)
+            {
+                // Oui: on incrémente le compte
+                cc.second += 1;
+                bNewWord = false;
+                break;
+            }
+        }
+
+        if (bNewWord)
+        {
+            // Non: on rajoute un élément.
+            StringCount cc{word, 1};
+            res.push_back(cc);
+        }
+    }
+
+    std::sort(res.begin(), res.end(), _OrderStringCount);
+    return res;
 }

@@ -87,7 +87,7 @@ Quelle fonction standard disponible dans cctype (documentation : [https://en.cpp
 peut-on utiliser pour ne pas se soucier des différences majuscule/minuscule ?
 Vérifier à l'aide du débogueur qu'à la fin du traitement, le tableau `res` ne possède au maximum 26 entrées.
 
-> ...
+> On peut utiliser tolower afin qu'elles soient toutes en minuscule ou à l'inverse toupper
 
 Dans `exo5::GetSortedLetterCount()`, remplacer `#if 0` par `#if 1`.
 La fonction ne compile plus car la fonction `_OrderCharCount()` n'est pas définie.
@@ -98,7 +98,7 @@ Que doit indiquer sa valeur de retour ?
 
 ([Documentation de std::sort](https://en.cppreference.com/cpp/algorithm/sort))
 
-> ...
+> Des CharCount en parametre et un bool en return . Elle doit indiquer si une valeur est plus grande qu'une autre
 
 J) Définir et implémenter la fonction `_OrderCharCount()`.
 Exécuter le programme.
