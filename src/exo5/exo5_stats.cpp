@@ -51,7 +51,7 @@ int64_t exo5::CountLetters(String const& play)
     {
         if (std::isalpha(c) != 0)
         {
-            numChar;
+            numChar++;
         }
     }
     return numChar;
@@ -66,12 +66,12 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
         if (std::isalpha(c) != 0 && std::toupper(c))
         {
             found = false;
-            for (size_t i = 0; i < res.size(); i++)
+            for (CharCount& sc : res)
             {
-                if (res[i].first == std::toupper(c))
+                if (sc.first == std::toupper(c))
                 {
                     found = true;
-                    res[i].second++;
+                    sc.second++;
                 }
             }
             if (!found)
@@ -80,7 +80,9 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
     }
 
 #if 1
-    std::sort(res.begin(), res.end(), _OrderCharCount);
+
+    res.sort(_OrderCharCount);
+    //std::sort(res.begin(), res.end(), _OrderCharCount);
 #endif
     return res;
 }
@@ -134,9 +136,8 @@ exo5::StringList exo5::FindWords(String const& play)
 exo5::StringList exo5::FindUniqueWords(StringList const& words)
 {
     StringList uniqueWords;
-    for (size_t i = 0; i < words.size(); i++)
+    for (String currentWord : words)
     {
-        exo5::String currentWord = words[i];
         int cnt = std::count(uniqueWords.begin(), uniqueWords.end(), currentWord);
 
         if (cnt >= 1)
@@ -151,15 +152,17 @@ exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
     StringCountList wordsSorted;
     bool find = false;
-    for (size_t i = 0; i < words.size(); i++)
+    //for (size_t i = 0; i < words.size(); i++)
+    for (String currentWord : words)
     {
-        exo5::String currentWord = words[i];
+        //exo5::String currentWord = words[i];
         find = false;
-        for (size_t i = 0; i < wordsSorted.size(); i++)
+        //for (size_t i = 0; i < wordsSorted.size(); i++)
+        for (StringCount& sc : wordsSorted)
         {
-            if (wordsSorted[i].first == currentWord)
+            if (sc.first == currentWord)
             {
-                wordsSorted[i].second++;
+                sc.second++;
                 find = true;
             }
         }
@@ -169,7 +172,8 @@ exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
         }
     }
 
-    std::sort(wordsSorted.begin(), wordsSorted.end(), _OrderWordCount);
+    wordsSorted.sort(_OrderWordCount);
+    //std::sort(wordsSorted.begin(), wordsSorted.end(), _OrderWordCount);
     return wordsSorted;
 }
 
