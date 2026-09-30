@@ -55,12 +55,35 @@ int64_t exo5::CountLetters(String const& play)
     return count;
 }
 
+bool _OrderCharCount(exo5::CharCount a, exo5::CharCount b) {
+    return a.second > b.second;
+};
+
 exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
 { 
     CharCountList res;
-    // TODO
+
+    for (char c : play){
+        if (std::isalpha(c)){
+            c = std::toupper(c);
+            bool bFound = false;
+            for (CharCount& cc : res){
+                if (cc.first == c)
+                {
+                    cc.second+= 1;
+                    bFound = true;
+                }
+            }
+            if (!bFound){
+                CharCount cc{c, 1};
+                res.push_back(cc);
+            }
+        }
+    }
+
     
-#if 0
+    
+#if 1
     std::sort(res.begin(), res.end(), _OrderCharCount);
 #endif
     return res;
@@ -68,20 +91,101 @@ exo5::CharCountList exo5::GetSortedLetterCount(String const& play)
 
 int64_t exo5::CountWords(String const& play)
 {
-    return 0;
+    int64_t count = 0;
+    bool bPrevLetter = false;
+    for (char c : play)
+    {
+        if (std::isalpha(c))
+        {
+            if (!bPrevLetter)
+            {
+                count += 1;
+            }
+        }
+        bPrevLetter = std::isalpha(c);
+    }
+    return count;
 }
 
 exo5::StringList exo5::FindWords(String const& play)
 {
-    return {};
+    exo5::StringList words;
+    bool bPrevLetter = false;
+    size_t idxWordBegin = 0;
+    size_t idxWordEnd = 0;
+    for (size_t idx = 0; idx < play.size(); idx += 1){
+        char c = play[idx];
+        if (std:: isalpha(c)){
+            if (!bPrevLetter)
+            {
+                idxWordBegin = idx;
+            }
+               
+        }
+        else
+        {
+            if (bPrevLetter)
+            {
+                idxWordEnd = idx;
+                String word = play.substr(idxWordBegin, idxWordEnd - idxWordBegin);
+                words.push_back(word);
+            }
+        }
+        bPrevLetter = std::isalpha(c);
+    }
+    return words;
 }
 
 exo5::StringList exo5::FindUniqueWords(StringList const& words)
 {
-    return {};
+    StringList strList;
+    bool bWordExist;
+    for (String str : words)
+    {
+        bWordExist = false;
+        for (String str2 : strList)
+        {
+            if (str == str2)
+            {
+                bWordExist = true;
+            }
+        }
+        if (!bWordExist)
+        {
+            strList.push_back(str);
+        }
+    }
+    return strList;
 }
+
+bool _OrderLetterCount(exo5::StringCount a, exo5::StringCount b)
+{
+    return a.second > b.second;
+};
 
 exo5::StringCountList exo5::GetSortedWordCount(StringList const& words)
 {
-    return {};
+    StringCountList strList;
+
+    for (String str : words)
+    {
+        bool bFound = false;
+        for (StringCount& str2 : strList)
+        {
+            if (str2.first == str)
+            {
+                str2.second += 1;
+                bFound = true;
+            }
+        }
+        if (!bFound)
+        {
+            StringCount str2{str, 1};
+            strList.push_back(str2);
+        }
+    }
+#if 1
+    std::sort(strList.begin(), strList.end(), _OrderLetterCount);
+#endif
+    return strList;
 }
