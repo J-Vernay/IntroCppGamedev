@@ -37,9 +37,11 @@ private:
     double m_timeStart;
     uint8_t m_alpha = 0;
     Vec2 m_dir;
-    int32_t m_kind;
-    int32_t m_idxFrame;
     jv::gpu::Texture* m_pTexture;
+
+    double m_absTime;
+    bool m_bRunning;
+    bool m_bLeft;
 };
 
 } // namespace dino

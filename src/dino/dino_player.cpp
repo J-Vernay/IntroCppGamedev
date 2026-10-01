@@ -6,7 +6,6 @@
 dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
 {
     m_pos = pos;
-    m_kind = jv::util::RandomInt32(0, 7);
     //m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
     m_pTexture = pTexture;
@@ -35,14 +34,19 @@ void dino::Player::Update(double absTime, float deltaTime)
             dirx += 1;
         m_dir = {dirx, diry};
 
-        if (keyboard.btn_right) // 'D' sur le clavier (ZQSD)
+        m_bRunning = keyboard.btn_right; // 'D' sur le clavier (ZQSD)
+        if (m_bRunning)
             speed *= 2;
     }
 
     m_pos.x += m_dir.x * deltaTime * speed;
     m_pos.y += m_dir.y * deltaTime * speed;
 
-    m_idxFrame = int32_t(absTime * 8) % 4;
+    m_absTime = absTime;
+
+    if (m_dir.x != 0)
+        m_bLeft = m_dir.x < 0;
+
 
     double aliveTime = absTime - m_timeStart;
     if (aliveTime < 1)
@@ -51,7 +55,34 @@ void dino::Player::Update(double absTime, float deltaTime)
 
 void dino::Player::Draw() const
 {
-    float u1, u2, v1, v2;
+    float u1, u2, v1 = 0, v2 = 24;
+
+    if (m_bRunning)
+    {
+        // Course
+        int32_t idxFrame = int32_t(m_absTime * 16) % 6;
+        u1 = 432 + 24 * idxFrame;
+        u2 = 432 + 24 + 24 * idxFrame;
+    }
+    else if (m_dir.x != 0 || m_dir.y != 0)
+    {
+        // Marche
+        int32_t idxFrame = int32_t(m_absTime * 8) % 6;
+        u1 = 96 + 24 * idxFrame;
+        u2 = 96 + 24 + 24 * idxFrame;
+    }
+    else
+    {
+        // Immobile
+        int32_t idxFrame = int32_t(m_absTime * 8) % 4;
+        u1 = 0 + 24 * idxFrame;
+        u2 = 24 + 24 * idxFrame;
+    }
+
+    if (m_bLeft)
+        std::swap(u1, u2);
+
+    #if 0
 
     if (m_dir.x > 0)
     {
@@ -80,6 +111,7 @@ void dino::Player::Draw() const
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
+#endif
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;
