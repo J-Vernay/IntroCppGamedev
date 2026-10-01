@@ -26,7 +26,8 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> il ya la classe animal, scene et terrain, la classe terrain sert a initialiser le terrain et le mettre a jour, la classe scene est le hub central du jeu, et
+la classe animal fait apparaitre et deplacer les animeaux
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,23 +35,23 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> il ya 79 vertex buffer et 80 textures, les types sont animeaux terrain et dTime
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
 
-> ...
+> c'est le destructeur de la classe, le destructeur est appeler lorsque lon ferme la fenetre de jeu
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
-> ...
+> cela frise completement le jeu, car si tu ne recupere pas une reference, sa fait une copie a la place et tu deplace donc des copies
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ...
+> creer un constructeur dedier a la creation a partir dun autre animal pour pouvoir gerer ce ca, en interdisant les copies avec un = delete
 
 Remettre l'esperluette.
 
@@ -61,7 +62,7 @@ Le faire.
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
 
-> ...
+> on lui donne les coordonner de  la ou il doit se place et sa creer des triangles
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.
