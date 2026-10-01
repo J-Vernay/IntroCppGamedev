@@ -43,7 +43,8 @@ using Millisec = std::chrono::duration<double, std::milli>;
 std::ofstream g_outStat;
 int64_t g_dummy;
 
-template <typename TContainer> void TestContainer(std::string_view testKind)
+template <typename TContainer>
+void TestContainer(std::string_view testKind)
 {
     std::cout << "\n\n==================== " << testKind << " ====================\n\n";
     TContainer vs;

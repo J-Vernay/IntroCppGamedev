@@ -37,15 +37,15 @@ E) Analyser la sortie `=== vector-char ===` (première section).
 À chaque fois, soustrayez l'adresse de la dernière valeur par l'adresse de la première valeur.
 Quel motif observez-vous ?
 
-> 
+> si on soustrait les deux valeurs on obtiens le n de resize -1
 
 F) Retrouvez-vous ce motif avec `deque<char>`, `list<char>`, `string` ?
 
-> ...
+> uniquement pour string
 
 G) Retrouvez-vous ce motif avec `vector<Struct<4096>>` ? Quelle différence ?
 
-> ...
+> oui, la difference juste avec n -1 * 4096
 
 H) Assurez-vous d'avoir configuré la compilation avec le profil "Release",
 puis exécuter le programme.
@@ -55,26 +55,27 @@ dans le dossier `Documents`.
 I) En lisant le code de `TestContainer`, de quel code étudie-t-on les performances ?
 Combien de mesures sont prises à chaque fois ? Comment sont-elles agrégées ?
 
-> ...
+> le temps de l'iteration et de lecture d'1 octet pour chaque donnés
  
 I) Mettre "Container" en légende à droite, "TestName" en abscisse, et "IterTimeMs" en ordonnée.
 Quel type de conteneur semble particulièrement peu efficace ?
 
-> ...
+> une List struct<octet>
 
 J) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "string" dans la légende pour n'afficher que cette courbe.
 Puis cliquer sur "deque-char", "vector-char" et "list-char".
 De quel autre conteneur les performances de "string" se rapprochent-elles ?
 
-> ...
+> de deque char et de vector
 
 K) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "vector-char" dans la légende pour n'afficher que cette courbe.
 Puis cliquer sur "vector-Struct256", "vector-Struct1024", "vector-Struct4096".
 Pourquoi les performances de l'itération sur `vector` dépendent du type stocké ?
 
-> ...
+> ca dépend la mémoire utilisée selon le nombre d'octets qu'on stock dans le struct . Ducoup aller retrouver une certaine valeur prend plus de temps
+> car pour la rentrer dans le cache prend + de temps.
 
 L) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMS" en ordonnée.
 Double-cliquer sur "vector-Struct4096" dans la légende pour n'afficher que cette courbe.
@@ -82,6 +83,6 @@ Puis cliquer sur "deque-Struct4096" et "list-Struct4096".
 Pourquoi les performances de `vector` et `deque` ne sont pas linéaires
 par rapport au nombre d'éléments ?
 
-> ...
+> ils ont pas besoin de relire chaques elements comme une liste. Ils sont donc + contigue donc ils scale mieux avec la mémoire.
 
 **Fin des exercices, on attaque le projet, cf. `dino.md`**
