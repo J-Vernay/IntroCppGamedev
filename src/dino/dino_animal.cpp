@@ -12,11 +12,6 @@ dino::Animal::Animal(Vec2 pos, double absTime)
     m_pTexture = dino::LoadImageAsset("animals.bmp");
 }
 
-dino::Animal::~Animal()
-{
-    jv::gpu::DestroyTexture(m_pTexture);
-}
-
 void dino::Animal::Update(double absTime, float deltaTime)
 {
     float speed = 30;
@@ -34,8 +29,20 @@ void dino::Animal::Draw() const
 {
     float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
 
+    // COORDONNEES HORIZONTALES
+    if (m_dir.x > 0)
+        std::swap(u1, u2);
+
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
+
+    // COORDONNEES VERTICALES
+    if (std::abs(m_dir.y) > std::abs(m_dir.x))
+    {
+        float pxOffset = (m_dir.y > 0) ? 32.0f : 64.0f;
+        v1 += pxOffset;
+        v2 += pxOffset;
+    }
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;

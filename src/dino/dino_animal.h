@@ -18,9 +18,6 @@ public:
     /// Affiche l'animal
     void Draw() const;
 
-    /// Détruit les ressources associées à l'animal.
-    ~Animal();
-
 private:
     Vec2 m_pos;
     double m_timeStart;

@@ -26,7 +26,11 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> 
+Animal : prend en responsabilité la gestion mémoire d'un animal et ses ressources associés; ainsi son déplacement, affichage et animation
+Scene : met à jour la logique et l'affichage du terrain et des animaux présent dans la scène par des appels. Génére aussi des nouveaux animaux de manière périodique.
+Terrain : gére l'affichage, l'animation et le changement de saison du terrain où les entités se déplacent. Peut générer une position aléatoire dans l'espace du terrain ou restreindre une position existante sur celui ci.
+
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,7 +38,7 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> 
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
