@@ -22,29 +22,29 @@ Vous devriez avoir la console qui apparaît avec diverses informations pour plus
 B) Quelle est la particularité de la fonction `TestContainer` ?
 Que déclare le code `template <int N> struct Struct` ?
 
-> ...
+> C'est un type générique.
 
 C) Quelle méthode `TestContainer` teste sur chaque conteneur étudié ?
 
-> ...
+> Il teste Resize
 
 D) Que signifie la syntaxe `&v` ?
 
-> ...
+> C'est le chemin d'accès vers la variable v.
 
 E) Analyser la sortie `=== vector-char ===` (première section).
 À chaque fois, soustrayez l'adresse de la dernière valeur par l'adresse de la première valeur.
 Quel motif observez-vous ?
 
-> ...
+> Ca ajoute la valeur de resize -1. Les données sont stockées de manière contigue
 
 F) Retrouvez-vous ce motif avec `deque<char>`, `list<char>`, `string` ?
 
-> ...
+> deque n'as pas le même comportement, list non plus mais string a le même.
 
 G) Retrouvez-vous ce motif avec `vector<Struct<4096>>` ? Quelle différence ?
 
-> ...
+> entre mon élément 0,1,2 et 3 j'ai 4096
 
 H) Assurez-vous d'avoir configuré la compilation avec le profil "Release",
 puis exécuter le programme.
@@ -59,14 +59,14 @@ Combien de mesures sont prises à chaque fois ? Comment sont-elles agrégées ?
 I) Mettre "Container" en légende à droite, "TestName" en abscisse, et "IterTimeMs" en ordonnée.
 Quel type de conteneur semble particulièrement peu efficace ?
 
-> ...
+> Ce sont les std::list
 
 J) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "string" dans la légende pour n'afficher que cette courbe.
 Puis cliquer sur "deque-char", "vector-char" et "list-char".
 De quel autre conteneur les performances de "string" se rapprochent-elles ?
 
-> ...
+> Ca se rapproche de vector.
 
 K) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMs" en ordonnée.
 Double-cliquer sur "vector-char" dans la légende pour n'afficher que cette courbe.

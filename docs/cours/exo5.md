@@ -97,7 +97,7 @@ Que doit indiquer sa valeur de retour ?
 
 ([Documentation de std::sort](https://en.cppreference.com/cpp/algorithm/sort))
 
->Des CharCount en parametre et un Bool en return. Elle doit induquer si une valeur est plus grande qu'une autre.
+> Des CharCount en parametre et un Bool en return. Elle doit indiquer si une valeur est plus grande qu'une autre.
 
 J) Définir et implémenter la fonction `_OrderCharCount()`.
 Exécuter le programme.

@@ -3,13 +3,13 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-    m_pTexture = dino::LoadImageAsset("animals.bmp");
+    m_pTexture = pTexture;
 }
 
 dino::Animal::~Animal()
@@ -36,6 +36,25 @@ void dino::Animal::Draw() const
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
+    if (m_dir.x > 0)
+    {
+        std::swap(u1, u2);
+    }
+    if (std::abs(m_dir.y) > std::abs(m_dir.x))
+    {
+        if (m_dir.y > 0)
+        {
+            v1 = 32, v2 = 64;
+        }
+        else
+        {
+            v1 = 64, v2 = 96;
+        }
+    }
+    else
+    {
+        v1 = 0, v2 = 32;
+    }
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;

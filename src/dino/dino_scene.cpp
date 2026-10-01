@@ -7,11 +7,17 @@
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
-
+    pTexture = dino::LoadImageAsset("animals.bmp");
+    pTexturePlayer = dino::LoadImageAsset("dinosaurs.bmp");
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
+    Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+    m_players.emplace_back(spawnPos, 0, pTexturePlayer);
 }
 
-dino::Scene::~Scene() {}
+dino::Scene::~Scene() {
+    jv::gpu::DestroyTexture(pTexture);
+    jv::gpu::DestroyTexture(pTexturePlayer);
+}
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
@@ -31,11 +37,13 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime);
+        m_animals.emplace_back(spawnPos, absTime, pTexture);
     }
 
     for (Animal& animal : m_animals)
         animal.Update(absTime, deltaTime);
+    for (Player& players : m_players)
+        players.Update(absTime, deltaTime);
 }
 
 void dino::Scene::Draw() const
@@ -44,6 +52,8 @@ void dino::Scene::Draw() const
 
     for (Animal const& animal : m_animals)
         animal.Draw();
+    for (Player const& player : m_players)
+        player.Draw();
 
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {
