@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include <dino/dino_terrain.h>
 
 namespace dino
 {
@@ -10,7 +11,7 @@ class Animal
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Animal(Vec2 pos, double absTime);
+    Animal(Vec2 pos, double absTime,jv::gpu::Texture* textureAnimalPtr, Terrain* pTerrain);
     
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
@@ -21,6 +22,8 @@ public:
     /// Détruit les ressources associées à l'animal.
     ~Animal();
 
+    Animal(const Animal&) = delete;
+
 private:
     Vec2 m_pos;
     double m_timeStart;
@@ -29,6 +32,7 @@ private:
     int32_t m_kind;
     int32_t m_idxFrame;
     jv::gpu::Texture* m_pTexture;
+    Terrain* m_pTerrain;
 };
 
 } // namespace dino

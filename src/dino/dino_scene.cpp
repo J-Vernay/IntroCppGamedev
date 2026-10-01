@@ -4,20 +4,33 @@
 
 #include <format>
 
-dino::Scene::Scene() : m_Terrain{24, 16}
+dino::Scene::Scene()
+    : m_Terrain{24, 16}, m_players{
+        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, &m_Terrain},
+        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad1, &m_Terrain},
+        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad2, &m_Terrain},
+        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad3, &m_Terrain}
+    }
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
+    m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 }
 
-dino::Scene::~Scene() {}
+dino::Scene::~Scene() 
+{
+    jv::gpu::DestroyTexture(m_pTextureText);
+    jv::gpu::DestroyTexture(m_pTextureAnimal);
+}
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
     m_lastDeltaTime = deltaTime;
 
     m_Terrain.Update(absTime, deltaTime);
+
+    _UpdatePlayers(absTime, deltaTime);
 
     _UpdateAnimals(absTime, deltaTime);
 }
@@ -31,16 +44,25 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime);
+        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal, &m_Terrain);
     }
 
     for (Animal& animal : m_animals)
         animal.Update(absTime, deltaTime);
 }
 
+void dino::Scene::_UpdatePlayers(double absTime, float deltaTime)
+{
+    for (Player& player : m_players)
+        player.Update(absTime, deltaTime);
+}
+
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
+
+    for (Player const& player : m_players)
+        player.Draw();
 
     for (Animal const& animal : m_animals)
         animal.Draw();
