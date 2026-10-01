@@ -44,7 +44,7 @@ struct Vec2
     float y;
 };
 
-/// Représente une couleur de pixels, utilisée pour moduler l'affichage d'une texture.
+/// Représente une couleur de pixels, utilisée pour moduler l'affichage d'une animalTexture.
 union Color {
     struct
     {
@@ -88,19 +88,19 @@ util::Vec2 GetRenderSize() noexcept;
 /// Change la couleur par défaut de l'arrière-plan du rendu.
 void SetBackgroundColor(util::Color color) noexcept;
 
-/// Type qui représente une texture chargée côté GPU.
+/// Type qui représente une animalTexture chargée côté GPU.
 struct Texture;
 
-/// Crée une texture avec les dimensions et pixels donnés, et envoit les données à la carte
+/// Crée une animalTexture avec les dimensions et pixels donnés, et envoit les données à la carte
 /// graphique.
-/// @param label Nom donné à la texture, utilisé pour le debug.
+/// @param label Nom donné à la animalTexture, utilisé pour le debug.
 /// @param pixels Doit contenir une liste de `largeur * hauteur` couleurs représentant
 ///               les valeurs RGBA de chaque pixel, de gauche à droite et de bas en haut.
 /// @note Après le retour de la fonction, 'pPixelsRGBA' ne sera plus accédé et peut être libéré.
 Texture* CreateTexture(
     std::string_view label, util::Vec2 textureSize, std::span<util::Color const> pixels);
 
-/// Détruit la texture et libère la mémoire consommée par cette texture.
+/// Détruit la animalTexture et libère la mémoire consommée par cette animalTexture.
 void DestroyTexture(Texture* pTexture);
 
 /// Type qui représente un sommet de triangle texturé.

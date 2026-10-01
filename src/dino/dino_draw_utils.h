@@ -45,7 +45,7 @@ void GenVertices_Polyline(std::vector<jv::gpu::Vertex>& out, std::vector<Vec2> c
 /// Ajoute le dessin d'un rectangle au drawcall donné.
 /// @param topLeft Coordonnées en haut à gauche à l'écran.
 /// @param size Nombre de pixels de largeur et hauteur.
-/// @param topLeftUV Coordonnées en haut à gauche sur la texture d'origine.
+/// @param topLeftUV Coordonnées en haut à gauche sur la animalTexture d'origine.
 /// @param color Couleur qui module le sprite, WHITE pour le laisser tel quel.
 void GenVertices_Rect(std::vector<jv::gpu::Vertex>& vertices, Vec2 topLeft, Vec2 size,
     Vec2 topLeftUV, jv::util::Color color = Color_WHITE);

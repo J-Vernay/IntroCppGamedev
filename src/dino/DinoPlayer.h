@@ -6,20 +6,20 @@ namespace dino
 {
 
 // Représente un animal.
-class Animal
+class DinoPlayer
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Animal(Vec2 pos, double absTime, jv::gpu::Texture* text);
-    
-    /// Déplace l'animal et met à jour son animation.
+    DinoPlayer(Vec2 pos, double absTime, jv::gpu::Texture* text);
+
+    /// Deplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
 
     /// Affiche l'animal
     void Draw() const;
 
-    /// Détruit les ressources associées à l'animal.
-    ~Animal();
+    /// Detruit les ressources associées à l'animal.
+    ~DinoPlayer();
 
 private:
     Vec2 m_pos;
