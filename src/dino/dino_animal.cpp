@@ -43,6 +43,17 @@ void dino::Animal::Draw() const
     {
         std::swap(u2, u1);
     }
+    if (std::abs(m_dir.y) > std::abs(m_dir.x))
+    {
+        if (m_dir.y > 0)
+        {
+            v1 = 32, v2 = 64;
+        }
+        else
+        {
+            v1 = 64, v2 = 96;
+        }
+    }
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
