@@ -4,14 +4,24 @@
 
 #include <format>
 
-dino::Scene::Scene() : m_Terrain{24, 16}
-{
+dino::Scene::Scene()
+    : m_Terrain{24, 16},
+      m_players
+    {Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, 0, &m_Terrain},
+          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad1, 1, &m_Terrain},
+          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad2, 2, &m_Terrain},
+          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad3, 3, &m_Terrain}}
+    {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
     m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
 
-    m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
-    
+    for (Player& p : m_players)
+    {
+        m_entitys.push_back(&p);
+    }
+
+    m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 }
 
 dino::Scene::~Scene() 
@@ -27,6 +37,12 @@ void dino::Scene::Update(double absTime, float deltaTime)
     m_Terrain.Update(absTime, deltaTime);
 
     _UpdateAnimals(absTime, deltaTime);
+
+    for (Player& p : m_players)
+    {
+        p.Update(absTime, deltaTime);
+        //p.HandlePhysics(m_entitys);
+    }
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -38,16 +54,25 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal);
+        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal, &m_Terrain);
     }
 
+    
+
     for (Animal& animal : m_animals)
+    {
         animal.Update(absTime, deltaTime);
+        //animal.HandlePhysics(m_entitys);
+    }
 }
 
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
+    for (const Player& p : m_players)
+    {
+        p.Draw();
+    }
 
     for (Animal const& animal : m_animals)
         animal.Draw();

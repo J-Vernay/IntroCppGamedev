@@ -133,12 +133,14 @@ Quand ils atteignent le bord du terrain, ils prennent une nouvelle direction al�
 
 C) Comment détecter si deux cercles à des positions données sont en collision ?
 
-> ...
+> on calcule la distance entre le centre des deux cercles, si cette distance est inférieure
+a la somme de leur rayon, les cercles se touchent.
 
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> ...
+> On les repoussent vers le vecteur opposé de leur différence de position. Si l'un des deux
+est contre un mur cela pose problème.
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
