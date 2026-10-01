@@ -76,9 +76,6 @@ se déplacent principalement verticalement.
 Pour modifier les coordonnées UV, se référer à [dino_uv_ref.md](dino_uv_ref.md)
 
 
-
-
-
 ## 2. Joueurs
 
 A) Créer deux nouveaux fichiers sources `src/dino/dino_player.h` et `src/dino/dino_player.cpp`. 

@@ -7,6 +7,8 @@
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
+    m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
+    m_pTexturePlayer = dino::LoadImageAsset("dinosaurs.bmp");
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 }
