@@ -24,13 +24,14 @@ private:
     float m_lastDeltaTime = 0;
 
     Terrain m_Terrain;
-    Player m_players[4];
 
+    std::deque<Player> m_players;
     std::deque<Animal> m_animals;
+    std::vector<Entity*> m_entities;
+
     double m_animalSpawnTime = 0;
 
-    void _UpdateAnimals(double absTime, float deltaTime);
-    void _UpdatePlayers(double absTime, float deltaTime);
+    void SpawnAnimals(double absTime, float deltaTime);
 };
 
 } // namespace dino

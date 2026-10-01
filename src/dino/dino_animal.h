@@ -7,23 +7,25 @@
 namespace dino
 {
 
-// Représente un animal.
 class Animal : public Entity
 {
 public:
 
-    Animal(Vec2 pos, double absTime,jv::gpu::Texture* textureAnimalPtr, Terrain* pTerrain);
+    Animal(Vec2 pos, double absTime,jv::gpu::Texture* textureAnimalPtr);
     
     void Update(double absTime, float deltaTime) override;
 
     void Draw() const override;
+
+    virtual void ResolveTerrainPos(Terrain& terrain) override;
 
     ~Animal();
 
     Animal(const Animal&) = delete;
 
 private:
+
     int32_t m_kind;
 };
 
-} // namespace dino
+} 

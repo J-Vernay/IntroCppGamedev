@@ -10,7 +10,7 @@ class Player : public Entity
 {
 public:
 
-    Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, Terrain* pTerrain);
+    Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx);
 
     void Update(double absTime, float deltaTime) override;
 
@@ -20,6 +20,8 @@ public:
     void UpdatePlayerState(float deltaTime);
     void UpdateIndexFrame(double absTime);
     void UpdateSpeed(bool isRunning);
+
+    virtual void ResolveTerrainPos(Terrain& terrain) override;
 
     void HandleHit();
     void UpdateHurtState(float deltaTime);
@@ -33,8 +35,8 @@ private:
     struct SpeedPlayerData
     {
         float CurrentSpeed = 30;
-        const float SpeedWalking = 30;
-        const float SpeedRunning = 60;
+        const float SpeedWalking = 50;
+        const float SpeedRunning = 100;
 
         bool IsRunning() const
         {

@@ -1,5 +1,8 @@
-﻿#include <math.h>
-#pragma once
+﻿#pragma once 
+
+#include < math.h>
+#include <dino/dino_main.h>
+#include <dino/dino_terrain.h>
 
 namespace dino
 {
@@ -7,13 +10,16 @@ namespace dino
 class Entity
 {
 public:
-    Entity(Vec2 pos, double absTime, Terrain* pTerrain) : m_pos(pos), m_timeStart(absTime), m_pTerrain(pTerrain) {};
+    Entity(Vec2 pos, double absTime) : m_pos(pos), m_timeStart(absTime) {};
     
     virtual void Update(double absTime, float deltaTime) = 0;
     virtual void Draw() const = 0;
     virtual ~Entity() {};
 
     Entity(const Entity&) = delete;
+
+    void ResolvePhysicConflict(float x, float y);
+    virtual void ResolveTerrainPos(Terrain& terrain) = 0;
 
 protected:
     Vec2 m_pos = {0, 0};
@@ -27,6 +33,5 @@ protected:
 
     jv::gpu::Texture* m_pTexture;
 
-    Terrain* m_pTerrain;
 };
 } // namespace dino

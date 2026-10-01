@@ -4,14 +4,13 @@
 #include <math.h>
 
 dino::Animal::Animal(
-    Vec2 pos, double absTime, jv::gpu::Texture* textureAnimalPtr, Terrain* pTerrain)
-    : Entity(pos, absTime, pTerrain)
+    Vec2 pos, double absTime, jv::gpu::Texture* textureAnimalPtr)
+    : Entity(pos, absTime)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-    m_pTerrain = pTerrain;  
     m_pTexture = textureAnimalPtr;
 }
 
@@ -22,16 +21,6 @@ dino::Animal::~Animal()
 void dino::Animal::Update(double absTime, float deltaTime)
 {
     float speed = 30;
-
-    float nextPosX = m_pos.x + m_dir.x * deltaTime * speed;
-    float nextPosY = m_pos.y + m_dir.y * deltaTime * speed;
-
-    Vec2 clampedPos = m_pTerrain->ClampPos({nextPosX, nextPosY});
-
-    if (nextPosX != clampedPos.x || nextPosY != clampedPos.y)
-    {
-        m_dir = jv::util::RandomRotate(m_dir, 170, 190);
-    }
 
     m_pos.x += m_dir.x * deltaTime * speed;
     m_pos.y += m_dir.y * deltaTime * speed;
@@ -84,4 +73,15 @@ void dino::Animal::Draw() const
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Animal", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Animal::ResolveTerrainPos(Terrain& terrain)
+{
+    Vec2 clampedPos = terrain.ClampPos(m_pos);
+
+    if (m_pos.x != clampedPos.x || m_pos.y != clampedPos.y)
+    {
+        m_dir = jv::util::RandomRotate(m_dir, 170, 190);
+        m_pos = clampedPos;
+    }
 }

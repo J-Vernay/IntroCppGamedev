@@ -1,21 +1,23 @@
 ﻿
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
-
 #include <format>
 
-dino::Scene::Scene()
-    : m_Terrain{24, 16}, m_players{
-        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, &m_Terrain},
-        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad1, &m_Terrain},
-        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad2, &m_Terrain},
-        Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad3, &m_Terrain}
-    }
+dino::Scene::Scene(): m_Terrain{24, 16}
+    
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
     m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
+
+    for (int i = 0; i < 4; i++)
+    {
+        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+        
+        m_players.emplace_back(spawnPos, 0.0, jv::input::GamepadIdx(i));
+        m_entities.emplace_back(&m_players[i]);
+    }
 }
 
 dino::Scene::~Scene() 
@@ -30,44 +32,38 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     m_Terrain.Update(absTime, deltaTime);
 
-    _UpdatePlayers(absTime, deltaTime);
+    SpawnAnimals(absTime, deltaTime);
 
-    _UpdateAnimals(absTime, deltaTime);
+    for (Entity*& entity : m_entities)
+    {
+        entity->Update(absTime, deltaTime);
+        entity->ResolveTerrainPos(m_Terrain);
+    }
 }
 
-void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
+void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
 {
-    // Spawner un animal si besoin.
 
     constexpr double kSpawnTime = 0.3;
     if (absTime - m_animalSpawnTime >= kSpawnTime)
     {
         m_animalSpawnTime = absTime;
+
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal, &m_Terrain);
+        
+        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal);
+        m_entities.emplace_back(&m_animals.back());
     }
-
-    for (Animal& animal : m_animals)
-        animal.Update(absTime, deltaTime);
 }
 
-void dino::Scene::_UpdatePlayers(double absTime, float deltaTime)
-{
-    for (Player& player : m_players)
-        player.Update(absTime, deltaTime);
-}
 
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
 
-    for (Player const& player : m_players)
-        player.Draw();
+    for (Entity* const& entity : m_entities)
+        entity->Draw();
 
-    for (Animal const& animal : m_animals)
-        animal.Draw();
-
-    // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {
         std::string text = std::format("dTime={:04.1f}ms", m_lastDeltaTime * 1000.0);
         std::vector<jv::gpu::Vertex> vs;

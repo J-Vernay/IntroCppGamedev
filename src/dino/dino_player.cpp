@@ -5,7 +5,7 @@
 #include <algorithm>
 
 
-dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, Terrain* pTerrain) : Entity(pos, absTime, pTerrain)
+dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx) : Entity(pos, absTime)
 {
 
     m_playerColorIndex = jv::util::RandomInt32(0, 3);
@@ -64,8 +64,6 @@ void dino::Player::UpdatePosition(float deltaTime)
 
     m_pos.x += m_dir.x * deltaTime * m_speedData.CurrentSpeed;
     m_pos.y += m_dir.y * deltaTime * m_speedData.CurrentSpeed;
-
-    m_pos = m_pTerrain->ClampPos(m_pos);
 }
 
 void dino::Player::UpdatePlayerState(float deltaTime)
@@ -111,6 +109,11 @@ void dino::Player::UpdateSpeed(bool isRunning)
     m_speedData.CurrentSpeed = isRunning ? m_speedData.SpeedRunning : m_speedData.SpeedWalking;
 }
 
+void dino::Player::ResolveTerrainPos(Terrain& terrain)
+{
+    m_pos = terrain.ClampPos(m_pos);
+}
+
 void dino::Player::HandleHit()
 {
     if (m_currentPlayerState == Hurt) return;
@@ -130,7 +133,6 @@ void dino::Player::UpdateHurtState(float deltaTime)
         m_timerHit -= deltaTime;
     }
 }
-
 
 void dino::Player::Draw() const
 {
@@ -185,3 +187,4 @@ void dino::Player::Draw() const
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
+
