@@ -3,18 +3,21 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime)
+dino::Animal::Animal(Vec2 pos, jv::gpu::Texture* m_pTexture, double absTime)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
+
+    //appliquer un ptr sur la texture
     m_pTexture = dino::LoadImageAsset("animals.bmp");
+    m_pTextureptr = m_pTexture;
 }
 
 dino::Animal::~Animal()
 {
-    jv::gpu::DestroyTexture(m_pTexture);
+    jv::gpu::DestroyTexture(m_pTextureptr);
 }
 
 void dino::Animal::Update(double absTime, float deltaTime)
@@ -28,11 +31,18 @@ void dino::Animal::Update(double absTime, float deltaTime)
     double aliveTime = absTime - m_timeStart;
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
+
+    
 }
 
 void dino::Animal::Draw() const
 {
     float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
+
+    if (m_dir.x > 0)
+    {
+        std::swap(u2, u1);
+    }
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
@@ -49,6 +59,8 @@ void dino::Animal::Draw() const
     vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Animal", vs);
-    jv::gpu::Draw(pVBuf, m_pTexture);
+    jv::gpu::Draw(pVBuf, m_pTextureptr);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+
+    
 }

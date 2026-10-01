@@ -31,7 +31,7 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime);
+        m_animals.emplace_back(spawnPos, dino::LoadImageAsset("animals.bmp"), absTime);
     }
 
     for (Animal& animal : m_animals)

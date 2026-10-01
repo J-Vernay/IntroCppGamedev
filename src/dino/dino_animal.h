@@ -10,7 +10,7 @@ class Animal
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Animal(Vec2 pos, double absTime);
+    Animal(Vec2 pos,jv::gpu::Texture* m_pTexture, double absTime);
     
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
@@ -28,7 +28,8 @@ private:
     Vec2 m_dir;
     int32_t m_kind;
     int32_t m_idxFrame;
-    jv::gpu::Texture* m_pTexture;
+    jv::gpu::Texture* m_pTextureptr
+    ;
 };
 
 } // namespace dino

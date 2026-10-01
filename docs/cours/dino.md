@@ -26,7 +26,8 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> On retrouve la classe Terrin qui représente le terrain de jeu, la class Animal représente les entitées présentes.
+> et la class scene qui permet de générer le terrain et de faire spawn les entitées.
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,34 +35,38 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> il y a 17 vertex buffers, de type	std::list<jv::gpu::VertexBuffer,std::allocator<jv::gpu::VertexBuffer>>
+> il y a 18 textures de type std::list<jv::gpu::Texture,std::allocator<jv::gpu::Texture>>
+
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
 
-> ...
+> cette syntaxe est le destructeur de la class Animal. Cette methode est appelé lors de la destruction de la scene.
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
-> ...
+> Le programme crash et affiche un message d'erreur. On ne passe plus par une référance donc la variable est vide
+>étant donné qu'une ref ne peut pas etre null.
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ...
+>  Implementer soit meme, et eviter de passer par copie.
 
 Remettre l'esperluette.
 
 G) Comment faire pour qu'il n'y ait qu'une unique texture `animal.bmp` chargée en VRAM ?
 Le faire.
 
-> ...
+> Passer la texture en paramètre du constructeur et la référer au destructeur via une Textureptr.
+
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
 
-> ...
+> vertex servent a definir le nombre de pixel que vas faire l'entitée, et les UV sont pour le positionement de la texture sur les pixels.
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.
