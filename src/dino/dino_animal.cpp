@@ -3,7 +3,9 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* textureAnimalPtr, Terrain* pTerrain)
+dino::Animal::Animal(
+    Vec2 pos, double absTime, jv::gpu::Texture* textureAnimalPtr, Terrain* pTerrain)
+    : Entity(pos, absTime, pTerrain)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);

@@ -1,6 +1,4 @@
-﻿#include <dino/dino_animal.h>
-#include <dino/dino_draw_utils.h>
-#include <math.h>
+﻿#include <math.h>
 #pragma once
 
 namespace dino
@@ -18,10 +16,10 @@ public:
     Entity(const Entity&) = delete;
 
 protected:
-    Vec2 m_pos;
-    Vec2 m_dir;
+    Vec2 m_pos = {0, 0};
+    Vec2 m_dir = {0, 0};
 
-    double m_timeStart;
+    double m_timeStart = 0;
 
     uint8_t m_alpha = 0;
 
