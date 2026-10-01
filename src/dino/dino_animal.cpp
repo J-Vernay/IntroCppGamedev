@@ -3,18 +3,17 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-    m_pTexture = dino::LoadImageAsset("animals.bmp");
+    m_pTexture = pTexture;
 }
 
 dino::Animal::~Animal()
 {
-    jv::gpu::DestroyTexture(m_pTexture);
 }
 
 void dino::Animal::Update(double absTime, float deltaTime)

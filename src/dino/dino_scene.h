@@ -19,6 +19,8 @@ public:
 
 private:
     jv::gpu::Texture* m_pTextureText = nullptr;
+    jv::gpu::Texture* m_pTextureAnimal = nullptr;
+
     float m_lastDeltaTime = 0;
 
     Terrain m_Terrain;

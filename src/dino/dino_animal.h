@@ -10,7 +10,7 @@ class Animal
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Animal(Vec2 pos, double absTime);
+    Animal(Vec2 pos, double absTime, jv::gpu::Texture* pTexture);
 
     /// Constructeur d'Animal à partir d'un autre Animal par copie
     ///

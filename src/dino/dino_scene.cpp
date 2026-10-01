@@ -7,11 +7,15 @@
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
+    m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 }
 
-dino::Scene::~Scene() {}
+dino::Scene::~Scene()
+{
+    jv::gpu::DestroyTexture(m_pTextureAnimal);
+}
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
@@ -31,7 +35,7 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime);
+        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal);
     }
 
     for (Animal& animal : m_animals)
