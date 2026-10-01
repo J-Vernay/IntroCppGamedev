@@ -31,7 +31,32 @@ void dino::Animal::Update(double absTime, float deltaTime)
 
 void dino::Animal::Draw() const
 {
-    float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
+    float u1, u2, v1, v2;
+
+    if (m_dir.x > 0)
+    {
+        u1 = 32, u2 = 0; // Inversion du sprite sur l'axe X
+    }
+    else
+    {
+        u1 = 0, u2 = 32; // Normal sur l'axe X
+    }
+
+    if (std::abs(m_dir.y) > std::abs(m_dir.x))
+    {
+        if (m_dir.y > 0)
+        {
+            v1 = 32, v2 = 64; // Bas
+        }
+        else
+        {
+            v1 = 64, v2 = 96; // Haut
+        }
+    }
+    else
+    {
+        v1 = 0, v2 = 32; // Horizontal
+    }
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
