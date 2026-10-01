@@ -1,4 +1,4 @@
-
+﻿
 #include <dino/dino_player.h>
 #include <dino/dino_draw_utils.h>
 #include <math.h>
@@ -7,7 +7,7 @@ dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
-    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+    //m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
     m_pTexture = pTexture;
 }
@@ -18,7 +18,27 @@ dino::Player::~Player()
 
 void dino::Player::Update(double absTime, float deltaTime)
 {
-    float speed = 30;
+    float speed = 100;
+
+    // Calcul de la direction du joueur, en utilisant les flèches du clavier.
+    jv::input::Gamepad keyboard;
+    if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, keyboard))
+    {
+        float dirx = 0, diry = 0;
+        if (keyboard.dpad_up)
+            diry -= 1;
+        if (keyboard.dpad_down)
+            diry += 1;
+        if (keyboard.dpad_left)
+            dirx -= 1;
+        if (keyboard.dpad_right)
+            dirx += 1;
+        m_dir = {dirx, diry};
+
+        if (keyboard.btn_right) // 'D' sur le clavier (ZQSD)
+            speed *= 2;
+    }
+
     m_pos.x += m_dir.x * deltaTime * speed;
     m_pos.y += m_dir.y * deltaTime * speed;
 
