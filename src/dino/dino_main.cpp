@@ -17,6 +17,7 @@ void jv::game::Update(double absTime, float deltaTime)
 
 void jv::game::Draw()
 {
+    g_pDinoScene->SortEntities();
     g_pDinoScene->Draw();
 }
 

@@ -7,19 +7,24 @@
 namespace dino
 {
 
+using PointList = std::vector<Vec2>;
+
 // Représente un joueur.
 class Player : public Entity
 {
 public:
     /// Initialise le joueur.
-    Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, jv::input::GamepadIdx gamepadIdx,
-        int32_t color, Terrain* terrain);
+    Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, jv::input::GamepadIdx gamepadIdx, Color color,
+        int32_t colorIndex, Terrain* terrain);
 
-    /// Déplace le joueur et met à jour son animation.
-    void Update(double absTime, float deltaTime);
+    void Update(double absTime, float deltaTime) override;
 
-    /// Affiche le joueur.
-    void Draw() const;
+    void UpdateTrail(
+        double absTime, float deltaTime, std::vector<std::pair<Vec2, Vec2>> playersLastMove);
+
+    void Draw() const override;
+
+    void DrawTrail() const;
 
     /// Détruit les ressources associées au joueur.
     ~Player();
@@ -40,9 +45,14 @@ private:
     float m_hurtTime = 0;
     State m_state;
     int32_t m_idxFrame = 0;
-    int32_t m_color;
+    int32_t m_colorIndex;
     jv::input::GamepadIdx m_gamepadIdx;
     jv::gpu::Texture* m_pTexture;
+    PointList m_pastPositions;
+    Color m_color;
+
+    void CheckLoop();
+    void CheckPlayerTrailOverlap(std::vector<std::pair<Vec2, Vec2>> playersLastMove);
 
 protected:
     void OnOutsideTerrain() override;

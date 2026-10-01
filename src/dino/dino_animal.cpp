@@ -15,28 +15,13 @@ dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture, Terrai
 
 dino::Animal::~Animal()
 {
-    // jv::gpu::DestroyTexture(m_pTexture);
 }
 
 void dino::Animal::Update(double absTime, float deltaTime)
 {
     float speed = 30;
-    m_pos.x += m_dir.x * deltaTime * speed;
-    m_pos.y += m_dir.y * deltaTime * speed;
-
-    Vec2 clampedPos = m_terrain->ClampPos(m_pos);
-
-    if (m_pos.x != clampedPos.x || m_pos.y != clampedPos.y)
-    {
-        m_pos = clampedPos;
-        // TODO OnOutsideTerrain()
-        //
-        //
-        //
-        //
-        //
-        //
-    }
+    Vec2 displacement = Vec2{m_dir.x * deltaTime * speed, m_dir.y * deltaTime * speed};
+    Move(displacement);
 
     m_idxFrame = int32_t(absTime * 8) % 4;
 

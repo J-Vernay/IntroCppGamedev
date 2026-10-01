@@ -16,6 +16,8 @@ public:
     Scene();
     ~Scene();
     void Update(double absTime, float deltaTime);
+    // Trier les entités à afficher selon leur position y.
+    void SortEntities();
     void Draw() const;
 
 private:
@@ -30,6 +32,10 @@ private:
     std::deque<Animal> m_animals;
     double m_animalSpawnTime = 0;
     jv::gpu::Texture* m_animalTexture;
+
+    std::deque<Entity*> m_entities;
+
+    std::vector<std::pair<Vec2, Vec2>> m_playerLastMoves;
 
     jv::input::GamepadIdx m_gamepads[4] = {
         jv::input::GamepadIdx::Keyboard,

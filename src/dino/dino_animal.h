@@ -15,10 +15,10 @@ public:
     Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture, Terrain* terrain);
     
     /// Déplace l'animal et met à jour son animation.
-    void Update(double absTime, float deltaTime);
+    void Update(double absTime, float deltaTime) override;
 
     /// Affiche l'animal
-    void Draw() const;
+    void Draw() const override;
 
     /// Détruit les ressources associées à l'animal.
     ~Animal();

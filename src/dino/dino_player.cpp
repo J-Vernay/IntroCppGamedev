@@ -1,14 +1,16 @@
 ﻿
 #include <dino/dino_player.h>
 #include <dino/dino_draw_utils.h>
+#include <dino/dino_geometry.h>
 #include <math.h>
 
 dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture,
-    jv::input::GamepadIdx gamepadIdx, int32_t color, Terrain* terrain)
+    jv::input::GamepadIdx gamepadIdx, Color color, int32_t colorIndex, Terrain* terrain)
     : Entity(terrain, pos)
 {
     m_terrain = terrain;
     m_state = IDLE;
+    m_colorIndex = colorIndex;
     m_color = color;
     m_gamepadIdx = gamepadIdx;
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
@@ -18,12 +20,11 @@ dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture,
 
 dino::Player::~Player()
 {
-    // jv::gpu::DestroyTexture(m_pTexture);
 }
 
 void dino::Player::Update(double absTime, float deltaTime)
 {
-    float speed = 50;
+    float speed = 80;
     bool running = false;
 
     // Entrées joueur.
@@ -64,9 +65,8 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     if (m_state != HURT)
     {
-        m_pos.x += m_dir.x * deltaTime * speed;
-        m_pos.y += m_dir.y * deltaTime * speed;
-        m_pos = m_terrain->ClampPos(m_pos);
+        Vec2 displacement = Vec2{m_dir.x * deltaTime * speed, m_dir.y * deltaTime * speed};
+        Move(displacement);
 
         // Mettre à jour la direction du sprite, droite ou gauche.
         if (m_dir.x > 0)
@@ -118,15 +118,26 @@ void dino::Player::Update(double absTime, float deltaTime)
     m_idxFrame = int32_t(absTime * frameRate) % frameCount;
 }
 
+void dino::Player::UpdateTrail(double absTime, float deltaTime, std::vector<std::pair<Vec2, Vec2>> playersLastMove)
+{
+    // Stocker les positions passées pour le lasso.
+    m_pastPositions.push_back(m_pos);
+    if (m_pastPositions.size() > 120)
+    {
+        m_pastPositions.erase(m_pastPositions.begin());
+    }
+
+    // Vérifier si le joueur fait une boucle avec son lasso.
+    CheckLoop();
+    // Vérifier si un autre joueur est passé sur son lasso.
+    CheckPlayerTrailOverlap(playersLastMove);
+}
+
 void dino::Player::Draw() const
 {
-    // Le joueur se déplace visuellement vers la droite par défaut.
-    float u1 = 0, u2 = 24;
-    float v1 = m_color * 24;
-    float v2 = m_color * 24 + 24;
+    // Obtenir l'offset pour afficher la bonne action joueur.
+    float uActionOffset = 0;
 
-    int32_t uActionOffset = 0;
-    
     switch (m_state)
     {
     case IDLE:
@@ -145,8 +156,11 @@ void dino::Player::Draw() const
         break;
     }
 
-    u1 += 24 * m_idxFrame + uActionOffset;
-    u2 += 24 * m_idxFrame + uActionOffset;
+    // Le joueur se déplace visuellement vers la droite par défaut.
+    float u1 = 24 * m_idxFrame + uActionOffset;
+    float u2 = 24 + 24 * m_idxFrame + uActionOffset;
+    float v1 = m_colorIndex * 24;
+    float v2 = m_colorIndex * 24 + 24;
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;
@@ -166,9 +180,75 @@ void dino::Player::Draw() const
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
     vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
 
-    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Animal", vs);
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Player::DrawTrail() const
+{
+    float trailWidth = 5;
+    std::vector<jv::gpu::Vertex> vs;
+
+    GenVertices_Polyline(vs, m_pastPositions, trailWidth, m_color);
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Trail", vs);
+    jv::gpu::Draw(pVBuf, nullptr);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Player::CheckLoop()
+{
+    int32_t loopPointIndex1 = -1;
+    int32_t loopPointIndex2 = -1;
+
+    for (int i = m_pastPositions.size() - 3; i >= 0 && loopPointIndex1 == -1; i--)
+    {
+        Vec2 A = m_pastPositions[i + 1];
+        Vec2 B = m_pastPositions[i];
+        for (int j = m_pastPositions.size() - 2; j > i + 2 && loopPointIndex1 == -1; j--)
+        {
+            Vec2 C = m_pastPositions[j + 1];
+            Vec2 D = m_pastPositions[j];
+
+            if (!(A.x == B.x && A.y == B.y) && !(C.x == D.x && C.y == D.y) &&
+                IntersectSegment(A, B, C, D))
+            {
+                loopPointIndex1 = i + 1;
+                loopPointIndex2 = j;
+            }
+        }
+    }
+
+    if (loopPointIndex1 != -1)
+    {
+        m_pastPositions.erase(
+            m_pastPositions.begin() + loopPointIndex1,
+            m_pastPositions.begin() + loopPointIndex2);
+    }
+}
+
+void dino::Player::CheckPlayerTrailOverlap(std::vector<std::pair<Vec2, Vec2>> playersLastMove)
+{
+    int32_t overlapPointIndex = -1;
+
+    for (int i = m_pastPositions.size() - 2; i >= 0 && overlapPointIndex == -1; i--)
+    {
+        Vec2 A = m_pastPositions[i + 1];
+        Vec2 B = m_pastPositions[i];
+
+        for (int p = 0; p < playersLastMove.size() && overlapPointIndex == -1; p++)
+        {
+            if (IntersectSegment(A, B, playersLastMove[p].first, playersLastMove[p].second))
+            {
+                overlapPointIndex = i + 1;
+            }
+        }
+    }
+
+    if (overlapPointIndex != -1)
+    {
+        m_pastPositions.erase(m_pastPositions.begin(), m_pastPositions.begin() + overlapPointIndex);
+    }
 }
 
 void dino::Player::OnOutsideTerrain()

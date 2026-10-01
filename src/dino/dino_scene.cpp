@@ -3,6 +3,8 @@
 #include <dino/dino_scene.h>
 
 #include <format>
+#include <iostream>
+#include <algorithm>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
@@ -12,12 +14,21 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
+    Color colors[4] = {Color_BLUE, Color_RED, Color_YELLOW, Color_GREEN};
     for (int i = 0; i < 4; i++) {
-        m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_playerTexture, m_gamepads[i], i, &m_Terrain);
+        Entity& player = m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_playerTexture,
+            m_gamepads[i], colors[i], i, &m_Terrain);
+        m_entities.push_back(&player);
     }
 }
 
-dino::Scene::~Scene(){}
+dino::Scene::~Scene()
+{
+    jv::gpu::DestroyTexture(m_pTextureText);
+    jv::gpu::DestroyTexture(m_animalTexture);
+    jv::gpu::DestroyTexture(m_playerTexture);
+
+}
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
@@ -26,14 +37,28 @@ void dino::Scene::Update(double absTime, float deltaTime)
     m_Terrain.Update(absTime, deltaTime);
 
     _UpdatePlayers(absTime, deltaTime);
-    _UpdateAnimals(absTime, deltaTime);
+    //_UpdateAnimals(absTime, deltaTime);
     _UpdateCollisions(absTime, deltaTime);
 }
 
 void dino::Scene::_UpdatePlayers(double absTime, float deltaTime)
 {
-    for (Player& player : m_players)
-        player.Update(absTime, deltaTime);
+    for (int i = 0; i < m_players.size(); i++)
+    {
+        m_players[i].Update(absTime, deltaTime);
+
+        m_playerLastMoves.clear();
+        
+        for (int j = 0; j < m_players.size(); j++)
+        {
+            if (i == j) continue;
+
+            m_playerLastMoves.push_back(
+                std::pair<Vec2, Vec2>(m_players[j].GetLastPos(), m_players[j].GetPos()));
+        }
+
+        m_players[i].UpdateTrail(absTime, deltaTime, m_playerLastMoves);
+    }
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -44,7 +69,8 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime, m_animalTexture, &m_Terrain);
+        Entity& animal = m_animals.emplace_back(spawnPos, absTime, m_animalTexture, &m_Terrain);
+        m_entities.push_back(&animal);
     }
 
     for (Animal& animal : m_animals)
@@ -81,14 +107,21 @@ void dino::Scene::_UpdateCollisions(double absTime, float deltaTime)
     }
 }
 
+void dino::Scene::SortEntities()
+{
+    std::sort(m_entities.begin(), m_entities.end(),
+        [](Entity* a, Entity* b) { return a->GetPos().y < b->GetPos().y; });
+}
+
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
 
-    for (Animal const& animal : m_animals)
-        animal.Draw();
+    // Afficher les entités dans l'ordre.
+    for (Entity* entity : m_entities)
+        entity->Draw();
     for (Player const& player : m_players)
-        player.Draw();
+        player.DrawTrail();
 
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {

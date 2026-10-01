@@ -55,7 +55,7 @@ enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ?
+> On suit la règle de 3: on doit implémenter le destructeur, constructeur de copie, et l'opération d'affectation par copie.
 
 Remettre l'esperluette.
 
@@ -149,17 +149,17 @@ L'appliquer dans la base de code.
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.
 
-> L'`override` de méthodes. 
+> Les méthodes virtuelles et l'override.
 
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
 
-> ...
+> `Update()` et `Draw()` peuvent être mises en commun suivant le même principe.
 
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?
 
-> ...
+> Utiliser un tableau de pointeurs de la classe parent de `Player` et `Animal` (ici `Entité`).
 
 
 
@@ -172,12 +172,12 @@ des dinosaures, aux couleurs des dinosaures.
 B) Implémenter : "Les suites de points sont tronquées à une longueur maximale de deux secondes."
 Quelle méthode de std::vector utiliser ?
 
-‍...
+‍> `vector.erase()`
 
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?
 
-‍...
+‍> 119 segments : (119 - 1) * 2 * 4 joueurs = 944 intersections calculées.
 
 D) Implémenter : "Quand un joueur passe par dessus le lasso d'un autre joueur, le début du lasso est détruit jusqu'à l'intersection."
 Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' interagir entre elles.

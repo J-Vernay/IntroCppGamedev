@@ -4,6 +4,7 @@ dino::Entity::Entity(Terrain* terrain, Vec2 pos)
 {
     m_terrain = terrain;
     m_pos = pos;
+    m_lastPos = pos;
 }
 
 void dino::Entity::Collide(Entity& other)
@@ -21,17 +22,31 @@ void dino::Entity::Collide(Entity& other)
             (m_pos.x - otherPos.x) * collisionFraction, (m_pos.y - otherPos.y) * collisionFraction};
         Vec2 opposite = Vec2{-direction.x, -direction.y};
 
-        Push(direction);
-        other.Push(opposite);
+        Move(direction);
+        other.Move(opposite);
     }
 }
 
-void dino::Entity::Push(Vec2 const amount)
+void dino::Entity::Move(Vec2 const amount)
 {
+    m_lastPos = m_pos;
     m_pos = Vec2{m_pos.x + amount.x, m_pos.y + amount.y};
+
+    Vec2 clampedPos = m_terrain->ClampPos(m_pos);
+
+    if (m_pos.x != clampedPos.x || m_pos.y != clampedPos.y)
+    {
+        m_pos = clampedPos;
+        OnOutsideTerrain();
+    }
 }
 
 jv::util::Vec2 dino::Entity::GetPos() const
 {
     return m_pos;
+}
+
+jv::util::Vec2 dino::Entity::GetLastPos() const
+{
+    return m_lastPos;
 }
