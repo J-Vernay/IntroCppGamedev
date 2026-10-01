@@ -1,10 +1,10 @@
 [
 	{
 		"is_closed":1,
-		"window_x":-967,
-		"window_y":0,
-		"window_wide":974,
-		"window_high":1039,
+		"window_x":563,
+		"window_y":184,
+		"window_wide":794,
+		"window_high":664,
 		"maximized":0,
 		"ontop":0,
 		"filters_visible":0,
@@ -32,7 +32,7 @@
 		"findbar_highlight_all":1,
 		"menu":1,
 		"fullscreen_menu":0,
-		"theme":2,
+		"theme":0,
 		"status_bar_visible":1,
 		"statusbar_view_thumbnail_size":128,
 		"zoom":100,
@@ -42,7 +42,7 @@
 		[
 			{
 				"is_closed":0,
-				"search":"",
+				"search":"IntroCppGamedev *.exe !tools",
 				"match_case":0,
 				"match_path":1,
 				"match_whole_word":0,
@@ -69,8 +69,8 @@
 				"is_secondary_sort_folders_first":0,
 				"omit_results":0,
 				"temp_omit_results":0,
-				"listview_item_focus":"C:\\Program Files (x86)\\Trend Micro\\Endpoint Basecamp\\log\\EndpointBasecamp.log",
-				"listview_selection":["C:\\Program Files (x86)\\Trend Micro\\Endpoint Basecamp\\log\\EndpointBasecamp.log"],
+				"listview_item_focus":"",
+				"listview_selection":[],
 				"folders_sidebar_expanded":[],
 				"folders_sidebar_item_focus":"",
 				"folders_sidebar_selection":[],
