@@ -5,7 +5,7 @@
 Les images de dinosaures sont dans la spritesheet `dinosaurs.bmp`,
 disposées sur une grille de **24x24 pixels**.
 
-![Texture des dinosaures](dinosaurs.bmp)
+![Texture des dinosaures](../../assets/dinosaurs.bmp)
 
 Les animations consistent à enchaîner en boucle différents sprites.
 Dans la spritesheet, ces sprites correspondent à des positions U :
@@ -26,7 +26,7 @@ Les dinosaures de différentes couleurs correspondent à des positions V :
 
 Les images du terrain sont dans le tileset `terrain.bmp`.
 
-![Texture du terrain](terrain.bmp)
+![Texture du terrain](../../assets/terrain.bmp)
 
 Les tuiles du tileset font une taille de **16x16 pixels**.
 Le terrain de **256x192 pixels** correspond donc à **16x12 tuiles**.
@@ -60,7 +60,7 @@ Pour obtenir les saisons, il faut ajouter dans l'ordre **U += (0, 80, 160, 240)*
 
 Les images d'animaux sont dans la spritesheet `animals.bmp`.
 
-![Texture des animaux](animals.bmp)
+![Texture des animaux](../../assets/animals.bmp)
 
 Chaque sprite fait une taille de **32x32 pixels**.
 

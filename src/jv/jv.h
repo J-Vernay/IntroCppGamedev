@@ -150,7 +150,7 @@ enum class GamepadIdx : int32_t
     Keyboard,
 };
 
-constexpr GamepadIdx GamepadIdx_ALL[] = {
+static constexpr GamepadIdx GamepadIdx_ALL[] = {
     GamepadIdx::Gamepad1,
     GamepadIdx::Gamepad2,
     GamepadIdx::Gamepad3,

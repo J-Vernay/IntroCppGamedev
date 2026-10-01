@@ -1,4 +1,6 @@
-﻿#include <dino/dino_scene.h>
+﻿#include <dino/dino_main.h>
+#include <dino/dino_assets.h>
+#include <dino/dino_scene.h>
 
 dino::Scene* g_pDinoScene;
 
@@ -6,6 +8,9 @@ void jv::game::Init()
 {
     jv::util::Vec2 rdrSize = {480, 360};
     jv::gpu::SetRenderSize(rdrSize);
+
+    // Load game assets
+    (&dino::AssetsHolder::getInstance())->LoadTextures();
 
     g_pDinoScene = new dino::Scene;
 }

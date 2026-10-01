@@ -2,9 +2,11 @@
 
 #include <dino/dino_main.h>
 #include <dino/dino_animal.h>
+#include <dino/dino_player.h>
 #include <dino/dino_terrain.h>
 
 #include <deque>
+#include <vector>
 
 namespace dino
 {
@@ -16,6 +18,7 @@ public:
     ~Scene();
     void Update(double absTime, float deltaTime);
     void Draw() const;
+    Terrain& GetTerrain();
 
 private:
     jv::gpu::Texture* m_pTextureText = nullptr;
@@ -23,10 +26,14 @@ private:
 
     Terrain m_Terrain;
 
-    std::deque<Animal> m_animals;
+    std::vector<Entity*> m_entities;
+
     double m_animalSpawnTime = 0;
 
-    void _UpdateAnimals(double absTime, float deltaTime);
+    void _SetupPlayers();
+
+    void _UpdateEntities(double absTime, float deltaTime);
+    void _HandleCollisions();
 };
 
 } // namespace dino

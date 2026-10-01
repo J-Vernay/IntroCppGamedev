@@ -1,10 +1,11 @@
 ﻿#pragma once
 
 #include <jv/jv.h>
+#include <dino/dino_math_utils.h>
 
 namespace dino
 {
-
+	
 using Color = jv::util::Color;
 using Vec2 = jv::util::Vec2;
 
@@ -19,3 +20,4 @@ constexpr Color Color_YELLOW{0xFD, 0xC7, 0x60, 0xFF};
 constexpr Color Color_GREEN{0x88, 0xA0, 0x43, 0xFF};
 
 } // namespace dino
+

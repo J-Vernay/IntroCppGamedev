@@ -128,3 +128,16 @@ jv::util::Vec2 dino::Terrain::ClampPos(Vec2 pos) const
         pos.y = m_spawnOffset.y + m_spawnSize.y;
     return pos;
 }
+
+bool dino::Terrain::IsInside(Vec2 pos) const
+{
+    if (pos.x < m_spawnOffset.x)
+        return false;
+    if (pos.x > m_spawnOffset.x + m_spawnSize.x)
+        return false;
+    if (pos.y < m_spawnOffset.y)
+        return false;
+    if (pos.y > m_spawnOffset.y + m_spawnSize.y)
+        return false;
+    return true;
+}
