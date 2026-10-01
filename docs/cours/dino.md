@@ -152,7 +152,7 @@ comme la réaction à un événement du type "limite du terrain" ? L'appliquer d
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
 
-> ...
+> Update, Draw, ResolvePhysicConflict, ResolveTerrainPos
 
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?

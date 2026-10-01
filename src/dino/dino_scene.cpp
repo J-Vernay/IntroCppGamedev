@@ -39,6 +39,12 @@ void dino::Scene::Update(double absTime, float deltaTime)
         entity->Update(absTime, deltaTime);
         entity->ResolveTerrainPos(m_Terrain);
     }
+
+    for (size_t i = 0; i < m_entities.size(); i++)
+        for (size_t j = i + 1; j < m_entities.size(); j++)
+        {
+            m_entities[i]->ResolvePhysicConflict(*m_entities[j]);
+        }
 }
 
 void dino::Scene::SpawnAnimals(double absTime, float deltaTime)

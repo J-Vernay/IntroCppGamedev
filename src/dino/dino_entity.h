@@ -18,8 +18,25 @@ public:
 
     Entity(const Entity&) = delete;
 
-    void ResolvePhysicConflict(float x, float y);
+    void ResolvePhysicConflict(Entity& other);
     virtual void ResolveTerrainPos(Terrain& terrain) = 0;
+
+    const float PHYSIC_RADIUS = 16;
+
+    float GetX() const
+    {
+        return m_pos.x;
+    }
+
+    float GetY() const
+    {
+        return m_pos.y;
+    }
+
+    void SetPos(Vec2 pos)
+    {
+        m_pos = pos;
+    }
 
 protected:
     Vec2 m_pos = {0, 0};
