@@ -75,7 +75,7 @@ Quelle fonction standard disponible dans cctype (documentation : [https://en.cpp
 peut-on utiliser pour ne pas se soucier des différences majuscule/minuscule ?
 Vérifier à l'aide du débogueur qu'à la fin du traitement, le tableau `res` ne possède au maximum 26 entrées.
 
-> On peut utiliser std::tolower() .
+> On peut utiliser std::toupper() .
 
 Dans `exo5::GetSortedLetterCount()`, remplacer `#if 0` par `#if 1`.
 La fonction ne compile plus car la fonction `_OrderCharCount()` n'est pas définie.
