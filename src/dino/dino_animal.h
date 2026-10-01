@@ -11,6 +11,18 @@ class Animal
 public:
     /// Initialise l'animal avec un type au hasard.
     Animal(Vec2 pos, double absTime);
+
+    /// Constructeur d'Animal à partir d'un autre Animal par copie
+    ///
+    /// "Animal a = b;" ou "Animal a{b};" (on construit "a" à partir de "b")
+    Animal(Animal const& other) = delete;
+
+    /// Opérateur d'assignement par copie
+    ///
+    /// Animal a, b;
+    /// a = b; // Pas un constructeur, car 'a' et 'b' existe déjà ; c'est une affectation
+    Animal& operator=(Animal const& b) = delete;
+
     
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
