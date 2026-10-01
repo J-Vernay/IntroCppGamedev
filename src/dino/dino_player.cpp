@@ -1,4 +1,4 @@
-#include <dino/dino_draw_utils.h>
+﻿#include <dino/dino_draw_utils.h>
 #include <dino/dino_player.h>
 #include <math.h>
 
@@ -17,7 +17,24 @@ dino::Player::~Player()
 
 void dino::Player::Update(double absTime, float deltaTime)
 {
-    float speed = 30;
+    float speed = 100;
+
+    jv::input::Gamepad padInput;
+
+    if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, padInput))
+    {
+        float dirX = 0, dirY = 0;
+        if (padInput.dpad_left)
+            dirX -= 1;
+        if (padInput.dpad_right)
+            dirX += 1;
+        if (padInput.dpad_up)
+            dirY -= 1;
+        if (padInput.dpad_down)
+            dirY += 1;
+        m_dir = {dirX, dirY};
+    }
+
     m_pos.x += m_dir.x * deltaTime * speed;
     m_pos.y += m_dir.y * deltaTime * speed;
 
@@ -61,7 +78,7 @@ void dino::Player::Draw() const
     u2 += 32 * m_idxFrame + 128 * m_kind;
 
     jv::util::Color color = Color_WHITE;
-    color.a = m_alpha;
+    color.a = 255;
 
     std::vector<jv::gpu::Vertex> vs;
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
