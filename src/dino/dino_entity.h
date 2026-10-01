@@ -9,14 +9,15 @@ namespace dino
 class Entity
 {
 public:
-    Entity(Vec2 pos, double absTime, jv::gpu::Texture* texturePtr, Terrain* pTerrain);
+    Entity(Vec2 pos, double absTime, Terrain* pTerrain) : m_pos(pos), m_timeStart(absTime), m_pTerrain(pTerrain) {};
     
-    void Update(double absTime, float deltaTime);
-    void Draw() const;
-    ~Entity();
+    virtual void Update(double absTime, float deltaTime) = 0;
+    virtual void Draw() const = 0;
+    virtual ~Entity() {};
+
     Entity(const Entity&) = delete;
 
-private:
+protected:
     Vec2 m_pos;
     Vec2 m_dir;
 

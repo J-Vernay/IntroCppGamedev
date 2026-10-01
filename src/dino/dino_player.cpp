@@ -5,13 +5,10 @@
 #include <algorithm>
 
 
-dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, Terrain* pTerrain)
+dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, Terrain* pTerrain) : Entity(pos, absTime, pTerrain)
 {
-    m_pos = pos;
 
     m_playerColorIndex = jv::util::RandomInt32(0, 3);
-
-    m_pTerrain = pTerrain;  
 
     m_gamepadIdx = gamepadIdx;
 

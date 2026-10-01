@@ -1,17 +1,18 @@
 ﻿#include <dino/dino_main.h>
 #include <dino/dino_terrain.h>
+#include <dino/dino_entity.h>
 #pragma once
 
 namespace dino
 {
 
-class Player
+class Player : public Entity
 {
 public:
 
     Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, Terrain* pTerrain);
 
-    void Update(double absTime, float deltaTime);
+    void Update(double absTime, float deltaTime) override;
 
     void UpdateInput();
     void UpdateDirection(float x, float y);
@@ -19,10 +20,11 @@ public:
     void UpdatePlayerState(float deltaTime);
     void UpdateIndexFrame(double absTime);
     void UpdateSpeed(bool isRunning);
+
     void HandleHit();
     void UpdateHurtState(float deltaTime);
 
-    void Draw() const;
+    void Draw() const override;
 
     ~Player();
 
@@ -53,17 +55,9 @@ private:
         Hurt,
     };
 
-    Vec2 m_pos;
-    Vec2 m_dir;
-
-    double m_timeStart;
-
     float m_timerHit = 0;
 
-    uint8_t m_alpha = 0;
-
     int32_t m_playerColorIndex;
-    int32_t m_idxFrame = 0;
 
     SpeedPlayerData m_speedData;
     PlayerState m_currentPlayerState = PlayerState::Idle;
@@ -74,9 +68,6 @@ private:
     }
 
     jv::input::GamepadIdx m_gamepadIdx;
-    jv::gpu::Texture* m_pTexture;
-
-    Terrain* m_pTerrain;
 };
 
 } 
