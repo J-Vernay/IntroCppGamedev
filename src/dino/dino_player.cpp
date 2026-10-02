@@ -37,10 +37,21 @@ void dino::Player::Update(double absTime, float deltaTime)
         m_bRunning = keyboard.btn_right; // 'D' sur le clavier (ZQSD)
         if (m_bRunning)
             speed *= 2;
+
+        if (keyboard.btn_left) // 'A/Q' sur le clavier
+            m_hitTime = 3;
     }
 
-    m_pos.x += m_dir.x * deltaTime * speed;
-    m_pos.y += m_dir.y * deltaTime * speed;
+    
+    if (m_hitTime <= 0) // Animation de dégâts fini / pas active
+    {
+        m_pos.x += m_dir.x * deltaTime * speed;
+        m_pos.y += m_dir.y * deltaTime * speed;
+    }
+    else
+    {
+        m_hitTime -= deltaTime; // On avance le temps de l'anim
+    }
 
     m_absTime = absTime;
 
@@ -57,7 +68,14 @@ void dino::Player::Draw() const
 {
     float u1, u2, v1 = 0, v2 = 24;
 
-    if (m_bRunning)
+    if (m_hitTime > 0)
+    {
+        // Degat
+        int32_t idxFrame = int32_t(m_absTime * 8) % 3;
+        u1 = 336 + 24 * idxFrame;
+        u2 = 336 + 24 + 24 * idxFrame;
+    }
+    else if (m_bRunning)
     {
         // Course
         int32_t idxFrame = int32_t(m_absTime * 16) % 6;

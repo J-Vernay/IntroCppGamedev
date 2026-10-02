@@ -38,7 +38,7 @@ private:
     uint8_t m_alpha = 0;
     Vec2 m_dir;
     jv::gpu::Texture* m_pTexture;
-
+    double m_hitTime = 0;
     double m_absTime;
     bool m_bRunning;
     bool m_bLeft;
