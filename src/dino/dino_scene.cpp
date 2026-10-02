@@ -11,7 +11,10 @@ dino::Scene::Scene() : m_Terrain{24, 16}
     pTexturePlayer = dino::LoadImageAsset("dinosaurs.bmp");
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
     Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-    m_players.emplace_back(spawnPos, 0, pTexturePlayer);
+    //m_players.emplace_back(spawnPos, 0, pTexturePlayer, 0);
+    // m_players.emplace_back(spawnPos, 0, pTexturePlayer, 1);
+    m_players.emplace_back(spawnPos, 0, pTexturePlayer, 2);
+    // m_players.emplace_back(spawnPos, 0, pTexturePlayer, 3);
 }
 
 dino::Scene::~Scene() {

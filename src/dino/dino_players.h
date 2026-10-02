@@ -9,16 +9,12 @@ namespace dino
 class Player
 {
 public:
-    /// Initialise l'animal avec un type au hasard.
-    Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture);
+    Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture, int kind);
 
-    /// Deplace l'animal et met a jour son animation.
     void Update(double absTime, float deltaTime);
 
-    /// Affiche l'animal
     void Draw() const;
 
-    /// Detruit les ressources associees a l'animal.
     ~Player();
 
 private:
@@ -33,6 +29,8 @@ private:
     double m_absTime;
     bool m_bRunning;
     bool m_bLeft;
+    bool m_bStun = false;
+    float m_stunTime;
 };
 
 } // namespace dino

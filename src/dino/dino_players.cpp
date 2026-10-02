@@ -2,10 +2,10 @@
 #include <dino/dino_players.h>
 #include <math.h>
 
-dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
+dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture, int kind)
 {
     m_pos = pos;
-    m_kind = jv::util::RandomInt32(0, 7);
+    m_kind = kind;
     m_timeStart = absTime;
     m_pTexture = pTexture;
     m_gamepadIdx = jv::input::GamepadIdx::Keyboard;
@@ -35,7 +35,19 @@ void dino::Player::Update(double absTime, float deltaTime)
         {
             speed *= 2;
         }
+        if (input.btn_left){
+            m_bStun = true;
+            m_stunTime = 0.0;
+        }
+        if (m_bStun){
+            speed = 0;
+            m_stunTime += deltaTime;
+            if (m_stunTime >= 3){
+                m_bStun = false;
+            }
+        }
         
+
     }
     if (m_dir.x != 0)
     {
@@ -57,9 +69,15 @@ void dino::Player::Update(double absTime, float deltaTime)
 void dino::Player::Draw() const
 {
     
-    float u1 = 0, u2 = 24, v1 = 0, v2 = 24;
+    float u1 = 0, u2 = 24, v1 = 0 + 24 * m_kind, v2 = 24 + 24* m_kind;
     int32_t m_idxFrame;
-    if (m_bRunning)
+
+    if (m_bStun)
+    {
+        m_idxFrame = int32_t(m_absTime * 8) % 3;
+        u1 = 336 + 24 * m_idxFrame, u2 = 336 + 24 + 24 * m_idxFrame;
+    }
+    else if (m_bRunning)
     {
         m_idxFrame = int32_t(m_absTime * 16) % 6;
         u1 = 432 + 24 * m_idxFrame, u2 = 432 + 24 + 24 * m_idxFrame;
@@ -78,6 +96,7 @@ void dino::Player::Draw() const
     {
         std::swap(u1, u2);
     }
+    
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;
