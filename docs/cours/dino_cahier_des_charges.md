@@ -7,7 +7,7 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 
 ## Partie 4 - Lasso
 
-- Cf. TD
+- Cf. TD dans `dino.md`
 
 ## Flow du jeu
 
