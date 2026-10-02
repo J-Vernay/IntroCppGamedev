@@ -12,8 +12,10 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
-    Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-    m_players.emplace_back(spawnPos, 0, m_pTexturePlayer);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, m_pTexturePlayer);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 1, jv::input::GamepadIdx::Gamepad1, m_pTexturePlayer);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 2, jv::input::GamepadIdx::Gamepad2, m_pTexturePlayer);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 3, jv::input::GamepadIdx::Gamepad3, m_pTexturePlayer);
 }
 
 dino::Scene::~Scene()

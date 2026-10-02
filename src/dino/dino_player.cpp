@@ -3,11 +3,12 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
+dino::Player::Player(
+    Vec2 pos, int32_t idxPlayer, jv::input::GamepadIdx gamepadIdx, jv::gpu::Texture* pTexture)
 {
     m_pos = pos;
-    //m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
-    m_timeStart = absTime;
+    m_idxPlayer = idxPlayer;
+    m_gamepadIdx = gamepadIdx;
     m_pTexture = pTexture;
 }
 
@@ -21,7 +22,7 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     // Calcul de la direction du joueur, en utilisant les flèches du clavier.
     jv::input::Gamepad keyboard;
-    if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, keyboard))
+    if (jv::input::GetGamepad(m_gamepadIdx, keyboard))
     {
         float dirx = 0, diry = 0;
         if (keyboard.dpad_up)
@@ -41,6 +42,10 @@ void dino::Player::Update(double absTime, float deltaTime)
         if (keyboard.btn_left) // 'A/Q' sur le clavier
             m_hitTime = 3;
     }
+    else
+    {
+        m_dir = {};
+    }
 
     
     if (m_hitTime <= 0) // Animation de dégâts fini / pas active
@@ -57,11 +62,6 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     if (m_dir.x != 0)
         m_bLeft = m_dir.x < 0;
-
-
-    double aliveTime = absTime - m_timeStart;
-    if (aliveTime < 1)
-        m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
 
 void dino::Player::Draw() const
@@ -100,47 +100,16 @@ void dino::Player::Draw() const
     if (m_bLeft)
         std::swap(u1, u2);
 
-    #if 0
-
-    if (m_dir.x > 0)
-    {
-        u1 = 32, u2 = 0; // Inversion du sprite sur l'axe X
-    }
-    else
-    {
-        u1 = 0, u2 = 32; // Normal sur l'axe X
-    }
-
-    if (std::abs(m_dir.y) > std::abs(m_dir.x))
-    {
-        if (m_dir.y > 0)
-        {
-            v1 = 32, v2 = 64; // Bas
-        }
-        else
-        {
-            v1 = 64, v2 = 96; // Haut
-        }
-    }
-    else
-    {
-        v1 = 0, v2 = 32; // Horizontal
-    }
-
-    u1 += 32 * m_idxFrame + 128 * m_kind;
-    u2 += 32 * m_idxFrame + 128 * m_kind;
-#endif
-
-    jv::util::Color color = Color_WHITE;
-    color.a = m_alpha;
+    v1 += 24 * m_idxPlayer;
+    v2 += 24 * m_idxPlayer;
 
     std::vector<jv::gpu::Vertex> vs;
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1});
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1});
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2});
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1});
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2});
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2});
 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
