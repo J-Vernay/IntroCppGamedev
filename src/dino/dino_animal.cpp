@@ -3,7 +3,7 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex, dino::Terrain* terrain) : dino::Entity(pos, absTime)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex) : dino::Entity(pos, absTime)
 {
     m_pos = pos;
     m_idxFrame = 0;
@@ -11,7 +11,7 @@ dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex, dino::Terr
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
     m_pTexture = tex;
-    m_pTerrain = terrain;
+
 }
 
 dino::Animal::~Animal()
@@ -19,18 +19,21 @@ dino::Animal::~Animal()
     //jv::gpu::DestroyTexture(m_pTexture);
 }
 
-void dino::Animal::Update(double absTime, float deltaTime)
+void dino::Animal::HandleTerrainClamp(dino::Terrain* terrain)
 {
-    float speed = 30;
-    m_pos.x += m_dir.x * deltaTime * speed;
-    m_pos.y += m_dir.y * deltaTime * speed;
-
-    Vec2 clampedPos = m_pTerrain->ClampPos(m_pos);
+    Vec2 clampedPos = terrain->ClampPos(m_pos);
     if (clampedPos.x != m_pos.x || clampedPos.y != m_pos.y)
     {
         m_pos = clampedPos;
         m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     }
+}
+
+void dino::Animal::Update(double absTime, float deltaTime)
+{
+    float speed = 30;
+    m_pos.x += m_dir.x * deltaTime * speed;
+    m_pos.y += m_dir.y * deltaTime * speed;
 
     m_idxFrame = int32_t(absTime * 8) % 4;
 

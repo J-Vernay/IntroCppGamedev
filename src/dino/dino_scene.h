@@ -19,6 +19,9 @@ public:
     void Draw() const;
 
 private:
+    void SortEntitys();
+    static bool HeightDiff(Entity* firstElt, Entity* secondElt);
+
     jv::gpu::Texture* m_pTextureText = nullptr;
     jv::gpu::Texture* m_pTextureAnimal = nullptr;
     jv::gpu::Texture* m_pTexturePlayer = nullptr;

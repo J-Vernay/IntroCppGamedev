@@ -22,15 +22,27 @@ public:
         return m_pos;
     };
 
+    void SetPositionCollision(Vec2 v, float l) {
+        m_pos.x -= v.x /l;
+        m_pos.y -= v.y /l;
+    };
+
+    void SetDirectionCollision(Vec2 v, float l)
+    {
+        m_dir.x = v.x / l;
+        m_dir.y = v.y / l;
+    }
+
     void HandlePhysics(std::vector<Entity*> entitys);
 
+    virtual void HandleTerrainClamp(dino::Terrain* terrain) = 0;
+
 protected:
-    Vec2 m_pos;
-    double m_timeStart;
+    Vec2 m_pos = {0, 0};
+    double m_timeStart = 0;
     uint8_t m_alpha = 0;
-    Vec2 m_dir;
-    int32_t m_idxFrame;
-    jv::gpu::Texture* m_pTexture;
-    dino::Terrain* m_pTerrain;
+    Vec2 m_dir = {0, 0};
+    int32_t m_idxFrame = 0;
+    jv::gpu::Texture* m_pTexture = nullptr;
 };
 } // namespace dino

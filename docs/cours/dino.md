@@ -147,27 +147,27 @@ E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels)
 F) Implémenter : "Les animaux se repoussent entre eux, et aussi les animaux et les dinosaures entre eux."
 Pourquoi y a-t-il duplication de code ?
 
-> ...
+> player et animals sont de classes différentes
 
 G) Quelle fonctionnalité du C++ permet de dédupliquer la logique commune entre `dino::Player` et `dino::Animal` ?
 L'appliquer dans la base de code.
 
-> ...
+> l'héritage
 
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.
 
-> ...
+> Polymorphisme
 
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
 
-> ...
+> Le clamp de position par rapport au terrain
 
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?
 
-> ...
+> Trier une liste d'entity par rapport a leur position y puis les draw dans l'ordre.
 
 
 
@@ -180,7 +180,7 @@ des dinosaures, aux couleurs des dinosaures.
 B) Implémenter : "Les suites de points sont tronquées à une longueur maximale de deux secondes."
 Quelle méthode de std::vector utiliser ?
 
-‍...
+‍erase et begin
 
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?

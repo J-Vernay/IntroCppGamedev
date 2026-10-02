@@ -143,11 +143,11 @@ namespace input
 /// Identifiant de manette (pour ce cours, le clavier est considéré comme un type de manettes).
 enum class GamepadIdx : int32_t
 {
+    Keyboard,
     Gamepad1,
     Gamepad2,
     Gamepad3,
     Gamepad4,
-    Keyboard,
 };
 
 constexpr GamepadIdx GamepadIdx_ALL[] = {

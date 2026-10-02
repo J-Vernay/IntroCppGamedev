@@ -7,10 +7,10 @@
 namespace dino
 {
 
-class Animal : Entity
+class Animal : public Entity
 {
 public:
-    Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex, dino::Terrain* terrain);
+    Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex);
     
     void Update(double absTime, float deltaTime) override;
 
@@ -19,6 +19,8 @@ public:
     ~Animal();
 
     Animal(const Animal&) = delete;
+
+    void HandleTerrainClamp(dino::Terrain* terrain) override;
 
 private:
     int32_t m_kind;

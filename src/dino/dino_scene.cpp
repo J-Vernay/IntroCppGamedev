@@ -3,14 +3,15 @@
 #include <dino/dino_scene.h>
 
 #include <format>
+#include <algorithm>
 
 dino::Scene::Scene()
     : m_Terrain{24, 16},
       m_players
-    {Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, 0, &m_Terrain},
-          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad1, 1, &m_Terrain},
-          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad2, 2, &m_Terrain},
-          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad3, 3, &m_Terrain}}
+    {Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, 0},
+          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad1, 1},
+          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad2, 2},
+          Player{m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Gamepad3, 3}}
     {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
     m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
@@ -41,8 +42,14 @@ void dino::Scene::Update(double absTime, float deltaTime)
     for (Player& p : m_players)
     {
         p.Update(absTime, deltaTime);
-        //p.HandlePhysics(m_entitys);
+        p.HandlePhysics(m_entitys);
     }
+    for (Entity* e : m_entitys)
+    {
+        e->HandleTerrainClamp(&m_Terrain);
+    }
+
+    SortEntitys();
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -54,7 +61,8 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal, &m_Terrain);
+        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal);
+        m_entitys.push_back(&m_animals.back());
     }
 
     
@@ -62,20 +70,20 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     for (Animal& animal : m_animals)
     {
         animal.Update(absTime, deltaTime);
-        //animal.HandlePhysics(m_entitys);
+        animal.HandlePhysics(m_entitys);
     }
 }
 
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
-    for (const Player& p : m_players)
+
+    for (const Entity* e : m_entitys)
     {
-        p.Draw();
+        e->Draw();
     }
 
-    for (Animal const& animal : m_animals)
-        animal.Draw();
+    
 
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {
@@ -86,4 +94,16 @@ void dino::Scene::Draw() const
         jv::gpu::Draw(pVBuf, m_pTextureText);
         jv::gpu::DestroyVertexBuffer(pVBuf);
     }
+}
+
+void dino::Scene::SortEntitys()
+{
+    std::sort(m_entitys.begin(), m_entitys.end(), HeightDiff);
+}
+
+bool dino::Scene::HeightDiff(Entity* firstElt, Entity* secondElt)
+{
+    Vec2 first = firstElt->GetPosition();
+    Vec2 second = secondElt->GetPosition();
+    return (first.y < second.y);
 }
