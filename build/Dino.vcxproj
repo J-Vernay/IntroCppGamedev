@@ -147,6 +147,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dino_entity.cpp" />
     <ClInclude Include="..\src\dino\dino_animal.h" />
     <ClCompile Include="..\src\dino\dino_assets.h" />
     <ClInclude Include="..\src\dino\dino_draw_utils.h" />

@@ -106,8 +106,8 @@ void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
 
+    // Sort entities by height (Y)
     std::vector<Entity*> sortedEntities(m_entities.size());
-
     std::partial_sort_copy(m_entities.begin(), m_entities.end(), sortedEntities.begin(), sortedEntities.end(), _SortByY);
 
     for (Entity const* entityPtr : sortedEntities)

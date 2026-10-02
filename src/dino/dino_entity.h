@@ -24,6 +24,13 @@ protected:
     void _Move(Scene& scene, float deltaTime);
 
     int32_t m_idxFrame;
+    /// <summary>
+    /// Changes the visuals of the entity
+    /// Animal: 0-7
+    /// Player: 0-3
+    /// </summary>
     int32_t m_kind;
+    float m_speed = 0;
+    Vec2 m_dir = {};
 };
 }

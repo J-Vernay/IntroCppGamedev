@@ -11,19 +11,10 @@ dino::Animal::Animal(Vec2 pos, double absTime)
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
+    m_speed = m_baseSpeed;
 }
 
 dino::Animal::~Animal() {}
-
-void dino::Animal::_Move(Scene& scene, float deltaTime)
-{
-    m_pos.x += m_dir.x * deltaTime * m_baseSpeed;
-    m_pos.y += m_dir.y * deltaTime * m_baseSpeed;
-
-    // If animal is outside, clamp and change direction
-    if (!scene.GetTerrain().IsInside(m_pos))
-        _HandleTerrainCollision(scene.GetTerrain());
-}
 
 void dino::Animal::_HandleTerrainCollision(Terrain& terrain) 
 {

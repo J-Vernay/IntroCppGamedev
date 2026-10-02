@@ -27,10 +27,6 @@ protected:
 private:
     double m_timeStart;
     uint8_t m_alpha = 0;
-    Vec2 m_dir;
-    
-
-    void _Move(Scene& scene, float deltaTime);
 
     const float m_baseSpeed = 30;
 };

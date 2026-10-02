@@ -27,16 +27,11 @@ protected:
 private:
     jv::input::GamepadIdx m_gamepadIdx;
     uint8_t m_alpha = UINT8_MAX;
-    float m_speed = 0;
-    Vec2 m_dir = {};
     Vec2 m_lastDir = {};
 
     double m_hitDuration = DBL_MIN;
     // Get player input and calculate direction and speed (taking into account if the player is hit)
     void _BuildVelocity();
-    // Move the player
-    //! Call only after building velocity
-    void _Move(Scene& scene, float deltaTime);
 
     const float g_basePlayerSpeed = 30;
     const float g_basePlayerStunDuration = 3;
