@@ -1,12 +1,14 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include "dino_terrain.h"
+#include <dino/Entity.h>
 
 namespace dino
 {
 
 // Représente un joueur.
-class Player
+class Player : public Entity
 {
 public:
     /// Initialise le joueur avec un type au hasard.
@@ -36,7 +38,6 @@ public:
 private:
     int32_t m_idxPlayer;
     jv::input::GamepadIdx m_gamepadIdx;
-    Vec2 m_pos;
     Vec2 m_dir;
     jv::gpu::Texture* m_pTexture;
     double m_hitTime = 0;

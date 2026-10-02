@@ -29,6 +29,7 @@ private:
 
     std::deque<Player> m_players;
     std::deque<Animal> m_animals;
+    std::vector<Entity*> m_entities;
     double m_animalSpawnTime = 0;
 
     void _UpdateAnimals(double absTime, float deltaTime);

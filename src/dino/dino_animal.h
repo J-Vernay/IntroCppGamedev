@@ -1,12 +1,14 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include "dino_terrain.h"
+#include <dino/Entity.h>
 
 namespace dino
 {
 
 // Représente un animal.
-class Animal
+class Animal : public Entity
 {
 public:
     /// Initialise l'animal avec un type au hasard.
@@ -27,20 +29,24 @@ public:
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
 
+
     /// Affiche l'animal
-    void Draw() const;
+    void Draw() const override;
 
     /// Détruit les ressources associées à l'animal.
     ~Animal();
 
+
+
 private:
-    Vec2 m_pos;
     double m_timeStart;
     uint8_t m_alpha = 0;
     Vec2 m_dir;
     int32_t m_kind;
     int32_t m_idxFrame;
     jv::gpu::Texture* m_pTexture;
+
+    void _ReactTerrain() override;
 };
 
 } // namespace dino

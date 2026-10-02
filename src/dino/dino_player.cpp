@@ -2,6 +2,7 @@
 #include <dino/dino_player.h>
 #include <dino/dino_draw_utils.h>
 #include <math.h>
+#include <dino/Entity.h>
 
 dino::Player::Player(
     Vec2 pos, int32_t idxPlayer, jv::input::GamepadIdx gamepadIdx, jv::gpu::Texture* pTexture)
@@ -14,7 +15,9 @@ dino::Player::Player(
 
 dino::Player::~Player()
 {
+
 }
+
 
 void dino::Player::Update(double absTime, float deltaTime)
 {

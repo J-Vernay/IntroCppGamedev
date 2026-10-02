@@ -1,6 +1,8 @@
 ﻿
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
+#include <dino/Entity.h>
+#include <algorithm>
 
 #include <format>
 
@@ -34,6 +36,37 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     for (Player& player : m_players)
         player.Update(absTime, deltaTime);
+
+    for (Player& player : m_players)
+    {
+        player.CheckTerrain(m_Terrain);
+    }
+
+    for (int i = 0; i < m_players.size(); ++i)
+        for (int j = i + 1; j < m_players.size(); ++j)
+            Entity::ResolveCollision(m_players[i], m_players[j]);
+
+
+    for (Animal& animal : m_animals)
+    {
+        animal.CheckTerrain(m_Terrain);
+
+        m_entities.resize(0);
+        for (Player& player : m_players)
+            m_entities.push_back(&player);
+        for (Animal& animal : m_animals)
+            m_entities.push_back(&animal);
+
+        std::sort(m_entities.begin(), m_entities.end(), Entity::OrderByPosY);
+    }
+
+    for (int i = 0; i < m_animals.size(); ++i)
+        for (int j = i + 1; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_animals[i], m_animals[j]);
+
+     for (int i = 0; i < m_players.size(); ++i)
+        for (int j = i + 1; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_players[i], m_animals[j]);
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -56,11 +89,8 @@ void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
 
-    for (Animal const& animal : m_animals)
-        animal.Draw();
-
-    for (Player const& player : m_players)
-        player.Draw();
+    for (Entity const* entity : m_entities)
+        entity->Draw();
 
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {

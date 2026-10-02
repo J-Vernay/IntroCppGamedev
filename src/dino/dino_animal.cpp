@@ -2,6 +2,8 @@
 #include <dino/dino_animal.h>
 #include <dino/dino_draw_utils.h>
 #include <math.h>
+#include "dino_terrain.h"
+#include <dino/Entity.h>
 
 dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
 {
@@ -16,6 +18,7 @@ dino::Animal::~Animal()
 {
 }
 
+
 void dino::Animal::Update(double absTime, float deltaTime)
 {
     float speed = 30;
@@ -28,6 +31,12 @@ void dino::Animal::Update(double absTime, float deltaTime)
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
+
+void dino::Animal::_ReactTerrain()
+{
+    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+}
+
 
 void dino::Animal::Draw() const
 {
