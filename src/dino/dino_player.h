@@ -2,13 +2,13 @@
 
 #include <dino/dino_main.h>
 #include <dino/dino_terrain.h>
+#include <dino/Entity.h>
 
 namespace dino
 {
 
 // Représente un joueur.
-    class Player
-    {
+    class Player : public Entity {
     public:
         /// Initialise le joueur avec un type au hasard.
         Player(Vec2 pos, int32_t idxPlayer, jv::input::GamepadIdx gamepadIdx,
@@ -31,15 +31,14 @@ namespace dino
         /// Affiche le joueur
         void Draw() const;
 
-        void DetectBounds(Terrain const& terrain);
-
         /// Détruit les ressources associées au joueur.
         ~Player();
+           
 
     private:
         int32_t m_idxPlayer;
         jv::input::GamepadIdx m_gamepadIdx;
-        Vec2 m_pos;
+        
         Vec2 m_dir;
         jv::gpu::Texture* m_pTexture;
         double m_hitTime = 0;

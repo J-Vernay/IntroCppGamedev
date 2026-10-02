@@ -136,12 +136,12 @@ E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels)
 F) Implémenter : "Les animaux se repoussent entre eux, et aussi les animaux et les dinosaures entre eux."
 Pourquoi y a-t-il duplication de code ?
 
-> ...
+> Parce que la logique de collision est implémentée séparément pour les dinosaures et les animaux, alors qu'elle pourrait être partagée.
 
 G) Quelle fonctionnalité du C++ permet de dédupliquer la logique commune entre `dino::Player` et `dino::Animal` ?
 L'appliquer dans la base de code.
 
-> ...
+> L'héritage et les classes de base permettent de dédupliquer la logique commune.
 
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.

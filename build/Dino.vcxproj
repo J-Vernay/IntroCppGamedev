@@ -154,6 +154,7 @@
     <ClInclude Include="..\src\dino\dino_player.h" />
     <ClInclude Include="..\src\dino\dino_scene.h" />
     <ClInclude Include="..\src\dino\dino_terrain.h" />
+    <ClInclude Include="..\src\dino\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dino\dino_animal.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="..\src\dino\dino_player.cpp" />
     <ClCompile Include="..\src\dino\dino_scene.cpp" />
     <ClCompile Include="..\src\dino\dino_terrain.cpp" />
+    <ClCompile Include="..\src\dino\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="JV.vcxproj">

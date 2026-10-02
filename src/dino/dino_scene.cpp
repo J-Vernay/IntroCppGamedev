@@ -11,9 +11,15 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
-    
-    Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-    m_players.emplace_back(spawnPos, 0, jv::input::GamepadIdx::Keyboard, m_pTexturePlayer);
+   
+    m_players.emplace_back(
+        m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, m_pTexturePlayer);
+    m_players.emplace_back(
+        m_Terrain.GenerateRandomSpawn(), 1, jv::input::GamepadIdx::Gamepad1, m_pTexturePlayer);
+    m_players.emplace_back(
+        m_Terrain.GenerateRandomSpawn(), 2, jv::input::GamepadIdx::Gamepad2, m_pTexturePlayer);
+    m_players.emplace_back(
+        m_Terrain.GenerateRandomSpawn(), 3, jv::input::GamepadIdx::Gamepad3, m_pTexturePlayer);
 }
 
 dino::Scene::~Scene() {
@@ -34,6 +40,18 @@ void dino::Scene::Update(double absTime, float deltaTime)
         player.Update(absTime, deltaTime);
         player.DetectBounds(m_Terrain);
     }
+
+    for (int i = 0; i < m_players.size(); ++i)
+        for (int j = i + 1; j < m_players.size(); ++j)
+            Entity::ResolveCollision(m_players[i], m_players[j]);
+
+    for (int i = 0; i < m_animals.size(); ++i)
+        for (int j = i + 1; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_animals[i], m_animals[j]);
+
+    for (int i = 0; i < m_players.size(); ++i)
+        for (int j = 0; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_players[i], m_animals[j]);
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -51,7 +69,7 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     for (Animal& animal : m_animals)
     {
         animal.Update(absTime, deltaTime);
-        animal.CheckTerrainBounds(m_Terrain);
+        animal.DetectBounds(m_Terrain);
     }
 }
 

@@ -22,7 +22,7 @@ void dino::Player::Update(double absTime, float deltaTime)
     float speed = 100;
     jv::input::Gamepad padInput;
 
-    if (jv::input::GetGamepad(jv::input::GamepadIdx::Keyboard, padInput))
+   if (jv::input::GetGamepad(m_gamepadIdx, padInput))
     {
         float dirX = 0, dirY = 0;
         if (padInput.dpad_left)
@@ -102,7 +102,7 @@ void dino::Player::Draw() const
     if (m_bLeft)
         std::swap(u1, u2);
 
-    #if 0
+#if 0
 
     v1 = 0, v2 = 24;
 
@@ -114,20 +114,18 @@ void dino::Player::Draw() const
     jv::util::Color color = Color_WHITE;
     color.a = 255;
 
+    v1 += 24 * m_idxPlayer;
+    v2 += 24 * m_idxPlayer;
+
     std::vector<jv::gpu::Vertex> vs;
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1});
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1});
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2});
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1});
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2});
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2});
 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
-}
-
-void dino::Player::DetectBounds(Terrain const& terrain)
-{
-    m_pos = terrain.ClampPos(m_pos);
 }
