@@ -10,6 +10,9 @@ class Entity
 {
 public:
     static void ResolveCollision(Entity& a, Entity& b);
+    static bool OrderByPosY(Entity const* a, Entity const* b);
+
+    virtual void Draw() const = 0;
 
     /// S'assurer que la position du joueur reste sur le terrain.
     void CheckTerrain(Terrain const& terrain);

@@ -30,7 +30,7 @@ public:
     void Update(double absTime, float deltaTime);
 
     /// Affiche le joueur
-    void Draw() const;
+    void Draw() const override;
 
     /// Détruit les ressources associées au joueur.
     ~Player();

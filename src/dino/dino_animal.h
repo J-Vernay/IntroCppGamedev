@@ -29,7 +29,7 @@ public:
     void Update(double absTime, float deltaTime);
 
     /// Affiche l'animal
-    void Draw() const;
+    void Draw() const override;
 
     /// Détruit les ressources associées à l'animal.
     ~Animal();

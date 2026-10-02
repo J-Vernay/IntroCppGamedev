@@ -31,3 +31,9 @@ void dino::Entity::CheckTerrain(Terrain const& terrain)
 void dino::Entity::_ReactTerrain()
 {
 }
+
+
+bool dino::Entity::OrderByPosY(Entity const* a, Entity const* b)
+{
+    return a->m_pos.y < b->m_pos.y;
+}
