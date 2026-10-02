@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\dino\dino_animal.h" />
     <ClInclude Include="..\src\dino\dino_draw_utils.h" />
+    <ClInclude Include="..\src\dino\dino_entity.h" />
     <ClInclude Include="..\src\dino\dino_geometry.h" />
     <ClInclude Include="..\src\dino\dino_main.h" />
     <ClInclude Include="..\src\dino\dino_player.h" />
@@ -158,6 +159,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\dino\dino_animal.cpp" />
     <ClCompile Include="..\src\dino\dino_draw_utils.cpp" />
+    <ClCompile Include="..\src\dino\dino_entity.cpp" />
     <ClCompile Include="..\src\dino\dino_geometry.cpp" />
     <ClCompile Include="..\src\dino\dino_main.cpp" />
     <ClCompile Include="..\src\dino\dino_player.cpp" />

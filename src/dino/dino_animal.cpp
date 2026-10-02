@@ -37,7 +37,6 @@ void dino::Animal::CheckTerrain(Terrain const& terrain)
         m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
 }
 
-
 void dino::Animal::Draw() const
 {
     float u1, u2, v1, v2;

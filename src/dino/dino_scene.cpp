@@ -1,6 +1,7 @@
 ﻿
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
+#include <dino/dino_entity.h>
 
 #include <format>
 
@@ -37,7 +38,15 @@ void dino::Scene::Update(double absTime, float deltaTime)
     
     for (int i = 0; i < m_players.size(); ++i)
         for (int j = i + 1; j < m_players.size(); ++j)
-            Player::ResolveCollision(m_players[i], m_players[j]);
+            Entity::ResolveCollision(m_players[i], m_players[j]);
+
+    for (int i = 0; i < m_animals.size(); ++i)
+        for (int j = i + 1; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_animals[i], m_animals[j]);
+
+    for (int i = 0; i < m_players.size(); ++i)
+        for (int j = 0; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_players[i], m_animals[j]);
 
     for (Player& player : m_players)
         player.CheckTerrain(m_Terrain);
