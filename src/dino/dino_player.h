@@ -20,6 +20,8 @@ public:
     void UpdatePlayerState(float deltaTime);
     void UpdateIndexFrame(double absTime);
     void UpdateSpeed(bool isRunning);
+    
+    void UpdateLasso();
 
     virtual void ResolveTerrainPos(Terrain& terrain) override;
 
@@ -27,6 +29,13 @@ public:
     void UpdateHurtState(float deltaTime);
 
     void Draw() const override;
+    void DrawLasso() const;
+    void DrawPlayer() const;
+
+    int GetId() const
+    {
+        return id;
+    }
 
     ~Player();
 
@@ -47,6 +56,15 @@ private:
         {
             CurrentSpeed = SpeedWalking;
         }
+    };
+
+    jv::util::Color m_playerColor;
+
+    jv::util::Color m_playersColors[4] = {
+        Color_BLUE,
+        Color_RED,
+        Color_YELLOW,
+        Color_GREEN
     };
 
     enum PlayerState
@@ -70,6 +88,9 @@ private:
     }
 
     jv::input::GamepadIdx m_gamepadIdx;
+    int id;
+
+    std::vector<Vec2> m_lassoVector;
 };
 
 } 

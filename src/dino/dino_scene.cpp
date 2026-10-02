@@ -2,6 +2,8 @@
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
 #include <format>
+#include <vector>
+#include <algorithm>
 
 dino::Scene::Scene(): m_Terrain{24, 16}
     
@@ -15,7 +17,12 @@ dino::Scene::Scene(): m_Terrain{24, 16}
     {
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
         
-        m_players.emplace_back(spawnPos, 0.0, jv::input::GamepadIdx(i));
+
+        m_players.emplace_back(
+            spawnPos,
+            0.0,
+            jv::input::GamepadIdx(i));
+
         m_entities.emplace_back(&m_players[i]);
     }
 }
@@ -32,7 +39,7 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     m_Terrain.Update(absTime, deltaTime);
 
-    SpawnAnimals(absTime, deltaTime);
+    //SpawnAnimals(absTime, deltaTime);
 
     for (Entity*& entity : m_entities)
     {
@@ -43,8 +50,12 @@ void dino::Scene::Update(double absTime, float deltaTime)
     for (size_t i = 0; i < m_entities.size(); i++)
         for (size_t j = i + 1; j < m_entities.size(); j++)
         {
+            if (m_entities[i] == m_entities[j]) continue;
             m_entities[i]->ResolvePhysicConflict(*m_entities[j]);
         }
+
+    std::sort(m_entities.begin(), m_entities.end(),
+        [](Entity* const& a, Entity* const& b) { return a->GetY() < b->GetY(); });
 }
 
 void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
@@ -59,6 +70,21 @@ void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
         
         m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal);
         m_entities.emplace_back(&m_animals.back());
+    }
+}
+
+void dino::Scene::LassoCollisionCheck()
+{
+    for (int i = 0; i < m_players.size(); i++)
+    {
+        for (int j = 0; j < m_players.size(); j++)
+        {
+            if (m_players[i].GetId() == m_players[j].GetId()) continue;
+
+            // need to check if playerlasso intersect with other player lasso 
+
+
+        }
     }
 }
 

@@ -128,7 +128,8 @@ C) Comment détecter si deux cercles à des positions données sont en collision
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> On clamp la position.
+> Division risque par zéro si les deux cercles sont exactement au même endroit.
+> Il faut gérer ce cas particulier en donnant une direction aléatoire à l'un des deux cercles.
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
@@ -157,7 +158,8 @@ L'appliquer dans la base de code.
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?
 
-> ...
+> J'ai un vector de pointer de DinoEntity, je peux trier ce vector en utilisant une fonction de comparaison qui compare les
+> positions verticales des entités grace a un getter.
 
 
 
@@ -170,12 +172,12 @@ des dinosaures, aux couleurs des dinosaures.
 B) Implémenter : "Les suites de points sont tronquées à une longueur maximale de deux secondes."
 Quelle méthode de std::vector utiliser ?
 
-‍...
+‍On peut utiliser la méthode `erase` de `std::vector` pour supprimer les points les plus anciens lorsque la longueur maximale est dépassée.
 
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?
 
-‍...
+‍> Il y a 4j et 120 points, donc 4*120 = 480 intersections de segments sont calculés.
 
 D) Implémenter : "Quand un joueur passe par dessus le lasso d'un autre joueur, le début du lasso est détruit jusqu'à l'intersection."
 Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' interagir entre elles.

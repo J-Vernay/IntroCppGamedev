@@ -1,6 +1,7 @@
 ﻿
 #include <dino/dino_player.h>
 #include <dino/dino_draw_utils.h>
+#include <dino/dino_geometry.h>
 #include <math.h>
 #include <algorithm>
 
@@ -8,15 +9,20 @@
 dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx) : Entity(pos, absTime)
 {
 
-    m_playerColorIndex = jv::util::RandomInt32(0, 3);
-
     m_gamepadIdx = gamepadIdx;
+
+    id = static_cast<int>(gamepadIdx);
+    
+    m_playerColorIndex = id;
+
+    m_playerColor = m_playersColors[id];
 
     m_dir = Vec2{0, 0}; 
 
     m_timeStart = absTime;
 
     m_pTexture = dino::LoadImageAsset("dinosaurs.bmp");
+
 }
 
 dino::Player::~Player()
@@ -30,7 +36,7 @@ void dino::Player::Update(double absTime, float deltaTime)
     UpdatePosition(deltaTime);
     UpdatePlayerState(deltaTime);
     UpdateIndexFrame(absTime);
-
+    UpdateLasso();
     double aliveTime = absTime - m_timeStart;
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
@@ -109,6 +115,37 @@ void dino::Player::UpdateSpeed(bool isRunning)
     m_speedData.CurrentSpeed = isRunning ? m_speedData.SpeedRunning : m_speedData.SpeedWalking;
 }
 
+void dino::Player::UpdateLasso()
+{
+    if (m_lassoVector.size() > 2)
+    {
+        for (int i = 0; i < m_lassoVector.size() - 2; i++)
+        {
+            if (i == m_lassoVector.size() - 1)
+                continue;
+
+            bool isIntersecting = IntersectSegment(
+                m_pos, m_lassoVector.back(), m_lassoVector[i], m_lassoVector[i + 1]);
+
+            if (isIntersecting)
+            {
+                m_lassoVector.erase(m_lassoVector.begin() + i, m_lassoVector.end());
+                return;
+            }
+        }
+    }
+
+   
+    if (m_lassoVector.size() > 120)
+    {
+        m_lassoVector.erase(m_lassoVector.begin());
+    }
+    else
+    {
+        m_lassoVector.push_back(m_pos);
+    }
+}
+
 void dino::Player::ResolveTerrainPos(Terrain& terrain)
 {
     m_pos = terrain.ClampPos(m_pos);
@@ -135,6 +172,21 @@ void dino::Player::UpdateHurtState(float deltaTime)
 }
 
 void dino::Player::Draw() const
+{
+    DrawLasso();
+    DrawPlayer();
+}
+
+void dino::Player::DrawLasso() const
+{
+    std::vector<jv::gpu::Vertex> vs;
+    GenVertices_Polyline(vs, m_lassoVector, 4, m_playerColor);
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Lasso", vs);
+    jv::gpu::Draw(pVBuf, nullptr);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Player::DrawPlayer() const
 {
     float u1 = 0;
     float u2 = 24;
@@ -167,7 +219,6 @@ void dino::Player::Draw() const
         u1 = tempU;
     }
 
-   
     u1 += 24 * m_idxFrame + decal * 24;
     u2 += 24 * m_idxFrame + decal * 24;
 
