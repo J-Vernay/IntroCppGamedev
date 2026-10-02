@@ -16,13 +16,13 @@ dino::Animal::Animal(Vec2 pos, double absTime)
 
 dino::Animal::~Animal() {}
 
-void dino::Animal::_HandleTerrainCollision(Terrain& terrain) 
+void dino::Animal::_HandleTerrainCollision(Terrain const& terrain) 
 {
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_pos = terrain.ClampPos(m_pos);
 }
 
-void dino::Animal::Update(dino::Scene& scene, double absTime, float deltaTime)
+void dino::Animal::Update(dino::Scene const& scene, double absTime, float deltaTime)
 {
     _Move(scene, deltaTime);
 

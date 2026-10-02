@@ -9,11 +9,15 @@ namespace dino
 class Player : public Entity
 {
 public:
+    // Player's lasso is public for scene to handle cutting (and points)
+    std::vector<Vec2> m_lassoPoints = {};
+    std::vector<double> m_lassoPointsSpawnTime = {};
+
     /// Initialise le joueur.
     Player(jv::input::GamepadIdx gamepadIdx, Vec2 pos, int32_t kind);
 
     /// Déplace le jouer et met à jour son animation.
-    void Update(Scene& scene, double absTime, float deltaTime) override;
+    void Update(Scene const& scene, double absTime, float deltaTime) override;
 
     /// Affiche le joueur
     void Draw() const override;
@@ -22,11 +26,9 @@ public:
     ~Player();
 
 protected:
-    void _HandleTerrainCollision(Terrain& terrain) override;
+    void _HandleTerrainCollision(Terrain const& terrain) override;
 
 private:
-    std::vector<Vec2> m_lassoPoints = {};
-    std::vector<double> m_lassoPointsSpawnTime = {};
     double m_lastLassoPointTime = DBL_MIN;
 
     // Player's input device
@@ -46,7 +48,7 @@ private:
     const float g_basePlayerSpeed = 30;
     const float g_basePlayerStunDuration = 3;
     const float g_lassoPointsDeltaTime = 0.01f;
-    const float g_lassoPointsLifeTime = 2.0f;
+    const float g_lassoPointsLifeTime = 5.0f;
     const float g_lassoWidth = 6.0f;
 };
 

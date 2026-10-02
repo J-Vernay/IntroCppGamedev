@@ -15,7 +15,7 @@ public:
     Animal(Vec2 pos, double absTime);
     
     /// Déplace l'animal et met à jour son animation.
-    void Update(dino::Scene& scene, double absTime, float deltaTime) override;
+    void Update(dino::Scene const& scene, double absTime, float deltaTime) override;
 
     /// Affiche l'animal
     void Draw() const override;
@@ -23,7 +23,7 @@ public:
     /// Détruit les ressources associées à l'animal.
     ~Animal();
 protected:
-    void _HandleTerrainCollision(Terrain& terrain) override;
+    void _HandleTerrainCollision(Terrain const& terrain) override;
 private:
     double m_timeStart;
     uint8_t m_alpha = 0;

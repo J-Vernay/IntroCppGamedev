@@ -18,7 +18,7 @@ public:
     ~Scene();
     void Update(double absTime, float deltaTime);
     void Draw() const;
-    Terrain& GetTerrain();
+    Terrain const& GetTerrain() const;
 
 private:
     jv::gpu::Texture* m_pTextureText = nullptr;
@@ -34,6 +34,7 @@ private:
 
     void _UpdateEntities(double absTime, float deltaTime);
     void _HandleCollisions();
+    void _HandlePlayersLasso();
 };
 
 } // namespace dino

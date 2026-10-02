@@ -59,7 +59,7 @@ void dino::Player::_BuildVelocity()
     }
 }
 
-void dino::Player::_HandleTerrainCollision(Terrain& terrain)
+void dino::Player::_HandleTerrainCollision(Terrain const& terrain)
 {
     m_pos = terrain.ClampPos(m_pos);
 }
@@ -84,7 +84,7 @@ void dino::Player::_HandleLasso(double absTime)
     }
 }
 
-void dino::Player::Update(dino::Scene& scene, double absTime, float deltaTime)
+void dino::Player::Update(dino::Scene const& scene, double absTime, float deltaTime)
 {
     // Update stun duration
     if (m_hitDuration > 0)

@@ -1,6 +1,7 @@
 ﻿
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
+#include <dino/dino_geometry.h>
 #include <format>
 #include <algorithm>
 
@@ -41,6 +42,7 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     _UpdateEntities(absTime, deltaTime);
     _HandleCollisions();
+    _HandlePlayersLasso();
 }
 
 void dino::Scene::_UpdateEntities(double absTime, float deltaTime)
@@ -51,9 +53,9 @@ void dino::Scene::_UpdateEntities(double absTime, float deltaTime)
     if (absTime - m_animalSpawnTime >= kSpawnTime)
     {
         m_animalSpawnTime = absTime;
-        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        dino::Animal* animal = new dino::Animal(spawnPos, absTime);
-        m_entities.push_back(animal);
+        //Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+        //dino::Animal* animal = new dino::Animal(spawnPos, absTime);
+        //m_entities.push_back(animal);
     }
 
     for (Entity* entityPtr : m_entities)
@@ -66,13 +68,12 @@ void dino::Scene::_UpdateEntities(double absTime, float deltaTime)
 void dino::Scene::_HandleCollisions()
 {
     // Check every pairs for collisions
-    for (Entity* entityPtr1 : m_entities)
+    for (int i = 0; i < m_entities.size(); i++)
     {
-        for (Entity* entityPtr2 : m_entities)
+        for (int j = i + 1; j < m_entities.size(); j++)
         {
-            // Don't collide with yourself
-            if (entityPtr1 == entityPtr2)
-                continue;
+            Entity* entityPtr1 = m_entities[i];
+            Entity* entityPtr2 = m_entities[j];
 
             Entity& entity1 = *entityPtr1;
             Entity& entity2 = *entityPtr2;
@@ -91,6 +92,71 @@ void dino::Scene::_HandleCollisions()
                 entity2.m_pos = {entity2.m_pos.x - displacement.x * delta, entity2.m_pos.y - displacement.y * delta};
             }
             
+        }
+    }
+}
+
+void dino::Scene::_HandlePlayersLasso() {
+    // Get only players
+    std::vector<Player*> players;
+    for (Entity* entityPtr : m_entities)
+    {
+        Player* playerPtr = dynamic_cast<Player*>(entityPtr);
+        if (playerPtr == nullptr)
+            continue;
+        players.push_back(playerPtr);
+    }
+    // Check every player pairs
+    for (auto&& playerPtr1 : players)
+    {
+        for (auto&& playerPtr2 : players)
+        {   
+            Player& player1 = *playerPtr1;
+            Player& player2 = *playerPtr2;
+
+            if (player1.m_lassoPoints.size() < 2)
+                break;
+            // Only the end of the lasso can intersect (does not make sense to check a segment that didn't change this frame, only the last segment changed)
+            int p1LassoIdx = player1.m_lassoPoints.size() - 2;
+
+            // Check every segment pairs
+            for (int p2LassoIdx = 0; p2LassoIdx < player2.m_lassoPoints.size() - 1; p2LassoIdx++)
+            {
+                if (player2.m_lassoPoints.size() == 0)
+                    break;
+                // We are not checking p1's lasso's end
+                if (p1LassoIdx != player1.m_lassoPoints.size() - 2)
+                   continue;
+
+                // Intersection
+                if (IntersectSegment(player1.m_lassoPoints[p1LassoIdx], player1.m_lassoPoints[p1LassoIdx + 1], 
+                    player2.m_lassoPoints[p2LassoIdx], player2.m_lassoPoints[p2LassoIdx + 1]))
+                {
+                    if (&player1 == &player2) // Self-Loop
+                    {
+                        // Does not intersect with itself
+                        if (p2LassoIdx >= p1LassoIdx - 1)
+                            continue;
+                        
+                        // Remove every points between the player and intersection point
+                        for (int i = p2LassoIdx; i < player1.m_lassoPoints.size();)
+                        {
+                            player1.m_lassoPoints.erase(player1.m_lassoPoints.begin() + p2LassoIdx);
+                            player1.m_lassoPointsSpawnTime.erase(player1.m_lassoPointsSpawnTime.begin() + p2LassoIdx);
+                        }
+                        break;
+                    }
+                    else // Player 1 is over Player 2
+                    {
+                        // Remove player 2 beginning
+                        for (int i = 0; i < p2LassoIdx; i++)
+                        {
+                            player2.m_lassoPoints.erase(player2.m_lassoPoints.begin());
+                            player2.m_lassoPointsSpawnTime.erase(player2.m_lassoPointsSpawnTime.begin());
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -127,7 +193,7 @@ void dino::Scene::Draw() const
     }
 }
 
-dino::Terrain& dino::Scene::GetTerrain()
+dino::Terrain const& dino::Scene::GetTerrain() const
 {
     return m_Terrain;
 }

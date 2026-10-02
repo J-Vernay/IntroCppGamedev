@@ -14,14 +14,14 @@ public:
     Vec2 m_pos;
     float m_collisionRadius = 8;
 
-    virtual void Update(Scene& scene, double absTime, float deltaTime) = 0;
+    virtual void Update(Scene const& scene, double absTime, float deltaTime) = 0;
 
     virtual void Draw() const = 0;
 
 protected:
     /// Code to play when entity gets out of the terrain
-    virtual void _HandleTerrainCollision(Terrain& terrain) = 0;
-    void _Move(Scene& scene, float deltaTime);
+    virtual void _HandleTerrainCollision(Terrain const& terrain) = 0;
+    void _Move(Scene const& scene, float deltaTime);
 
     int32_t m_idxFrame;
     /// <summary>
