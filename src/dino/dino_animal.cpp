@@ -3,18 +3,19 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* pTexture)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-    m_pTexture = dino::LoadImageAsset("animals.bmp");
+
+    m_pTexture = pTexture;
 }
 
 dino::Animal::~Animal()
 {
-    jv::gpu::DestroyTexture(m_pTexture);
+
 }
 
 void dino::Animal::Update(double absTime, float deltaTime)
@@ -30,9 +31,45 @@ void dino::Animal::Update(double absTime, float deltaTime)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
 
+void dino::Animal::CheckTerrain(Terrain const& terrain)
+{
+    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+}
+
+void dino::Animal::_ReactTerrain()
+{
+
+}
+
 void dino::Animal::Draw() const
 {
-    float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
+    float u1, u2, v1, v2;
+
+    if (m_dir.x > 0)
+    {
+        u1 = 32, u2 = 0;
+    }
+    else
+    {
+        u1 = 0, u2 = 32;
+    }
+
+    if (std::abs(m_dir.y) > std::abs(m_dir.x))
+    {
+        if (m_dir.y > 0)
+        {
+            v1 = 32, v2 = 64;
+        }
+        else
+        {
+            v1 = 64, v2 = 96;
+        }
+    }
+    else
+    {
+        v1 = 0, v2 = 32;
+    }
+
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
