@@ -29,9 +29,6 @@ public:
     /// Déplace le joueur et met à jour son animation.
     void Update(double absTime, float deltaTime);
 
-    /// S'assurer que la position du joueur reste sur le terrain.
-    void CheckTerrain(Terrain const& terrain);
-
     /// Affiche le joueur
     void Draw() const;
 

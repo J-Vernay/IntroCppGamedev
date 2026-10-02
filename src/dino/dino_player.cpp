@@ -64,11 +64,6 @@ void dino::Player::Update(double absTime, float deltaTime)
         m_bLeft = m_dir.x < 0;
 }
 
-void dino::Player::CheckTerrain(Terrain const& terrain)
-{
-    m_pos = terrain.ClampPos(m_pos);
-}
-
 void dino::Player::Draw() const
 {
     float u1, u2, v1 = 0, v2 = 24;

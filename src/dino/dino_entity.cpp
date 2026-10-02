@@ -19,3 +19,15 @@ void dino::Entity::ResolveCollision(Entity& a, Entity& b)
         b.m_pos.y += depl.y;
     }
 }
+
+void dino::Entity::CheckTerrain(Terrain const& terrain)
+{
+    Vec2 oldPos = m_pos;
+    m_pos = terrain.ClampPos(m_pos);
+    if (m_pos.x != oldPos.x || m_pos.y != oldPos.y)
+        _ReactTerrain();
+}
+
+void dino::Entity::_ReactTerrain()
+{
+}

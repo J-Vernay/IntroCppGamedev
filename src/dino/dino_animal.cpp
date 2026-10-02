@@ -29,12 +29,9 @@ void dino::Animal::Update(double absTime, float deltaTime)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
 
-void dino::Animal::CheckTerrain(Terrain const& terrain)
+void dino::Animal::_ReactTerrain()
 {
-    Vec2 oldPos = m_pos;
-    m_pos = terrain.ClampPos(m_pos);
-    if (m_pos.x != oldPos.x || m_pos.y != oldPos.y)
-        m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
 }
 
 void dino::Animal::Draw() const

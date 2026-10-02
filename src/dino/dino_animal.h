@@ -28,9 +28,6 @@ public:
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
 
-    /// S'assurer que la position du joueur reste sur le terrain.
-    void CheckTerrain(Terrain const& terrain);
-
     /// Affiche l'animal
     void Draw() const;
 
@@ -44,6 +41,8 @@ private:
     int32_t m_kind;
     int32_t m_idxFrame;
     jv::gpu::Texture* m_pTexture;
+
+    void _ReactTerrain() override;
 };
 
 } // namespace dino
