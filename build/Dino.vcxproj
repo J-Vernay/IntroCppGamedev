@@ -151,16 +151,20 @@
     <ClInclude Include="..\src\dino\dino_draw_utils.h" />
     <ClInclude Include="..\src\dino\dino_geometry.h" />
     <ClInclude Include="..\src\dino\dino_main.h" />
+    <ClInclude Include="..\src\dino\dino_player.h" />
     <ClInclude Include="..\src\dino\dino_scene.h" />
     <ClInclude Include="..\src\dino\dino_terrain.h" />
+    <ClInclude Include="..\src\dino\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dino\dino_animal.cpp" />
     <ClCompile Include="..\src\dino\dino_draw_utils.cpp" />
     <ClCompile Include="..\src\dino\dino_geometry.cpp" />
     <ClCompile Include="..\src\dino\dino_main.cpp" />
+    <ClCompile Include="..\src\dino\dino_player.cpp" />
     <ClCompile Include="..\src\dino\dino_scene.cpp" />
     <ClCompile Include="..\src\dino\dino_terrain.cpp" />
+    <ClCompile Include="..\src\dino\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="JV.vcxproj">
