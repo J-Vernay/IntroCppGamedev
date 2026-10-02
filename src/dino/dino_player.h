@@ -12,6 +12,8 @@ public:
 
     Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx);
 
+    Player(const Player&) = delete;
+
     void Update(double absTime, float deltaTime) override;
 
     void UpdateInput();
@@ -21,9 +23,20 @@ public:
     void UpdateIndexFrame(double absTime);
     void UpdateSpeed(bool isRunning);
     
-    void UpdateLasso();
+    std::vector<Vec2> UpdateLasso();
+
+    void HandleLassoCollision(int index)
+    {
+        if (index < 0 || index >= m_lassoVector.size()) return;
+        m_lassoVector.erase(m_lassoVector.begin(), m_lassoVector.begin() + index);
+    }
 
     virtual void ResolveTerrainPos(Terrain& terrain) override;
+
+    virtual void CatchByPlayer() override
+    {
+        HandleHit();
+    }
 
     void HandleHit();
     void UpdateHurtState(float deltaTime);
@@ -35,6 +48,25 @@ public:
     int GetId() const
     {
         return id;
+    }
+
+    Vec2 GetLassoPosByIndex(int index) const
+    {
+        if (index < 0 || index >= m_lassoVector.size())
+            return m_pos;
+        return m_lassoVector[index];
+    }
+
+    Vec2 GetLassoLastPos() const
+    {
+        if (m_lassoVector.empty())
+            return m_pos;
+        return m_lassoVector.back();
+    }
+
+    int GetLassoSize() const
+    {
+        return static_cast<int>(m_lassoVector.size());
     }
 
     ~Player();

@@ -36,7 +36,6 @@ void dino::Player::Update(double absTime, float deltaTime)
     UpdatePosition(deltaTime);
     UpdatePlayerState(deltaTime);
     UpdateIndexFrame(absTime);
-    UpdateLasso();
     double aliveTime = absTime - m_timeStart;
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
@@ -54,8 +53,6 @@ void dino::Player::UpdateInput()
             gamepad.dpad_down - gamepad.dpad_up);
 
         UpdateSpeed(gamepad.btn_right == 1);
-
-        if (gamepad.btn_left == 1) HandleHit();
     }
 }
 
@@ -115,8 +112,9 @@ void dino::Player::UpdateSpeed(bool isRunning)
     m_speedData.CurrentSpeed = isRunning ? m_speedData.SpeedRunning : m_speedData.SpeedWalking;
 }
 
-void dino::Player::UpdateLasso()
+std::vector<dino::Vec2> dino::Player::UpdateLasso()
 {
+    std::vector<Vec2> result;
     if (m_lassoVector.size() > 2)
     {
         for (int i = 0; i < m_lassoVector.size() - 2; i++)
@@ -129,13 +127,13 @@ void dino::Player::UpdateLasso()
 
             if (isIntersecting)
             {
+                result.insert(result.end(),m_lassoVector.begin() + i, m_lassoVector.end());
                 m_lassoVector.erase(m_lassoVector.begin() + i, m_lassoVector.end());
-                return;
+                return result;
             }
         }
     }
 
-   
     if (m_lassoVector.size() > 120)
     {
         m_lassoVector.erase(m_lassoVector.begin());
@@ -144,7 +142,10 @@ void dino::Player::UpdateLasso()
     {
         m_lassoVector.push_back(m_pos);
     }
+
+    return result;
 }
+
 
 void dino::Player::ResolveTerrainPos(Terrain& terrain)
 {

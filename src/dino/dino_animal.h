@@ -19,13 +19,26 @@ public:
 
     virtual void ResolveTerrainPos(Terrain& terrain) override;
 
+    virtual void CatchByPlayer() override;
+
+    enum AnimalState
+    {
+        Alive,
+        Caught,
+    };
+
     ~Animal();
 
-    Animal(const Animal&) = delete;
+
+    bool IsAlive() const
+    {
+        return m_state == Alive;
+    }
 
 private:
 
     int32_t m_kind;
+    AnimalState m_state = Alive;
 };
 
 } 

@@ -1,6 +1,7 @@
 ﻿
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
+#include <dino/dino_geometry.h>
 #include <format>
 #include <vector>
 #include <algorithm>
@@ -39,23 +40,19 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     m_Terrain.Update(absTime, deltaTime);
 
-    //SpawnAnimals(absTime, deltaTime);
+    SpawnAnimals(absTime, deltaTime);
 
-    for (Entity*& entity : m_entities)
-    {
-        entity->Update(absTime, deltaTime);
-        entity->ResolveTerrainPos(m_Terrain);
-    }
+    UpdateEntiy(absTime, deltaTime);
 
-    for (size_t i = 0; i < m_entities.size(); i++)
-        for (size_t j = i + 1; j < m_entities.size(); j++)
-        {
-            if (m_entities[i] == m_entities[j]) continue;
-            m_entities[i]->ResolvePhysicConflict(*m_entities[j]);
-        }
+    UpdateEntiyCollision();
 
-    std::sort(m_entities.begin(), m_entities.end(),
-        [](Entity* const& a, Entity* const& b) { return a->GetY() < b->GetY(); });
+    UpdateEntityOrderInLayer();
+
+    LassoCollisionCheck();
+
+    UpdatePlayerLassoCollision();
+
+    RebuildEntityList();
 }
 
 void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
@@ -76,16 +73,93 @@ void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
 void dino::Scene::LassoCollisionCheck()
 {
     for (int i = 0; i < m_players.size(); i++)
-    {
         for (int j = 0; j < m_players.size(); j++)
         {
-            if (m_players[i].GetId() == m_players[j].GetId()) continue;
+            if (m_players[i].GetId() == m_players[j].GetId())
+                continue;
 
-            // need to check if playerlasso intersect with other player lasso 
+            Vec2 lastA = {m_players[i].GetX(), m_players[i].GetY()};
+            Vec2 lastB = m_players[i].GetLassoLastPos();
 
+            if (m_players[i].GetLassoSize() >= 2)
+            {
+                lastB = m_players[i].GetLassoPosByIndex(m_players[i].GetLassoSize() - 2);
+            }
 
+            for (int k = 0; k < m_players[j].GetLassoSize() - 1; k++)
+            {
+                bool isIntersecting = IntersectSegment(lastA, lastB,
+                    m_players[j].GetLassoPosByIndex(k), m_players[j].GetLassoPosByIndex(k + 1));
+
+                if (isIntersecting)
+                {
+                    m_players[j].HandleLassoCollision(k);
+                }
+            }
+        }
+}
+
+void dino::Scene::UpdateEntiy(double absTime, float deltaTime)
+{
+    for (Entity*& entity : m_entities)
+    {
+        entity->Update(absTime, deltaTime);
+        entity->ResolveTerrainPos(m_Terrain);
+    }
+}
+
+void dino::Scene::UpdateEntiyCollision()
+{
+    for (size_t i = 0; i < m_entities.size(); i++)
+        for (size_t j = i + 1; j < m_entities.size(); j++)
+        {
+            if (m_entities[i] == m_entities[j])
+                continue;
+            m_entities[i]->ResolvePhysicConflict(*m_entities[j]);
+        }
+}
+
+void dino::Scene::UpdateEntityOrderInLayer()
+{
+    std::sort(m_entities.begin(), m_entities.end(),
+        [](Entity* const& a, Entity* const& b) { return a->GetY() < b->GetY(); });
+}
+
+void dino::Scene::UpdatePlayerLassoCollision()
+{
+    for (Player& player : m_players)
+    {
+        std::vector<dino::Vec2> result = player.UpdateLasso();
+
+        if (result.size() <= 0)
+            continue;
+
+        for (Entity* entity : m_entities)
+        {
+            if (entity == &player)
+                continue;
+
+            Vec2 entityPos = {entity->GetX(), entity->GetY()};
+
+            if (dino::isInside(result, entityPos))
+            {
+                entity->CatchByPlayer();
+            }
         }
     }
+}
+
+void dino::Scene::RebuildEntityList()
+{
+    std::erase_if(m_animals, [](Animal animal) { return !animal.IsAlive(); });
+
+    m_entities.clear();
+
+    for (Player& player : m_players)
+        m_entities.push_back(&player);
+
+    for (Animal& animal : m_animals)
+        m_entities.push_back(&animal);
 }
 
 

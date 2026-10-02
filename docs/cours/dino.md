@@ -184,7 +184,8 @@ Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' int
 
 E) Comment détecter qu'une position est à l'intérieur d'un contour fermé définis par des segments ?
 
-‍...
+‍> Je prend le point et je trace un rayon horizontal vers la droite, je compte le nombre d'intersections avec les segments du contour.
+> Si le nombre d'intersections est impair, le point est à l'intérieur du contour, sinon il est à l'extérieur.
 
 F) Implémenter via une logique commune, comme mentionné dans (3.H) : 
 - Quand un dinosaure est dans une boucle de lasso, il se prend des dégâts (= immobilisation 3 secondes + animation).

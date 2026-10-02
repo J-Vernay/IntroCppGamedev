@@ -34,6 +34,12 @@ private:
     void SpawnAnimals(double absTime, float deltaTime);
 
     void LassoCollisionCheck();
+
+    void UpdateEntiy(double absTime, float deltaTime);
+    void UpdateEntiyCollision();
+    void UpdateEntityOrderInLayer();
+    void UpdatePlayerLassoCollision();
+    void RebuildEntityList();
 };
 
 } // namespace dino

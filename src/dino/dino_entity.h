@@ -16,12 +16,11 @@ public:
     virtual void Draw() const = 0;
     virtual ~Entity() {};
 
-    Entity(const Entity&) = delete;
 
     void ResolvePhysicConflict(Entity& other);
     virtual void ResolveTerrainPos(Terrain& terrain) = 0;
 
-    const float PHYSIC_RADIUS = 16;
+    static constexpr float PHYSIC_RADIUS = 16;
 
     float GetX() const
     {
@@ -37,6 +36,8 @@ public:
     {
         m_pos = pos;
     }
+
+    virtual void CatchByPlayer() = 0;
 
 protected:
     Vec2 m_pos = {0, 0};

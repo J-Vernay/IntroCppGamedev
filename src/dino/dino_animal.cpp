@@ -28,6 +28,7 @@ void dino::Animal::Update(double absTime, float deltaTime)
     m_idxFrame = int32_t(absTime * 8) % 4;
 
     double aliveTime = absTime - m_timeStart;
+
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
@@ -84,4 +85,10 @@ void dino::Animal::ResolveTerrainPos(Terrain& terrain)
         m_dir = jv::util::RandomRotate(m_dir, 170, 190);
         m_pos = clampedPos;
     }
+}
+
+void dino::Animal::CatchByPlayer()
+{
+    if (m_state == Caught) return;
+        m_state = Caught;
 }
