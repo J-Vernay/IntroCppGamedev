@@ -28,7 +28,7 @@ void dino::Animal::OnLassoHit(Player& player_origin, Scene& scene)
     delete this;
 }
 
-void dino::Animal::Update(dino::Scene const& scene, double absTime, float deltaTime)
+void dino::Animal::Update(dino::Scene& scene, double absTime, float deltaTime)
 {
     _Move(scene, deltaTime);
 

@@ -15,7 +15,7 @@ public:
     Animal(Vec2 pos, double absTime);
     
     /// Déplace l'animal et met à jour son animation.
-    void Update(dino::Scene const& scene, double absTime, float deltaTime) override;
+    void Update(dino::Scene& scene, double absTime, float deltaTime) override;
 
     /// Affiche l'animal
     void Draw() const override;

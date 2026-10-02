@@ -15,7 +15,7 @@ public:
     Vec2 m_pos;
     float m_collisionRadius = 8;
 
-    virtual void Update(Scene const& scene, double absTime, float deltaTime) = 0;
+    virtual void Update(Scene& scene, double absTime, float deltaTime) = 0;
 
     virtual void Draw() const = 0;
 

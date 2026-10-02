@@ -89,20 +89,36 @@ void dino::Player::OnLassoHit(Player& player_origin, Scene& scene)
     m_hitDuration = g_basePlayerStunDuration;
 }
 
-void dino::Player::Update(dino::Scene const& scene, double absTime, float deltaTime)
+void dino::Player::Update(dino::Scene& scene, double absTime, float deltaTime)
 {
-    // Update stun duration
-    if (m_hitDuration > 0)
+    // Pause/Lobby independent input logic
+    jv::input::Gamepad gamepad;
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad)) // Can't move if hit
     {
-        m_hitDuration -= deltaTime;
+        if (gamepad.select && !scene.m_game) // Disconnect player in lobby
+        {
+            scene.RemoveEntity(this);
+            delete this;
+            return;
+        }
     }
 
-    _BuildVelocity();
-    _Move(scene, deltaTime);
-    _HandleLasso(absTime);
- 
-    // Update animation frame time
-    this->m_idxFrame = int32_t(absTime * 8);
+    if (!scene.m_pause)
+    {
+        // Update stun duration
+        if (m_hitDuration > 0)
+        {
+            m_hitDuration -= deltaTime;
+        }
+
+        _BuildVelocity();
+        _Move(scene, deltaTime);
+        _HandleLasso(absTime);
+
+        // Update animation frame time
+        this->m_idxFrame = int32_t(absTime * 8);
+    }
+    
 }
 
 void dino::Player::Draw() const
@@ -136,7 +152,6 @@ void dino::Player::Draw() const
     }
 
     jv::util::Color color = Color_WHITE;
-    color.a = m_alpha;
     // Player's Sprite
     std::vector<jv::gpu::Vertex> vs;
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);

@@ -14,6 +14,7 @@ public:
     
     /// Change la saison du terrain (0 à 3 : printemps, été, automne, hiver)
     void SetSeason(int32_t idxSeason);
+    int32_t GetSeason() const;
 
     /// Met à jour le terrain (déroulement de l'animation).
     void Update(double absTime, float deltaTime);

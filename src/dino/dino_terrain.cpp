@@ -75,6 +75,10 @@ void dino::Terrain::SetSeason(int32_t idxSeason)
         jv::util::Panic("Seulement 4 saisons disponibles");
     m_idxSeason = idxSeason;
 }
+int32_t dino::Terrain::GetSeason() const
+{
+    return m_idxSeason;
+}
 
 dino::Terrain::~Terrain()
 {

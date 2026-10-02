@@ -2,60 +2,165 @@
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
 #include <dino/dino_geometry.h>
+#include <dino/dino_assets.h>
 #include <format>
 #include <algorithm>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
-    m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
-
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
-
-    _SetupPlayers();
+    StartLobby(-5);
 }
 
 dino::Scene::~Scene() {}
 
-void dino::Scene::_SetupPlayers() 
+void dino::Scene::StartGame(int32_t season)
 {
-    jv::input::GamepadIdx playersToCreate[4] = {
+    // remove all animals
+    for (int i = 0; i < m_entities.size(); i++)
+    {
+        Animal* ptr = dynamic_cast<Animal*>(m_entities[i]);
+        if (ptr == nullptr)
+            continue;
+
+        m_entities.erase(m_entities.begin() + i);
+        delete ptr;
+        i--;
+    }
+
+    m_game = true;
+    m_pause = false;
+    m_timer = g_gameDuration;
+    m_Terrain.SetSeason(season);
+
+    // remove all trees
+    for (int i = 0; i < m_entities.size(); i++)
+    {
+        Tree* ptr = dynamic_cast<Tree*>(m_entities[i]);
+        if (ptr == nullptr)
+            continue;
+
+        m_entities.erase(m_entities.begin() + i);
+        delete ptr;
+        i--;
+    }
+}
+
+void dino::Scene::StartLobby(double absTime)
+{
+    // remove all animals
+    for (int i = 0; i < m_entities.size(); i++)
+    {
+        Animal* ptr = dynamic_cast<Animal*>(m_entities[i]);
+        if (ptr == nullptr)
+            continue;
+
+        m_entities.erase(m_entities.begin() + i);
+        delete ptr;
+        i--;
+    }
+
+    m_game = false;
+    m_pause = false;
+    m_timer = 0.0f;
+    // Spawn all trees
+    for (int i = 0; i < 4; i++)
+    {
+        Tree* treePtr = (new dino::Tree(absTime, i));
+        Tree& tree = *treePtr;
+        tree.m_pos = {
+            i * (jv::gpu::GetRenderSize().x / 6) + jv::gpu::GetRenderSize().x / 4, 
+            jv::gpu::GetRenderSize().y / 2.5f
+        };
+        m_entities.push_back(treePtr);
+    }
+}
+
+void dino::Scene::SetPause()
+{
+    m_pause = true;
+    m_pauseHandler.m_selectedOption = 0;
+}
+
+void dino::Scene::_PreGameLogic()
+{
+    // Handle player connection/disconnection
+    jv::input::GamepadIdx gamePads[4] = {
         jv::input::GamepadIdx::Keyboard,
         jv::input::GamepadIdx::Gamepad1, 
-        jv::input::GamepadIdx::Gamepad2, 
+        jv::input::GamepadIdx::Gamepad2,
         jv::input::GamepadIdx::Gamepad3
     };
-
-    for (char i = 0; i < sizeof(playersToCreate) / sizeof(playersToCreate[0]); i++)
+    for (char i = 0; i < 4; i++)
     {
-        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        dino::Player* player = new dino::Player(playersToCreate[i], spawnPos, i);
+        jv::input::GamepadIdx idx = gamePads[i];
+        bool found = false;
 
-        m_entities.push_back(player);
+        for (Entity* entityPtr : m_entities)
+        {
+            Player* playerPtr = dynamic_cast<Player*>(entityPtr);
+            if (playerPtr == nullptr)
+                continue;
+            if ((*playerPtr).m_gamepadIdx == idx)
+                found = true;
+        }
+        if (found)
+            continue;
+
+        jv::input::Gamepad gamepad;
+        if (jv::input::GetGamepad(idx, gamepad))
+        {
+            if (gamepad.start)
+            {
+                Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+                dino::Player* player = new dino::Player(idx, spawnPos, i);
+
+                m_entities.push_back(player);
+            }
+        }
     }
 }
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
+    if (m_pause)
+        deltaTime = 0.0f;
     m_lastDeltaTime = deltaTime;
+
+    // Handle game timer
+    if (m_game && !m_pause)
+    {
+        m_timer -= deltaTime;
+        if (m_timer <= 0) // Game end
+        {
+            StartLobby(absTime);
+        }
+    }
+    // Handle lobby logic (especially non-connected player input)
+    if (!m_game)
+        _PreGameLogic();
 
     m_Terrain.Update(absTime, deltaTime);
 
     _UpdateEntities(absTime, deltaTime);
     _HandleCollisions();
     _HandlePlayersLasso();
+    m_pauseHandler.Update(*this, absTime, deltaTime);
 }
 
 void dino::Scene::_UpdateEntities(double absTime, float deltaTime)
 {
     // Spawner un animal si besoin.
-
-    constexpr double kSpawnTime = 0.3;
-    if (absTime - m_animalSpawnTime >= kSpawnTime)
+    if (m_game && !m_pause)
     {
-        m_animalSpawnTime = absTime;
-        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        dino::Animal* animal = new dino::Animal(spawnPos, absTime);
-        m_entities.push_back(animal);
+        double kSpawnTime = (m_timer / g_gameDuration) + 0.05f;
+        if (absTime - m_animalSpawnTime >= kSpawnTime)
+        {
+            m_animalSpawnTime = absTime;
+            Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+            dino::Animal* animal = new dino::Animal(spawnPos, absTime);
+            m_entities.push_back(animal);
+        }
     }
 
     for (Entity* entityPtr : m_entities)
@@ -124,9 +229,6 @@ void dino::Scene::_HandlePlayersLasso() {
             {
                 if (player2.m_lassoPoints.size() == 0)
                     break;
-                // We are not checking p1's lasso's end
-                if (p1LassoIdx != player1.m_lassoPoints.size() - 2)
-                   continue;
 
                 // Intersection
                 if (IntersectSegment(player1.m_lassoPoints[p1LassoIdx], player1.m_lassoPoints[p1LassoIdx + 1], 
@@ -179,7 +281,7 @@ bool _SortByY(dino::Entity* aPtr, dino::Entity* bPtr)
 {
     dino::Entity& a = *aPtr;
     dino::Entity& b = *bPtr;
-    return a.m_pos.y > b.m_pos.y;
+    return a.m_pos.y < b.m_pos.y;
 }
 
 void dino::Scene::Draw() const
@@ -202,8 +304,23 @@ void dino::Scene::Draw() const
         std::vector<jv::gpu::Vertex> vs;
         dino::GenVertices_Text(vs, text, Color_WHITE, Color_GREY);
         jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("dTime", vs);
-        jv::gpu::Draw(pVBuf, m_pTextureText);
+        jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["text"]);
         jv::gpu::DestroyVertexBuffer(pVBuf);
+    }
+    // Chronomètre de la partie
+    if (m_game)
+    {
+        std::string text = std::format("{:04.1f}sec", m_timer);
+        std::vector<jv::gpu::Vertex> vs;
+        dino::GenVertices_Text(vs, text, Color_WHITE, Color_GREY, {jv::gpu::GetRenderSize().x / 2 - 20, 0});
+        jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("chronoText", vs);
+        jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["text"]);
+        jv::gpu::DestroyVertexBuffer(pVBuf);
+    }
+    // Pause menu
+    if (m_pause)
+    {
+        m_pauseHandler.Draw(m_timer);
     }
 }
 
