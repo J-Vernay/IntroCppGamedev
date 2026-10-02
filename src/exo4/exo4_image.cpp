@@ -22,8 +22,8 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     uint32_t pxWidth = *(uint32_t*)(pFile + 0x0012);
     uint32_t pxHeight = *(uint32_t*)(pFile + 0x0016);
 
-    uint16_t v3 = *(uint16_t*)(pFile + 0x001C);
-    if (v3 != 8 && v3!= 24)
+    uint16_t bitsPerPixel = *(uint16_t*)(pFile + 0x001C);
+    if (bitsPerPixel != 8 && bitsPerPixel != 24)
         return {};
 
     // Destination
@@ -31,12 +31,16 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
     pixels.resize(pxWidth * pxHeight);
     jv::util::Color* pPixels = pixels.data();
 
-    if (v3 == 24)
+    if (bitsPerPixel == 24)
     {
-        for (uint32_t row = 0; row < pxHeight; row+=1)
+        // 3 octets par pixel, BGR
+        for (uint32_t row = 0; row < pxHeight; row += 1)
         {
+            // row:    0,            1,            2,            ..., pxHeight - 1
+            // invrow: pxHeight - 1, pxHeight - 2, pxHeight - 3, ..., 0
             uint32_t invrow = pxHeight - 1 - row;
-            for (uint32_t col = 0; col < pxWidth; col+= 1)
+
+            for (uint32_t col = 0; col < pxWidth; col += 1)
             {
                 uint32_t src_i = invrow * pxWidth + col;
                 pPixels->b = *(pFile + dataOffset + src_i * 3);
@@ -46,13 +50,17 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
                 pPixels += 1;
             }
         }
-        
+
     }
-    else if (v3 == 8)
+    else if (bitsPerPixel == 8)
     {
+        // 1 octet par pixel, index vers la "colortable"
         for (uint32_t row = 0; row < pxHeight; row += 1)
         {
+            // row:    0,            1,            2,            ..., pxHeight - 1
+            // invrow: pxHeight - 1, pxHeight - 2, pxHeight - 3, ..., 0
             uint32_t invrow = pxHeight - 1 - row;
+
             for (uint32_t col = 0; col < pxWidth; col += 1)
             {
                 uint32_t src_i = invrow * pxWidth + col;
@@ -67,14 +75,17 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
         }
     }
 
-   for (jv::util::Color& c : pixels ){
-       if (c.r == 255 && c.g == 0 && c.b == 255 && c.a == 255){
-           c.r = 0;
-           c.g = 0;
-           c.b = 0;
-           c.a = 0;
-       }
-   }
+    // Boucle for-range
+    for (jv::util::Color& c : pixels)
+    {
+        if (c.r == 255 && c.g == 0 && c.b == 255 && c.a == 255)
+        {
+            c.r = 0;
+            c.g = 0;
+            c.b = 0;
+            c.a = 0;
+        }
+    }
 
     jv::util::Vec2 pxSize = {pxWidth, pxHeight};
     jv::gpu::Texture* pTexture = jv::gpu::CreateTexture(imageName, pxSize, pixels);

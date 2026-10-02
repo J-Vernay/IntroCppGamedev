@@ -1,25 +1,29 @@
 ﻿
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
+#include <dino/dino_entity.h>
+#include <algorithm>
 
 #include <format>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
-    pTexture = dino::LoadImageAsset("animals.bmp");
-    pTexturePlayer = dino::LoadImageAsset("dinosaurs.bmp");
+    m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
+    m_pTexturePlayer = dino::LoadImageAsset("dinosaurs.bmp");
+
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
-    Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-    //m_players.emplace_back(spawnPos, 0, pTexturePlayer, 0);
-    // m_players.emplace_back(spawnPos, 0, pTexturePlayer, 1);
-    m_players.emplace_back(spawnPos, 0, pTexturePlayer, 2);
-    // m_players.emplace_back(spawnPos, 0, pTexturePlayer, 3);
+
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, jv::input::GamepadIdx::Keyboard, m_pTexturePlayer);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 1, jv::input::GamepadIdx::Gamepad1, m_pTexturePlayer);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 2, jv::input::GamepadIdx::Gamepad2, m_pTexturePlayer);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 3, jv::input::GamepadIdx::Gamepad3, m_pTexturePlayer);
 }
 
-dino::Scene::~Scene() {
-    jv::gpu::DestroyTexture(pTexture);
-    jv::gpu::DestroyTexture(pTexturePlayer);
+dino::Scene::~Scene()
+{
+    jv::gpu::DestroyTexture(m_pTexturePlayer);
+    jv::gpu::DestroyTexture(m_pTextureAnimal);
 }
 
 void dino::Scene::Update(double absTime, float deltaTime)
@@ -29,6 +33,35 @@ void dino::Scene::Update(double absTime, float deltaTime)
     m_Terrain.Update(absTime, deltaTime);
 
     _UpdateAnimals(absTime, deltaTime);
+
+    for (Player& player : m_players)
+        player.Update(absTime, deltaTime);
+    
+    for (int i = 0; i < m_players.size(); ++i)
+        for (int j = i + 1; j < m_players.size(); ++j)
+            Entity::ResolveCollision(m_players[i], m_players[j]);
+
+    for (int i = 0; i < m_animals.size(); ++i)
+        for (int j = i + 1; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_animals[i], m_animals[j]);
+
+    for (int i = 0; i < m_players.size(); ++i)
+        for (int j = 0; j < m_animals.size(); ++j)
+            Entity::ResolveCollision(m_players[i], m_animals[j]);
+
+    for (Player& player : m_players)
+        player.CheckTerrain(m_Terrain);
+
+    for (Animal& animal : m_animals)
+        animal.CheckTerrain(m_Terrain);
+
+    m_entities.resize(0);
+    for (Player& player : m_players)
+        m_entities.push_back(&player);
+    for (Animal& animal : m_animals)
+        m_entities.push_back(&animal);
+
+    std::sort(m_entities.begin(), m_entities.end(), Entity::OrderByPosY);
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -40,23 +73,19 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, absTime, pTexture);
+        m_animals.emplace_back(spawnPos, absTime, m_pTextureAnimal);
     }
 
     for (Animal& animal : m_animals)
         animal.Update(absTime, deltaTime);
-    for (Player& players : m_players)
-        players.Update(absTime, deltaTime);
 }
 
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
 
-    for (Animal const& animal : m_animals)
-        animal.Draw();
-    for (Player const& player : m_players)
-        player.Draw();
+    for (Entity const* entity : m_entities)
+        entity->Draw();
 
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {

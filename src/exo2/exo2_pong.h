@@ -33,8 +33,17 @@ private:
     int m_aiScore = 0;
 
     // VARIABLES
-    Color m_color;
+    Vec2 m_playerPos;
+    Vec2 m_aiPos;
+    Vec2 m_ballPos;
+    Vec2 m_ballDir;
+    float m_ballSpeed;
+    int m_scorePlayer = 0;
+    int m_scoreAI = 0;
 
+    void _UpdateAI(double absTime, float deltaTime);
+    void _UpdatePlayer(double absTime, float deltaTime);
+    void _UpdateBall(double absTime, float deltaTime);
 };
 
 } // namespace exo2

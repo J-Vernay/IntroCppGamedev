@@ -1,6 +1,8 @@
 ﻿#include <exo2/exo2_draw.h>
 
-void exo2::DrawRect(Vec2 pos, Vec2 size, Color color){
+
+void exo2::DrawRect(Vec2 pos, Vec2 size, Color color)
+{
     jv::gpu::Vertex vs[6];
     vs[0].pos = {pos.x, pos.y};
     vs[1].pos = {pos.x, pos.y + size.y};
@@ -20,15 +22,16 @@ void exo2::DrawRect(Vec2 pos, Vec2 size, Color color){
     jv::gpu::Draw(vb, nullptr, {});
     jv::gpu::DestroyVertexBuffer(vb);
 }
+
 void exo2::DrawScore(
     Vec2 center, Vec2 pointSize, int scorePlayer, Color colorPlayer, int scoreAI, Color colorAI)
 {
-    for (size_t i = 0; i < scorePlayer; i++)
-    {
-        DrawRect(Vec2(center.x - pointSize.x * i - pointSize.x, 0), pointSize, colorPlayer);
-    }
-    for (size_t i = 0; i < scoreAI; i++)
-    {
-        DrawRect(Vec2(center.x + pointSize.x * i, 0), pointSize, colorAI);
-    }
+    Vec2 pos;
+    pos.x = center.x - pointSize.x * scorePlayer;
+    pos.y = center.y - pointSize.y / 2;
+    DrawRect(pos, {pointSize.x * scorePlayer, pointSize.y}, colorPlayer);
+
+    pos.x = center.x;
+    pos.y = center.y - pointSize.y / 2;
+    DrawRect(pos, {pointSize.x * scoreAI, pointSize.y}, colorAI);
 }

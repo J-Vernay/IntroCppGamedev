@@ -81,6 +81,8 @@ Puis cliquer sur "deque-Struct4096" et "list-Struct4096".
 Pourquoi les performances de `vector` et `deque` ne sont pas linéaires
 par rapport au nombre d'éléments ?
 
-> ...
+> PAS A FAIRE
+
+
 
 **Fin des exercices, on attaque le projet, cf. `dino.md`**
