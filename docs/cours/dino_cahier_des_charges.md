@@ -5,6 +5,10 @@ Cf **evaluation.md** pour les détails des notes et les critères d'évaluation.
 
 En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à la racine du dépôt de code.
 
+## Partie 4 - Lasso
+
+- Cf. TD
+
 ## Flow du jeu
 
 - Un chronomètre de 60 secondes est affiché en haut de l'écran (centré horizontalement) et décroit.
@@ -22,28 +26,8 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 
 ## Scoring
 
-Quand le lasso fait une boucle, le score donné au joueur dépend des animaux :
-pour chaque type d'animaux (vache, autruche, cochon et mouton),
-le premier animal de ce type rapporte 10 points, puis 20 points, puis 30 points, etc.
-Par exemple, faire une boucle de lasso contenant 4 vaches et 2 autruches rapporte
-**(10 + 20 + 30 + 40) + (10 + 20) = 130 points** au joueur.
-
-Quand les animaux disparaissent, une petite notification contenant le texte +10, +20, etc,
-apparaît à leur emplacement, avec le texte colorié suivant le joueur qui a fermé la boucle.
+Quand le lasso fait une boucle, le joueur gagne 10 points par animal.
 
 Sur le côté gauche de l'écran, le score des 4 joueurs est affiché, chacun suivant la couleur du dinosaure.
 Ce score reste visible pendant le temps où les joueurs sont sur le lobby.
-
-## Menu d'options
-
-Quand la partie est mis en pause, l'écran de pause continue d'afficher le jeu en arrière-plan,
-et propose les choix suivants :
-
-- Recommencer : fait réapparaître les joueurs sur le même terrain, avec le chronomètre réinitialisé.
-- Retour au lobby : finit la partie, les scores ne sont plus affichés.
-- Chrono : avec les flèches de gauche/droite, le chronomètre peut être avancé/réculé de 10 secondes.
-- Reprendre : continue la partie, permet de sortir de la pause.
-
-Sur l'écran de pause, tous les joueurs peuvent contrôler le menu.
-L'écran de pause est contrôle avec les boutons `dpad` et `btn_right`.
 
