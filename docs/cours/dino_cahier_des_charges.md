@@ -28,18 +28,11 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
   Les arbres sont translucides pendant 5 secondes et ne peuvent pas être sélectionnés.
 
 ## Scoring
+> Ok
 
-Quand le lasso fait une boucle, le score donné au joueur dépend des animaux :
-pour chaque type d'animaux (vache, autruche, cochon et mouton),
-le premier animal de ce type rapporte 10 points, puis 20 points, puis 30 points, etc.
-Par exemple, faire une boucle de lasso contenant 4 vaches et 2 autruches rapporte
-**(10 + 20 + 30 + 40) + (10 + 20) = 130 points** au joueur.
+Quand le lasso fait une boucle, le joueur gagne 10 points par animal.
 
-Quand les animaux disparaissent, une petite notification contenant le texte +10, +20, etc,
-apparaît à leur emplacement, avec le texte colorié suivant le joueur qui a fermé la boucle.
-
-Sur le côté gauche de l'écran, le score des 4 joueurs est affiché, chacun suivant la couleur du dinosaure.
-Ce score reste visible pendant le temps où les joueurs sont sur le lobby.
+Sur le côté gauche de l'écran, le score des 4 joueurs est affiché, chacun suivant la couleur du dinosaure. Ce score reste visible pendant le temps où les joueurs sont sur le lobby.
 
 ## Menu d'options
 > Ok

@@ -16,6 +16,8 @@ public:
     // Player's input device
     jv::input::GamepadIdx m_gamepadIdx;
 
+    int m_score = 0;
+
     /// Initialise le joueur.
     Player(jv::input::GamepadIdx gamepadIdx, Vec2 pos, int32_t kind);
 

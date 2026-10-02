@@ -28,6 +28,16 @@ void dino::Scene::StartGame(int32_t season)
         i--;
     }
 
+    // Reset players score
+    for (Entity* entityPtr : m_entities)
+    {
+        Player* playerPtr = dynamic_cast<Player*>(entityPtr);
+        if (playerPtr == nullptr)
+            continue;
+        Player& player = *playerPtr;
+        player.m_score = 0;
+    }
+
     m_game = true;
     m_pause = false;
     m_timer = g_gameDuration;

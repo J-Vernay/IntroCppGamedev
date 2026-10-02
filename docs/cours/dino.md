@@ -181,7 +181,7 @@ Quelle méthode de std::vector utiliser ?
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?
 
-> Nombre total des segments
+> Nombre total des segments * (4 ** 2)
 
 D) Implémenter : "Quand un joueur passe par dessus le lasso d'un autre joueur, le début du lasso est détruit jusqu'à l'intersection."
 Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' interagir entre elles.

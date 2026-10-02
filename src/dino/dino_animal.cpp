@@ -24,6 +24,7 @@ void dino::Animal::_HandleTerrainCollision(Terrain const& terrain)
 
 void dino::Animal::OnLassoHit(Player& player_origin, Scene& scene)
 {
+    player_origin.m_score += 10;
     scene.RemoveEntity(this);
     delete this;
 }

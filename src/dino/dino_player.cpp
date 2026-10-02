@@ -6,6 +6,7 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 #include <algorithm>
+#include <format>
 
 dino::Player::Player(jv::input::GamepadIdx gamepadIdx, Vec2 pos, int32_t kind)
 {
@@ -153,30 +154,39 @@ void dino::Player::Draw() const
 
     jv::util::Color color = Color_WHITE;
     // Player's Sprite
-    std::vector<jv::gpu::Vertex> vs;
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
+    {
+        std::vector<jv::gpu::Vertex> vs;
+        vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
+        vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
+        vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
+        vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
+        vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
+        vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
 
-    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
-    jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["players"]);
-    jv::gpu::DestroyVertexBuffer(pVBuf);
-
+        jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
+        jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["players"]);
+        jv::gpu::DestroyVertexBuffer(pVBuf);
+    }
+    jv::util::Color const playersColor[4] = {Color_BLUE, Color_RED, Color_YELLOW, Color_GREEN};
+    jv::util::Color const playerColor = playersColor[m_kind];
     // Player's lasso
-    std::vector<jv::gpu::Vertex> lassoVerticies;
+    {
+        std::vector<jv::gpu::Vertex> lassoVerticies;
+        dino::GenVertices_Polyline(lassoVerticies, m_lassoPoints, g_lassoWidth, playerColor);
 
-    jv::util::Color const playersColor[4] = {
-        Color_BLUE,
-        Color_RED,
-        Color_YELLOW,
-        Color_GREEN
-    };
-    dino::GenVertices_Polyline(lassoVerticies, m_lassoPoints, g_lassoWidth, playersColor[m_kind]);
-
-    pVBuf = jv::gpu::CreateVertexBuffer("PlayerLasso", lassoVerticies);
-    jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["white"]);
-    jv::gpu::DestroyVertexBuffer(pVBuf);
+        jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("PlayerLasso", lassoVerticies);
+        jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["white"]);
+        jv::gpu::DestroyVertexBuffer(pVBuf);
+    }
+    // Score
+    {
+        {
+            std::vector<jv::gpu::Vertex> vs;
+            std::string text = std::format("{:04}", m_score);
+            dino::GenVertices_Text(vs, text, playerColor, Color_GREY, {0, (m_kind * 50.0f) + 100});
+            jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("score", vs);
+            jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["text"]);
+            jv::gpu::DestroyVertexBuffer(pVBuf);
+        }
+    }
 }
