@@ -12,7 +12,15 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
     Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-    m_players.emplace_back(spawnPos, 0, m_pTextureDinosaurs);
+
+    m_players.emplace_back(
+        m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 0, jv::input::GamepadIdx::Keyboard);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 1,
+        jv::input::GamepadIdx::Gamepad1);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 2,
+        jv::input::GamepadIdx::Gamepad2);
+    m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 3,
+        jv::input::GamepadIdx::Gamepad3);
 }
 
 dino::Scene::~Scene() 
@@ -30,7 +38,18 @@ void dino::Scene::Update(double absTime, float deltaTime)
     _UpdateAnimals(absTime, deltaTime);
 
     for (Player& player : m_players)
+    {
         player.Update(absTime, deltaTime);
+        player.CheckTerrain(m_Terrain);
+
+        for (Player& player2 : m_players)
+        {
+        
+        }
+    }
+
+
+
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -46,7 +65,11 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     }
 
     for (Animal& animal : m_animals)
+    {
         animal.Update(absTime, deltaTime);
+        animal.CheckTerrain(m_Terrain);
+    }
+        
 }
 
 void dino::Scene::Draw() const

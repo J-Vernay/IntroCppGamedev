@@ -30,6 +30,16 @@ void dino::Animal::Update(double absTime, float deltaTime)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
 
+void dino::Animal::CheckTerrain(Terrain const& m_Terrain)
+{
+    Vec2 oldPos = m_pos;
+    m_pos = m_Terrain.ClampPos(m_pos);
+    if (oldPos.x != m_pos.x || oldPos.y != m_pos.y)
+    {
+        m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+    }
+}
+
 void dino::Animal::Draw() const
 {
     float u1 = 0, u2 = 32, v1 = 0, v2 = 32;

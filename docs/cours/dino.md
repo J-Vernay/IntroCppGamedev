@@ -122,7 +122,7 @@ Quand ils atteignent le bord du terrain, ils prennent une nouvelle direction al�
 
 C) Comment détecter si deux cercles à des positions données sont en collision ?
 
-> ...
+> comparer les position avec leur radius et voir sil yen a deux qui se rapproche trop
 
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
