@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include <dino/dino_terrain.h>
 
 namespace dino
 {
@@ -18,11 +19,14 @@ public:
     /// Affiche l'animal
     void Draw() const;
 
+    void CheckTerrainBounds(Terrain const& terrain);
+
     /// Détruit les ressources associées à l'animal.
     ~Animal();
+    
+    Vec2 m_pos;
 
 private:
-    Vec2 m_pos;
     double m_timeStart;
     uint8_t m_alpha = 0;
     Vec2 m_dir;

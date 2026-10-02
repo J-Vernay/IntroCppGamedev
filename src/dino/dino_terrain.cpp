@@ -1,6 +1,7 @@
 ﻿
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_terrain.h>
+#include <dino/dino_player.h>
 
 #include <random>
 
@@ -44,7 +45,7 @@ dino::Terrain::Terrain(int32_t tileCountX, int32_t tileCountY)
     for (int32_t i = 1; i < tileCountX - 1; ++i)
     {
         dino::GenVertices_Rect(m_vertices, {16.f * i, 0}, {16, 16}, {16, 16});
-        dino::GenVertices_Rect(m_vertices, {16.f * i, 16.f * (tileCountY - 1)}, {16, 16}, {16, 48});
+        dino::GenVertices_Rect(m_vertices, {16.f * i, 16.f * (tileCountY - 1)}, {16, 16}, {16, 48});      
     }
     for (int32_t i = 1; i < tileCountY - 1; ++i)
     {
@@ -62,6 +63,7 @@ dino::Terrain::Terrain(int32_t tileCountX, int32_t tileCountY)
     {
         m_vertices[i].pos.x += terrainPos.x;
         m_vertices[i].pos.y += terrainPos.y;
+
     }
 
     // On retient les coordonnées du terrain pour la logique de jeu.

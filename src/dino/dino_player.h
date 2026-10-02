@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include <dino/dino_terrain.h>
 
 namespace dino
 {
@@ -10,7 +11,8 @@ namespace dino
     {
     public:
         /// Initialise le joueur avec un type au hasard.
-        Player(Vec2 pos, double absTime, jv::gpu::Texture* pTexture);
+        Player(Vec2 pos, int32_t idxPlayer, jv::input::GamepadIdx gamepadIdx,
+            jv::gpu::Texture* pTexture);
 
         /// Constructeur d'un Player à partir d'un autre Player par copie
         ///
@@ -29,17 +31,22 @@ namespace dino
         /// Affiche le joueur
         void Draw() const;
 
+        void DetectBounds(Terrain const& terrain);
+
         /// Détruit les ressources associées au joueur.
         ~Player();
 
     private:
+        int32_t m_idxPlayer;
+        jv::input::GamepadIdx m_gamepadIdx;
         Vec2 m_pos;
-        double m_timeStart;
-        uint8_t m_alpha = 0;
         Vec2 m_dir;
-        int32_t m_kind;
-        int32_t m_idxFrame;
         jv::gpu::Texture* m_pTexture;
+        double m_hitTime = 0;
+        double m_absTime = 0;
+        bool m_bRunning = false;
+        bool m_bLeft = false;
+
     };
 
 } // namespace dino

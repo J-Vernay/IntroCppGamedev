@@ -35,6 +35,14 @@ void dino::Animal::Update(double absTime, float deltaTime)
     
 }
 
+void dino::Animal::CheckTerrainBounds(Terrain const& terrain)
+{
+    Vec2 oldPos = m_pos;
+    m_pos = terrain.ClampPos(m_pos);
+    if (m_pos.x != oldPos.x || m_pos.y != oldPos.y)
+        m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+}
+
 void dino::Animal::Draw() const
 {
     float u1 = 0, u2 = 32, v1 = 0, v2 = 32;

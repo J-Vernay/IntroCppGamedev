@@ -13,7 +13,7 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 
     
     Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-    m_players.emplace_back(spawnPos, 0, m_pTexturePlayer);
+    m_players.emplace_back(spawnPos, 0, jv::input::GamepadIdx::Keyboard, m_pTexturePlayer);
 }
 
 dino::Scene::~Scene() {
@@ -30,7 +30,10 @@ void dino::Scene::Update(double absTime, float deltaTime)
     _UpdateAnimals(absTime, deltaTime);
 
     for (Player& player : m_players)
+    {
         player.Update(absTime, deltaTime);
+        player.DetectBounds(m_Terrain);
+    }
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -46,7 +49,10 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     }
 
     for (Animal& animal : m_animals)
+    {
         animal.Update(absTime, deltaTime);
+        animal.CheckTerrainBounds(m_Terrain);
+    }
 }
 
 void dino::Scene::Draw() const
