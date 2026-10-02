@@ -184,7 +184,8 @@ Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' int
 
 E) Comment détecter qu'une position est à l'intérieur d'un contour fermé définis par des segments ?
 
-‍...
+‍> Créer un "raycast" (par exemple vers le bas) jusqu'à la limite de l'île et compter combien de segments du contour fermé sont rencontrés.
+> Si impair, la position est dans le polygone, si pair, la position est hors du polygone.
 
 F) Implémenter via une logique commune, comme mentionné dans (3.H) : 
 - Quand un dinosaure est dans une boucle de lasso, il se prend des dégâts (= immobilisation 3 secondes + animation).

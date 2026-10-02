@@ -2,13 +2,15 @@
 #include <dino/dino_player.h>
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_geometry.h>
+#include <dino/dino_scene.h>
 #include <math.h>
 
+using PointList = std::vector<jv::util::Vec2>;
+
 dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture,
-    jv::input::GamepadIdx gamepadIdx, Color color, int32_t colorIndex, Terrain* terrain)
-    : Entity(terrain, pos)
+    jv::input::GamepadIdx gamepadIdx, Color color, int32_t colorIndex)
+    : Entity(pos)
 {
-    m_terrain = terrain;
     m_state = IDLE;
     m_colorIndex = colorIndex;
     m_color = color;
@@ -18,26 +20,41 @@ dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture,
     m_pTexture = texture;
 }
 
+bool dino::Player::Pauses()
+{
+    jv::input::Gamepad input;
+    if (jv::input::GetGamepad(m_gamepadIdx, input))
+    {
+        // Pause.
+        if (m_pauseReleased && input.start)
+        {
+            m_pauseReleased = false;
+            return true;
+        }
+        else if (!m_pauseReleased && !input.start)
+        {
+            m_pauseReleased = true;
+        }
+    }
+
+    return false;
+}
+
 dino::Player::~Player()
 {
 }
 
-void dino::Player::Update(double absTime, float deltaTime)
+void dino::Player::Update(double absTime, float deltaTime, Terrain& terrain)
 {
     float speed = 80;
     bool running = false;
+    m_hurtTimer -= deltaTime;
 
     // Entrées joueur.
     m_dir = {0, 0};
     jv::input::Gamepad input;
     if (jv::input::GetGamepad(m_gamepadIdx, input))
     {
-        if (input.btn_left)
-        {
-            m_state = HURT;
-            m_hurtTime = absTime;
-        }
-
         // Direction de mouvement.
         if (input.dpad_up)
             m_dir.y += -1;
@@ -66,7 +83,7 @@ void dino::Player::Update(double absTime, float deltaTime)
     if (m_state != HURT)
     {
         Vec2 displacement = Vec2{m_dir.x * deltaTime * speed, m_dir.y * deltaTime * speed};
-        Move(displacement);
+        Move(displacement, terrain);
 
         // Mettre à jour la direction du sprite, droite ou gauche.
         if (m_dir.x > 0)
@@ -84,7 +101,7 @@ void dino::Player::Update(double absTime, float deltaTime)
     else
     {
         // L'immobilisation des dégâts dure 3 secondes.
-        if (absTime - m_hurtTime > 3.)
+        if (m_hurtTimer < 0)
         {
             m_state = IDLE;
         }
@@ -127,8 +144,6 @@ void dino::Player::UpdateTrail(double absTime, float deltaTime, std::vector<std:
         m_pastPositions.erase(m_pastPositions.begin());
     }
 
-    // Vérifier si le joueur fait une boucle avec son lasso.
-    CheckLoop();
     // Vérifier si un autre joueur est passé sur son lasso.
     CheckPlayerTrailOverlap(playersLastMove);
 }
@@ -196,7 +211,13 @@ void dino::Player::DrawTrail() const
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
 
-void dino::Player::CheckLoop()
+void dino::Player::OnCaughtInLoop()
+{
+    m_state = HURT;
+    m_hurtTimer = 3;
+}
+
+std::pair<int32_t, int32_t> dino::Player::CheckLoop()
 {
     int32_t loopPointIndex1 = -1;
     int32_t loopPointIndex2 = -1;
@@ -219,12 +240,19 @@ void dino::Player::CheckLoop()
         }
     }
 
-    if (loopPointIndex1 != -1)
-    {
-        m_pastPositions.erase(
-            m_pastPositions.begin() + loopPointIndex1,
-            m_pastPositions.begin() + loopPointIndex2);
-    }
+    return std::pair<int32_t, int32_t>(loopPointIndex1, loopPointIndex2);
+}
+
+PointList dino::Player::GetTrail()
+{
+    return m_pastPositions;
+}
+
+void dino::Player::CutLoop(int32_t loopPoint1, int32_t loopPoint2)
+{
+    m_pastPositions.erase(
+        m_pastPositions.begin() + loopPoint1,
+        m_pastPositions.begin() + loopPoint2);
 }
 
 void dino::Player::CheckPlayerTrailOverlap(std::vector<std::pair<Vec2, Vec2>> playersLastMove)

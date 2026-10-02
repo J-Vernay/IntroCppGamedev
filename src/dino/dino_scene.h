@@ -24,7 +24,7 @@ private:
     jv::gpu::Texture* m_pTextureText = nullptr;
     float m_lastDeltaTime = 0;
 
-    Terrain m_Terrain;
+    Terrain m_terrain;
     
     std::deque<Player> m_players;
     jv::gpu::Texture* m_playerTexture;
@@ -37,6 +37,9 @@ private:
 
     std::vector<std::pair<Vec2, Vec2>> m_playerLastMoves;
 
+    float m_timer = 60;
+    bool m_bPause = false;
+
     jv::input::GamepadIdx m_gamepads[4] = {
         jv::input::GamepadIdx::Keyboard,
         jv::input::GamepadIdx::Gamepad1,
@@ -44,9 +47,12 @@ private:
         jv::input::GamepadIdx::Gamepad3
     };
 
+    void _CheckPause();
     void _UpdatePlayers(double absTime, float deltaTime);
     void _UpdateAnimals(double absTime, float deltaTime);
     void _UpdateCollisions(double absTime, float deltaTime);
+    void _DrawTimer() const;
+    void _OnPlayerLoop(Player* pPlayer, int32_t start, int32_t end);
 };
 
 } // namespace dino

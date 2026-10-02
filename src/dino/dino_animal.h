@@ -12,13 +12,15 @@ class Animal : public Entity
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture, Terrain* terrain);
+    Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture);
     
     /// Déplace l'animal et met à jour son animation.
-    void Update(double absTime, float deltaTime) override;
+    void Update(double absTime, float deltaTime, Terrain& terrain) override;
 
     /// Affiche l'animal
     void Draw() const override;
+
+    void OnCaughtInLoop() override;
 
     /// Détruit les ressources associées à l'animal.
     ~Animal();

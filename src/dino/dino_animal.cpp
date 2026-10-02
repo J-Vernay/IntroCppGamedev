@@ -1,27 +1,27 @@
 ﻿
 #include <dino/dino_animal.h>
 #include <dino/dino_draw_utils.h>
+#include <dino/dino_scene.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture, Terrain* terrain)
-    : Entity(terrain, pos)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture)
+    : Entity(pos)
 {
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
     m_pTexture = texture;
-    m_terrain = terrain;
 }
 
 dino::Animal::~Animal()
 {
 }
 
-void dino::Animal::Update(double absTime, float deltaTime)
+void dino::Animal::Update(double absTime, float deltaTime, Terrain& terrain)
 {
     float speed = 30;
     Vec2 displacement = Vec2{m_dir.x * deltaTime * speed, m_dir.y * deltaTime * speed};
-    Move(displacement);
+    Move(displacement, terrain);
 
     m_idxFrame = int32_t(absTime * 8) % 4;
 
@@ -72,6 +72,11 @@ void dino::Animal::Draw() const
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Animal", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Animal::OnCaughtInLoop()
+{
+    m_bShouldDie = true;
 }
 
 void dino::Animal::OnOutsideTerrain()
