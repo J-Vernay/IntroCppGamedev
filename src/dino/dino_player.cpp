@@ -56,18 +56,32 @@ void dino::Player::_BuildVelocity()
         {
             m_speed *= 2;
         }
-
-        // TEMPORARY
-        if (gamepad.btn_left)
-        {
-            m_hitDuration = g_basePlayerStunDuration;
-        }
     }
 }
 
 void dino::Player::_HandleTerrainCollision(Terrain& terrain)
 {
     m_pos = terrain.ClampPos(m_pos);
+}
+
+void dino::Player::_HandleLasso(double absTime)
+{
+    // Add a point to the lasso
+    if (absTime - m_lastLassoPointTime > g_lassoPointsDeltaTime)
+    {
+        m_lassoPoints.push_back(m_pos);
+        m_lassoPointsSpawnTime.push_back(absTime);
+        m_lastLassoPointTime = absTime;
+    }
+    // Remove points older than 2 seconds
+    for (int i = m_lassoPoints.size() - 1; i >= 0; i--)
+    {
+        if (absTime - m_lassoPointsSpawnTime[i] > g_lassoPointsLifeTime)
+        {
+            m_lassoPoints.erase(m_lassoPoints.begin() + i);
+            m_lassoPointsSpawnTime.erase(m_lassoPointsSpawnTime.begin() + i);
+        }
+    }
 }
 
 void dino::Player::Update(dino::Scene& scene, double absTime, float deltaTime)
@@ -80,6 +94,7 @@ void dino::Player::Update(dino::Scene& scene, double absTime, float deltaTime)
 
     _BuildVelocity();
     _Move(scene, deltaTime);
+    _HandleLasso(absTime);
  
     // Update animation frame time
     this->m_idxFrame = int32_t(absTime * 8);
@@ -117,7 +132,7 @@ void dino::Player::Draw() const
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;
-
+    // Player's Sprite
     std::vector<jv::gpu::Vertex> vs;
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
     vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
@@ -128,5 +143,20 @@ void dino::Player::Draw() const
 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
     jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["players"]);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+
+    // Player's lasso
+    std::vector<jv::gpu::Vertex> lassoVerticies;
+
+    jv::util::Color const playersColor[4] = {
+        Color_BLUE,
+        Color_RED,
+        Color_YELLOW,
+        Color_GREEN
+    };
+    dino::GenVertices_Polyline(lassoVerticies, m_lassoPoints, g_lassoWidth, playersColor[m_kind]);
+
+    pVBuf = jv::gpu::CreateVertexBuffer("PlayerLasso", lassoVerticies);
+    jv::gpu::Draw(pVBuf, (&dino::AssetsHolder::getInstance())->g_Textures["white"]);
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }

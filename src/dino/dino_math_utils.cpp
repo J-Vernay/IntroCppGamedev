@@ -3,7 +3,7 @@
 
 float dino::math::Distance(jv::util::Vec2 a, jv::util::Vec2 b)
 {
-    return sqrtf((b.y - a.y) * (b.y - a.y) + (b.x - a.x) * (b.x - a.x));
+    return hypotf(b.y - a.y, b.x - a.x);
 }
 
 jv::util::Vec2 dino::math::VectorSubtract(jv::util::Vec2 a, jv::util::Vec2 b)
