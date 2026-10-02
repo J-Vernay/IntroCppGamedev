@@ -84,6 +84,11 @@ void dino::Player::_HandleLasso(double absTime)
     }
 }
 
+void dino::Player::OnLassoHit(Player& player_origin, Scene& scene)
+{
+    m_hitDuration = g_basePlayerStunDuration;
+}
+
 void dino::Player::Update(dino::Scene const& scene, double absTime, float deltaTime)
 {
     // Update stun duration

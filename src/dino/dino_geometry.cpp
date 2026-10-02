@@ -26,3 +26,20 @@ bool dino::IntersectSegment(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
     else
         return 0 <= dot_AB_AC && dot_AB_AD <= dot_AB_AB;
 }
+
+bool dino::PointInPolygon(Vec2 point, std::vector<Vec2> polygon_verticies)
+{
+    if (polygon_verticies.size() < 3)
+        return false;
+
+    // Take a really far ray
+    Vec2 ray = {-1000, 0};
+    unsigned short count = 0;
+    for (int i = 0; i < polygon_verticies.size(); i++)
+    {
+        if (IntersectSegment(ray, point, polygon_verticies[i],
+                polygon_verticies[(i + 1) % polygon_verticies.size()]))
+            count++;
+    }
+    return count % 2 == 1;
+}

@@ -22,6 +22,9 @@ public:
     /// Affiche le joueur
     void Draw() const override;
 
+    // Stun le joueur
+    void OnLassoHit(Player& player_origin, Scene& scene) override;
+
     /// Détruit les ressources associées au joueur.
     ~Player();
 

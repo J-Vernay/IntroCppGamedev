@@ -188,7 +188,7 @@ Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' int
 
 E) Comment détecter qu'une position est à l'intérieur d'un contour fermé définis par des segments ?
 
-> ...
+> Il faut implémenter un algorithme de "Point-in-Polygon", comme par exemple l'agorithme de raycast (intersection).
 
 F) Implémenter via une logique commune, comme mentionné dans (3.H) : 
 - Quand un dinosaure est dans une boucle de lasso, il se prend des dégâts (= immobilisation 3 secondes + animation).

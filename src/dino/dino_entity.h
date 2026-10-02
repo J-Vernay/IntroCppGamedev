@@ -7,6 +7,7 @@ namespace dino
 {
 // Forward declaration
 class Scene;
+class Player;
 class Entity
 {
 public:
@@ -17,6 +18,8 @@ public:
     virtual void Update(Scene const& scene, double absTime, float deltaTime) = 0;
 
     virtual void Draw() const = 0;
+
+    virtual void OnLassoHit(Player& player_origin, Scene& scene) = 0;
 
 protected:
     /// Code to play when entity gets out of the terrain

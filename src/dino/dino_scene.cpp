@@ -53,9 +53,9 @@ void dino::Scene::_UpdateEntities(double absTime, float deltaTime)
     if (absTime - m_animalSpawnTime >= kSpawnTime)
     {
         m_animalSpawnTime = absTime;
-        //Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        //dino::Animal* animal = new dino::Animal(spawnPos, absTime);
-        //m_entities.push_back(animal);
+        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+        dino::Animal* animal = new dino::Animal(spawnPos, absTime);
+        m_entities.push_back(animal);
     }
 
     for (Entity* entityPtr : m_entities)
@@ -137,6 +137,20 @@ void dino::Scene::_HandlePlayersLasso() {
                         // Does not intersect with itself
                         if (p2LassoIdx >= p1LassoIdx - 1)
                             continue;
+
+                        // Check and hit every entity in the lasso's loop
+                        for (Entity* entityPtr : m_entities)
+                        {
+                            if (entityPtr == playerPtr1)
+                                continue;
+
+                            Entity& entity = *entityPtr;
+                            std::vector<Vec2> lassoLoopVerticies = {player1.m_lassoPoints.begin() + p2LassoIdx, player1.m_lassoPoints.end()};
+                            if (PointInPolygon(entity.m_pos, lassoLoopVerticies))
+                            {
+                                entity.OnLassoHit(player1, *this);
+                            }
+                        }
                         
                         // Remove every points between the player and intersection point
                         for (int i = p2LassoIdx; i < player1.m_lassoPoints.size();)
@@ -196,4 +210,14 @@ void dino::Scene::Draw() const
 dino::Terrain const& dino::Scene::GetTerrain() const
 {
     return m_Terrain;
+}
+
+void dino::Scene::RemoveEntity(Entity* entity) 
+{
+    for (size_t i = 0; i < m_entities.size(); i++)
+        if (m_entities[i] == entity)
+        {
+            m_entities.erase(m_entities.begin() + i);
+            break;
+        }
 }

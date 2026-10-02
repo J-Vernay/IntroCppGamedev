@@ -18,6 +18,7 @@ public:
     ~Scene();
     void Update(double absTime, float deltaTime);
     void Draw() const;
+    void RemoveEntity(Entity* entity);
     Terrain const& GetTerrain() const;
 
 private:

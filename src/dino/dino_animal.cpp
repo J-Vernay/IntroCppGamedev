@@ -22,6 +22,12 @@ void dino::Animal::_HandleTerrainCollision(Terrain const& terrain)
     m_pos = terrain.ClampPos(m_pos);
 }
 
+void dino::Animal::OnLassoHit(Player& player_origin, Scene& scene)
+{
+    scene.RemoveEntity(this);
+    delete this;
+}
+
 void dino::Animal::Update(dino::Scene const& scene, double absTime, float deltaTime)
 {
     _Move(scene, deltaTime);

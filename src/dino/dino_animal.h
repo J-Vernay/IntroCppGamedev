@@ -20,6 +20,9 @@ public:
     /// Affiche l'animal
     void Draw() const override;
 
+    // Enlève l'animal de la partie et donne les points au joueur
+    void OnLassoHit(Player& player_origin, Scene& scene) override;
+
     /// Détruit les ressources associées à l'animal.
     ~Animal();
 protected:

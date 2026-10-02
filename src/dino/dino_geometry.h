@@ -8,4 +8,6 @@ namespace dino
 /// Vérifie si les deux segments [AB] et [CD] ont une intersection.
 bool IntersectSegment(Vec2 a, Vec2 b, Vec2 c, Vec2 d);
 
+bool PointInPolygon(Vec2 point, std::vector<Vec2> polygon_verticies);
+
 } // namespace dino
