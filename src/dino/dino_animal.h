@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include <dino/dino_terrain.h>
 
 namespace dino
 {
@@ -22,10 +23,12 @@ public:
     /// Animal a, b;
     /// a = b; // Pas un constructeur, car 'a' et 'b' existe déjà ; c'est une affectation
     Animal& operator=(Animal const& b) = delete;
-
     
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);
+
+    /// S'assurer que la position du joueur reste sur le terrain.
+    void CheckTerrain(Terrain const& terrain);
 
     /// Affiche l'animal
     void Draw() const;

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include <dino/dino_terrain.h>
 
 namespace dino
 {
@@ -26,6 +27,9 @@ public:
 
     /// Déplace le joueur et met à jour son animation.
     void Update(double absTime, float deltaTime);
+
+    /// S'assurer que la position du joueur reste sur le terrain.
+    void CheckTerrain(Terrain const& terrain);
 
     /// Affiche le joueur
     void Draw() const;

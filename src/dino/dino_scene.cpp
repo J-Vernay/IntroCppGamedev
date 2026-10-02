@@ -34,6 +34,12 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     for (Player& player : m_players)
         player.Update(absTime, deltaTime);
+
+    for (Player& player : m_players)
+        player.CheckTerrain(m_Terrain);
+
+    for (Animal& animal : m_animals)
+        animal.CheckTerrain(m_Terrain);
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
