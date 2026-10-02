@@ -37,6 +37,8 @@ public:
     /// Détruit les ressources associées au joueur.
     ~Player();
 
+    static void ResolveCollision(Player& a, Player& b);
+
 private:
     int32_t m_idxPlayer;
     jv::input::GamepadIdx m_gamepadIdx;

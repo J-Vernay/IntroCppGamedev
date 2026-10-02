@@ -34,6 +34,10 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     for (Player& player : m_players)
         player.Update(absTime, deltaTime);
+    
+    for (int i = 0; i < m_players.size(); ++i)
+        for (int j = i + 1; j < m_players.size(); ++j)
+            Player::ResolveCollision(m_players[i], m_players[j]);
 
     for (Player& player : m_players)
         player.CheckTerrain(m_Terrain);
