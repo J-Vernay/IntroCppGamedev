@@ -77,7 +77,7 @@ void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
 {
     constexpr double kSpawnTime = 0.5;
 
-    float ratio = (m_chrono / 10.0f);
+    float ratio = (m_chrono / 60.0f);
 
     if (absTime - m_animalSpawnTime >= kSpawnTime * ratio)
     {
@@ -288,7 +288,7 @@ void dino::Scene::SetupGame()
         m_entities.emplace_back(&m_trees[i]);
     }
 
-    m_chrono = 10.0f;
+    m_chrono = 60.0f;
     m_isGameRunning = false;
 }
 
