@@ -11,41 +11,54 @@ dino::Scene::Scene(): m_Terrain{24, 16}
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
     m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
+    m_pTexturePlayer = dino::LoadImageAsset("dinosaurs.bmp");
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
     for (int i = 0; i < 4; i++)
     {
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        
 
-        m_players.emplace_back(
-            spawnPos,
-            0.0,
-            jv::input::GamepadIdx(i),
-            m_pTextureText);    
+        m_players.emplace_back(spawnPos, 0.0, jv::input::GamepadIdx(i),m_pTexturePlayer, m_pTextureText);
 
         m_entities.emplace_back(&m_players[i]);
     }
 
-    m_chrono = 60.0f;
+    SetupGame();
 }
 
 dino::Scene::~Scene() 
 {
     jv::gpu::DestroyTexture(m_pTextureText);
     jv::gpu::DestroyTexture(m_pTextureAnimal);
+    jv::gpu::DestroyTexture(m_pTexturePlayer);
 }
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
+    if (m_isGameRunning)
+    {
+        UpdateChrono(deltaTime);
+        SpawnAnimals(absTime, deltaTime);
+
+        for (Player& p : m_players)
+        {
+            p.RequestPause(m_isPaused, deltaTime);
+        }
+    }
+    else
+    {
+        for (Player& p : m_players)
+        {
+            p.UpdateLobbyState();
+        }
+    }
+    
+    if (m_isPaused) return;
+
     m_lastDeltaTime = deltaTime;
 
     m_Terrain.Update(absTime, deltaTime);
-
-    UpdateChrono(deltaTime);
-
-    SpawnAnimals(absTime, deltaTime);
 
     UpdateEntiy(absTime, deltaTime);
 
@@ -62,9 +75,9 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
 void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
 {
-    constexpr double kSpawnTime = 0.3;
+    constexpr double kSpawnTime = 0.5;
 
-    float ratio = (m_chrono / 60.0f);
+    float ratio = (m_chrono / 10.0f);
 
     if (absTime - m_animalSpawnTime >= kSpawnTime * ratio)
     {
@@ -169,7 +182,7 @@ void dino::Scene::UpdatePlayerLassoCollision()
 
 void dino::Scene::RebuildEntityList()
 {
-    std::erase_if(m_animals, [](Animal animal) { return !animal.IsAlive(); });
+    std::erase_if(m_animals, [](Animal& animal) { return !animal.IsAlive(); });
 
     m_entities.clear();
 
@@ -178,6 +191,9 @@ void dino::Scene::RebuildEntityList()
 
     for (Animal& animal : m_animals)
         m_entities.push_back(&animal);
+
+    for (Tree& tree : m_trees)
+        m_entities.push_back(&tree);
 }
 
 void dino::Scene::UpdateChrono(float deltaTime)
@@ -189,6 +205,7 @@ void dino::Scene::UpdateChrono(float deltaTime)
     else
     {
         m_chrono = 0;
+        StopGame();
     }
 }
 
@@ -218,3 +235,60 @@ void dino::Scene::Draw() const
     jv::gpu::Draw(pVBuf, m_pTextureText);
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
+
+void dino::Scene::StartGame(int index)
+{
+    if (m_isGameRunning) return;
+
+    m_isGameRunning = true;
+
+    m_trees.clear();
+
+    std::erase_if(m_players, [](Player& player) { return player.IsInLobby(); });
+
+    m_Terrain.SetSeason(index);
+
+    for (Player& p : m_players )
+    {
+        p.ResetPoint();
+    }
+}
+
+void dino::Scene::StopGame()
+{
+    m_isGameRunning = false;
+
+    m_animals.clear();
+    RebuildEntityList();
+
+    SetupGame();
+}
+
+void dino::Scene::SetupGame()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (i < m_players.size()) continue;
+            
+        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+
+        m_players.emplace_back(
+            spawnPos, 0.0, jv::input::GamepadIdx(i), m_pTexturePlayer, m_pTextureText);
+
+        m_entities.emplace_back(&m_players[i]);
+    }
+
+
+    for (int i = 0; i < 4; i++)
+    {
+        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+
+        m_trees.emplace_back(spawnPos, 0.0, i, this);
+
+        m_entities.emplace_back(&m_trees[i]);
+    }
+
+    m_chrono = 10.0f;
+    m_isGameRunning = false;
+}
+

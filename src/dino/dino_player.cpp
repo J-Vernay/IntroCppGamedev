@@ -8,8 +8,8 @@
 
 
 
-dino::Player::Player(
-    Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, jv::gpu::Texture* pTextureText)
+dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx,
+    jv::gpu::Texture* pMainTex, jv::gpu::Texture* pTextureText)
     : Entity(pos, absTime), m_pTextureText(pTextureText)
 {
 
@@ -25,13 +25,14 @@ dino::Player::Player(
 
     m_timeStart = absTime;
 
-    m_pTexture = dino::LoadImageAsset("dinosaurs.bmp");
+    m_pTexture = pMainTex;
 
+    m_currentPlayerState = Lobby;
 }
 
 dino::Player::~Player()
 {
-    jv::gpu::DestroyTexture(m_pTexture);
+    
 }
 
 void dino::Player::Update(double absTime, float deltaTime)
@@ -75,6 +76,8 @@ void dino::Player::UpdatePosition(float deltaTime)
 
 void dino::Player::UpdatePlayerState(float deltaTime)
 {
+    if (m_currentPlayerState == Lobby) return;
+
     if (m_currentPlayerState == Hurt)
     {
         UpdateHurtState(deltaTime);
@@ -88,6 +91,21 @@ void dino::Player::UpdatePlayerState(float deltaTime)
     else
     {
         m_currentPlayerState = PlayerState::Idle;
+    }
+}
+
+void dino::Player::UpdateLobbyState()
+{
+    jv::input::Gamepad gamepad;
+
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad) && gamepad.start)
+    {
+        m_currentPlayerState = Idle;
+    }
+
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad) && gamepad.select)
+    {
+        m_currentPlayerState = Lobby;
     }
 }
 
@@ -114,6 +132,22 @@ void dino::Player::UpdateIndexFrame(double absTime)
 void dino::Player::UpdateSpeed(bool isRunning)
 {
     m_speedData.CurrentSpeed = isRunning ? m_speedData.SpeedRunning : m_speedData.SpeedWalking;
+}
+
+void dino::Player::RequestPause(bool& gamePaused, float deltaTime)
+{
+    jv::input::Gamepad gamepad;
+
+    if (m_timerPause > 0)
+    {
+        m_timerPause -= deltaTime;
+    }
+
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad) && gamepad.start && m_timerPause <= 0)
+    {
+        gamePaused = !gamePaused;
+        m_timerPause = 0.25f;
+    }
 }
 
 std::vector<dino::Vec2> dino::Player::UpdateLasso()
@@ -150,7 +184,6 @@ std::vector<dino::Vec2> dino::Player::UpdateLasso()
     return result;
 }
 
-
 void dino::Player::ResolveTerrainPos(Terrain& terrain)
 {
     m_pos = terrain.ClampPos(m_pos);
@@ -178,6 +211,9 @@ void dino::Player::UpdateHurtState(float deltaTime)
 
 void dino::Player::Draw() const
 {
+    if (m_currentPlayerState == Lobby)
+        return;
+
     DrawLasso();
     DrawPlayer();
     DrawScore();

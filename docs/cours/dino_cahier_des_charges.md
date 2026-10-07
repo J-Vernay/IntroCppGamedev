@@ -13,14 +13,14 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 
 - Un chronomètre de 60 secondes est affiché en haut de l'écran (centré horizontalement) et décroit. DONE
 - Plus le chronomètre est bas, plus les animaux apparaissent vite. DONE
-- En cours de partie, n'importe quel joueur peut mettre en pause avec start.
-- En pause, les animaux, joueurs, et le chronomètre, ne bougent pas.
-- Avant la première partie, les joueurs sont dans l'état de "lobby"
-  et peuvent se connecter (start) ou se déconnecter (select).
-- Un arbre de chaque saison est affiché sur le lobby ; n'importe quel joueur
-  peut en entourer un pour lancer la partie avec un terrain correspondant à cette saison.
-- Les joueurs ne peuvent se connecter/déconnecter que sur le lobby.
-  Les joueurs ne peuvent mettre en pause que quand le jeu est en cours.
+- En cours de partie, n'importe quel joueur peut mettre en pause avec start. DONE
+- En pause, les animaux, joueurs, et le chronomètre, ne bougent pas. DONE
+- Avant la première partie, les joueurs sont dans l'état de "lobby" DONE
+  et peuvent se connecter (start) ou se déconnecter (select). DONE
+- Un arbre de chaque saison est affiché sur le lobby ; n'importe quel joueur DONE
+  peut en entourer un pour lancer la partie avec un terrain correspondant à cette saison. DONE
+- Les joueurs ne peuvent se connecter/déconnecter que sur le lobby. DONE
+  Les joueurs ne peuvent mettre en pause que quand le jeu est en cours. DONE
 - Quand le chronomètre expire, on est de retour dans l'état "lobby".
   Les arbres sont translucides pendant 5 secondes et ne peuvent pas être sélectionnés.
 

@@ -11,9 +11,7 @@ class Player : public Entity
 public:
 
     Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx,
-        jv::gpu::Texture* m_pTextureText);
-
-    Player(const Player&) = delete;
+        jv::gpu::Texture* m_pTextureText, jv::gpu::Texture* pMainTex);
 
     void Update(double absTime, float deltaTime) override;
 
@@ -21,8 +19,11 @@ public:
     void UpdateDirection(float x, float y);
     void UpdatePosition(float deltaTime);
     void UpdatePlayerState(float deltaTime);
+    void UpdateLobbyState();
     void UpdateIndexFrame(double absTime);
     void UpdateSpeed(bool isRunning);
+
+    void RequestPause(bool& gamePaused,float deltaTime);
     
     std::vector<Vec2> UpdateLasso();
 
@@ -39,9 +40,21 @@ public:
         m_score += points;
     }
 
+    void ResetPoint()
+    {
+        m_score = 0;
+    }
+
     virtual void CatchByPlayer() override
     {
+        if (m_currentPlayerState == Lobby)
+            return;
         HandleHit();
+    }
+
+    bool IsInLobby()
+    {
+        return m_currentPlayerState == Lobby;
     }
 
     void HandleHit();
@@ -83,8 +96,8 @@ private:
     struct SpeedPlayerData
     {
         float CurrentSpeed = 30;
-        const float SpeedWalking = 50;
-        const float SpeedRunning = 100;
+        float SpeedWalking = 50;
+        float SpeedRunning = 100;
 
         bool IsRunning() const
         {
@@ -108,6 +121,7 @@ private:
 
     enum PlayerState
     {
+        Lobby,
         Idle,
         Walking,
         Running,
@@ -115,6 +129,7 @@ private:
     };
 
     float m_timerHit = 0;
+    float m_timerPause = 0.0f;
 
     int32_t m_playerColorIndex;
 
