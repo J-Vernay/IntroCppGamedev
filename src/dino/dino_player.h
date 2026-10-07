@@ -19,6 +19,10 @@ public:
 
     bool Pauses();
 
+    bool CheckJoin();
+
+    bool CheckLeave();
+
     void Update(double absTime, float deltaTime, Terrain& terrain) override;
 
     void UpdateTrail(
@@ -60,7 +64,8 @@ private:
     jv::gpu::Texture* m_pTexture;
     PointList m_pastPositions;
     Color m_color;
-    bool m_pauseReleased = true;
+    bool m_bPauseReleased = true;
+    bool m_bHasJoined = false;
 
     void CheckPlayerTrailOverlap(std::vector<std::pair<Vec2, Vec2>> playersLastMove);
 

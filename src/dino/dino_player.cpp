@@ -26,14 +26,52 @@ bool dino::Player::Pauses()
     if (jv::input::GetGamepad(m_gamepadIdx, input))
     {
         // Pause.
-        if (m_pauseReleased && input.start)
+        if (m_bPauseReleased && input.start)
         {
-            m_pauseReleased = false;
+            m_bPauseReleased = false;
             return true;
         }
-        else if (!m_pauseReleased && !input.start)
+        else if (!m_bPauseReleased && !input.start)
         {
-            m_pauseReleased = true;
+            m_bPauseReleased = true;
+        }
+    }
+
+    return false;
+}
+
+bool dino::Player::CheckJoin()
+{
+    // Ne pas vérifier si déjà rejoint.
+    if (m_bHasJoined)
+        return false;
+
+    jv::input::Gamepad input;
+    if (jv::input::GetGamepad(m_gamepadIdx, input))
+    {
+        if (input.start) // Rejoindre en appuyant sur start.
+        {
+            m_bHasJoined = true;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool dino::Player::CheckLeave()
+{
+    // Ne pas vérifier si pas rejoint.
+    if (!m_bHasJoined)
+        return false;
+
+    jv::input::Gamepad input;
+    if (jv::input::GetGamepad(m_gamepadIdx, input))
+    {
+        if (input.select) // Quitter en appuyant sur select.
+        {
+            m_bHasJoined = false;
+            return true;
         }
     }
 

@@ -13,14 +13,21 @@ dino::Scene::Scene() : m_terrain{24, 16}
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
     m_animalTexture = dino::LoadImageAsset("animals.bmp");
     m_playerTexture = dino::LoadImageAsset("dinosaurs.bmp");
+    m_treeTexture = dino::LoadImageAsset("terrain.bmp");
 
     m_terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
     Color colors[4] = {Color_BLUE, Color_RED, Color_YELLOW, Color_GREEN};
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         Entity& player = m_players.emplace_back(m_terrain.GenerateRandomSpawn(), 0, m_playerTexture,
             m_gamepads[i], colors[i], i);
-        m_entities.push_back(&player);
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        Tree& tree = m_trees.emplace_back(m_terrain.GenerateRandomSpawn(), i, m_treeTexture);
+        m_entities.push_back(&tree);
     }
 }
 
@@ -29,11 +36,13 @@ dino::Scene::~Scene()
     jv::gpu::DestroyTexture(m_pTextureText);
     jv::gpu::DestroyTexture(m_animalTexture);
     jv::gpu::DestroyTexture(m_playerTexture);
+    jv::gpu::DestroyTexture(m_treeTexture);
 
 }
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
+    _CheckJoinLeave();
     _CheckPause();
 
     if (m_bPause)
@@ -42,55 +51,105 @@ void dino::Scene::Update(double absTime, float deltaTime)
     m_lastDeltaTime = deltaTime;
 
     m_terrain.Update(absTime, deltaTime);
-    m_timer -= deltaTime;
+    if (m_bGameStarted) m_timer -= deltaTime;
 
     _UpdatePlayers(absTime, deltaTime);
-    _UpdateAnimals(absTime, deltaTime);
+    if (!m_bGameStarted)
+        _CheckGameStart();
     _UpdateCollisions(absTime, deltaTime);
+    _UpdateAnimals(absTime, deltaTime);
+}
+
+void dino::Scene::_StartGame(int32_t idxSeason)
+{
+    m_bGameStarted = true;
+    m_terrain.SetSeason(idxSeason);
+    _RefreshEntities();
 }
 
 void dino::Scene::_CheckPause()
 {
-    for (Player& player : m_players)
+    // Les joueurs ne peuvent pas faire pause dans le lobby.
+    if (!m_bGameStarted)
+        return;
+
+    for (Player* player : m_activePlayers)
     {
-        if (player.Pauses())
+        if (player->Pauses())
         {
             m_bPause = !m_bPause;
         }
     }
 }
 
+void dino::Scene::_CheckJoinLeave()
+{
+    // Ne pas vérifier si le jeu a déjà démarré.
+    if (m_bGameStarted)
+        return;
+
+    for (Player& player : m_players)
+    {
+        if (player.CheckJoin())
+        {
+            m_activePlayers.push_back(&player);
+            m_entities.push_back(&player);
+        }
+        if (player.CheckLeave())
+        {
+            int leavingPlayerIndex = -1;
+            for (int i = 0; i < m_activePlayers.size(); i++)
+            {
+                if (&player == m_activePlayers[i])
+                {
+                    leavingPlayerIndex = i;
+                }
+            }
+            m_activePlayers.erase(m_activePlayers.begin() + leavingPlayerIndex);
+            _RefreshEntities();
+        }
+    }
+}
+
 void dino::Scene::_UpdatePlayers(double absTime, float deltaTime)
 {
-    for (int i = 0; i < m_players.size(); i++)
+    for (int i = 0; i < m_activePlayers.size(); i++)
     {
-        m_players[i].Update(absTime, deltaTime, m_terrain);
+        m_activePlayers[i]->Update(absTime, deltaTime, m_terrain);
 
         m_playerLastMoves.clear();
         
-        for (int j = 0; j < m_players.size(); j++)
+        for (int j = 0; j < m_activePlayers.size(); j++)
         {
             if (i == j) continue;
 
             m_playerLastMoves.push_back(
-                std::pair<Vec2, Vec2>(m_players[j].GetLastPos(), m_players[j].GetPos()));
+                std::pair<Vec2, Vec2>(m_activePlayers[j]->GetLastPos(), m_activePlayers[j]->GetPos()));
         }
 
-        m_players[i].UpdateTrail(absTime, deltaTime, m_playerLastMoves);
+        m_activePlayers[i]->UpdateTrail(absTime, deltaTime, m_playerLastMoves);
         
-        std::pair<int32_t, int32_t> loop = m_players[i].CheckLoop();
+        std::pair<int32_t, int32_t> loop = m_activePlayers[i]->CheckLoop();
         if (loop.first != -1)
         {
-            _OnPlayerLoop(&m_players[i], loop.first, loop.second);
+            _OnPlayerLoop(m_activePlayers[i], loop.first, loop.second);
         }
     }
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
 {
+    // Aucun animal n'apparaît si le jeu n'a pas commencé.
+    if (!m_bGameStarted)
+        return;
+
     // Spawner un animal si besoin.
-    constexpr double kSpawnTime = 0.3;
-    if (absTime - m_animalSpawnTime >= kSpawnTime)
+    constexpr double kStartSpawnTime = 1;
+    constexpr double kEndSpawnTime = 0.1;
+    float t = 1 - m_timer / GameTime;
+    float lerpSpawnTime = (kEndSpawnTime - kStartSpawnTime) * t + kStartSpawnTime;
+
+    if (absTime - m_animalSpawnTime >= lerpSpawnTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_terrain.GenerateRandomSpawn();
@@ -111,22 +170,18 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
 
     if (animalDied)
     {
-        m_entities.clear();
-        for (Player& player : m_players)
-            m_entities.push_back(&player);
-        for (Animal& animal : m_animals)
-            m_entities.push_back(&animal);
+        _RefreshEntities();
     }
 }
 
 void dino::Scene::_UpdateCollisions(double absTime, float deltaTime)
 {
     // Les dinosaures se poussent entre eux.
-    for (int i = 0; i < m_players.size(); i++)
+    for (int i = 0; i < m_activePlayers.size(); i++)
     {
-        for (int j = i + 1; j < m_players.size(); j++)
+        for (int j = i + 1; j < m_activePlayers.size(); j++)
         {
-            m_players[i].Collide(m_players[j], m_terrain);
+            m_activePlayers[i]->Collide(*m_activePlayers[j], m_terrain);
         }
     }
 
@@ -140,13 +195,49 @@ void dino::Scene::_UpdateCollisions(double absTime, float deltaTime)
     }
 
     // Les joueurs se poussent avec les animaux.
-    for (int i = 0; i < m_players.size(); i++)
+    for (int i = 0; i < m_activePlayers.size(); i++)
     {
         for (int j = 0; j < m_animals.size(); j++)
         {
-            m_players[i].Collide(m_animals[j], m_terrain);
+            m_activePlayers[i]->Collide(m_animals[j], m_terrain);
         }
     }
+
+    // Les joueurs et les arbres se poussent entre eux.
+    if (!m_bGameStarted)
+    {
+        for (int i = 0; i < m_activePlayers.size(); i++)
+        {
+            for (int j = 0; j < m_trees.size(); j++)
+            {
+                m_activePlayers[i]->Collide(m_trees[j], m_terrain);
+            }
+        }
+    }
+}
+
+void dino::Scene::_CheckGameStart()
+{
+    for (int i = 0; i < m_trees.size(); i++)
+    {
+        if (m_trees[i].ShouldStartGame())
+        {
+            _StartGame(i);
+            return;
+        }
+    }
+}
+
+void dino::Scene::_RefreshEntities()
+{
+    m_entities.clear();
+    for (Player* player : m_activePlayers)
+        m_entities.push_back(player);
+    for (Animal& animal : m_animals)
+        m_entities.push_back(&animal);
+    if (!m_bGameStarted)
+        for (Tree& tree : m_trees)
+            m_entities.push_back(&tree);
 }
 
 void dino::Scene::_DrawTimer() const
@@ -177,14 +268,15 @@ void dino::Scene::Draw() const
     m_terrain.Draw();
 
     // Afficher les lassos.
-    for (Player const& player : m_players)
-        player.DrawTrail();
+    for (Player const* player : m_activePlayers)
+        player->DrawTrail();
 
     // Afficher les entités dans l'ordre.
     for (Entity* entity : m_entities)
         entity->Draw();
 
-    _DrawTimer();
+    if (m_bGameStarted)
+        _DrawTimer();
 
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {
