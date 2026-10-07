@@ -21,7 +21,9 @@ public:
 private:
     jv::gpu::Texture* m_pTextureText = nullptr;
     jv::gpu::Texture* m_pTextureAnimal = nullptr;
+
     float m_lastDeltaTime = 0;
+    float m_chrono = 0;
 
     Terrain m_Terrain;
 
@@ -40,6 +42,9 @@ private:
     void UpdateEntityOrderInLayer();
     void UpdatePlayerLassoCollision();
     void RebuildEntityList();
+
+    void UpdateChrono(float deltaTime);
+    void DrawChrono() const;
 };
 
 } // namespace dino

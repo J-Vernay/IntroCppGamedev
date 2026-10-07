@@ -11,8 +11,8 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 
 ## Flow du jeu
 
-- Un chronomètre de 60 secondes est affiché en haut de l'écran (centré horizontalement) et décroit.
-- Plus le chronomètre est bas, plus les animaux apparaissent vite.
+- Un chronomètre de 60 secondes est affiché en haut de l'écran (centré horizontalement) et décroit. DONE
+- Plus le chronomètre est bas, plus les animaux apparaissent vite. DONE
 - En cours de partie, n'importe quel joueur peut mettre en pause avec start.
 - En pause, les animaux, joueurs, et le chronomètre, ne bougent pas.
 - Avant la première partie, les joueurs sont dans l'état de "lobby"
@@ -26,8 +26,8 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 
 ## Scoring
 
-Quand le lasso fait une boucle, le joueur gagne 10 points par animal.
+Quand le lasso fait une boucle, le joueur gagne 10 points par animal. DONE
 
-Sur le côté gauche de l'écran, le score des 4 joueurs est affiché, chacun suivant la couleur du dinosaure.
-Ce score reste visible pendant le temps où les joueurs sont sur le lobby.
+Sur le côté gauche de l'écran, le score des 4 joueurs est affiché, chacun suivant la couleur du dinosaure. DONE
+Ce score reste visible pendant le temps où les joueurs sont sur le lobby. DONE
 

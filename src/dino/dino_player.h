@@ -10,7 +10,8 @@ class Player : public Entity
 {
 public:
 
-    Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx);
+    Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx,
+        jv::gpu::Texture* m_pTextureText);
 
     Player(const Player&) = delete;
 
@@ -33,6 +34,11 @@ public:
 
     virtual void ResolveTerrainPos(Terrain& terrain) override;
 
+    void AddPoint(int points)
+    {
+        m_score += points;
+    }
+
     virtual void CatchByPlayer() override
     {
         HandleHit();
@@ -44,6 +50,7 @@ public:
     void Draw() const override;
     void DrawLasso() const;
     void DrawPlayer() const;
+    void DrawScore() const;
 
     int GetId() const
     {
@@ -123,6 +130,10 @@ private:
     int id;
 
     std::vector<Vec2> m_lassoVector;
+
+    int m_score = 0;
+
+    jv::gpu::Texture* m_pTextureText;
 };
 
 } 

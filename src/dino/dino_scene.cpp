@@ -22,10 +22,13 @@ dino::Scene::Scene(): m_Terrain{24, 16}
         m_players.emplace_back(
             spawnPos,
             0.0,
-            jv::input::GamepadIdx(i));
+            jv::input::GamepadIdx(i),
+            m_pTextureText);    
 
         m_entities.emplace_back(&m_players[i]);
     }
+
+    m_chrono = 60.0f;
 }
 
 dino::Scene::~Scene() 
@@ -39,6 +42,8 @@ void dino::Scene::Update(double absTime, float deltaTime)
     m_lastDeltaTime = deltaTime;
 
     m_Terrain.Update(absTime, deltaTime);
+
+    UpdateChrono(deltaTime);
 
     SpawnAnimals(absTime, deltaTime);
 
@@ -57,9 +62,11 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
 void dino::Scene::SpawnAnimals(double absTime, float deltaTime)
 {
-
     constexpr double kSpawnTime = 0.3;
-    if (absTime - m_animalSpawnTime >= kSpawnTime)
+
+    float ratio = (m_chrono / 60.0f);
+
+    if (absTime - m_animalSpawnTime >= kSpawnTime * ratio)
     {
         m_animalSpawnTime = absTime;
 
@@ -134,6 +141,16 @@ void dino::Scene::UpdatePlayerLassoCollision()
         if (result.size() <= 0)
             continue;
 
+        int point = 0;
+
+        for (Animal& a : m_animals)
+        {
+            if (dino::isInside(result, {a.GetX(), a.GetY()}))
+                point += 10;
+        }
+
+        player.AddPoint(point);
+
         for (Entity* entity : m_entities)
         {
             if (entity == &player)
@@ -144,6 +161,7 @@ void dino::Scene::UpdatePlayerLassoCollision()
             if (dino::isInside(result, entityPos))
             {
                 entity->CatchByPlayer();
+                
             }
         }
     }
@@ -162,20 +180,41 @@ void dino::Scene::RebuildEntityList()
         m_entities.push_back(&animal);
 }
 
+void dino::Scene::UpdateChrono(float deltaTime)
+{
+    if (m_chrono > 0)
+    {
+        m_chrono -= deltaTime;
+    }
+    else
+    {
+        m_chrono = 0;
+    }
+}
+
+void dino::Scene::DrawChrono() const
+{
+    std::string text = std::format("Time {:04.1f}s", m_chrono);
+    std::vector<jv::gpu::Vertex> vs;
+    dino::GenVertices_Text(vs, text, Color_WHITE, Color_BLACK, Vec2{200, 0});
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Chrono", vs);
+    jv::gpu::Draw(pVBuf, m_pTextureText);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
 
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
-
+    DrawChrono();
     for (Entity* const& entity : m_entities)
         entity->Draw();
 
-    {
-        std::string text = std::format("dTime={:04.1f}ms", m_lastDeltaTime * 1000.0);
-        std::vector<jv::gpu::Vertex> vs;
-        dino::GenVertices_Text(vs, text, Color_WHITE, Color_GREY);
-        jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("dTime", vs);
-        jv::gpu::Draw(pVBuf, m_pTextureText);
-        jv::gpu::DestroyVertexBuffer(pVBuf);
-    }
+
+    std::string text = std::format("dTime={:04.1f}ms", m_lastDeltaTime * 1000.0);
+    std::vector<jv::gpu::Vertex> vs;
+    dino::GenVertices_Text(vs, text, Color_WHITE, Color_GREY);
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("dTime", vs);
+    jv::gpu::Draw(pVBuf, m_pTextureText);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
 }

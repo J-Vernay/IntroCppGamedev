@@ -4,9 +4,13 @@
 #include <dino/dino_geometry.h>
 #include <math.h>
 #include <algorithm>
+#include <string>
 
 
-dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx) : Entity(pos, absTime)
+
+dino::Player::Player(
+    Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, jv::gpu::Texture* pTextureText)
+    : Entity(pos, absTime), m_pTextureText(pTextureText)
 {
 
     m_gamepadIdx = gamepadIdx;
@@ -176,6 +180,7 @@ void dino::Player::Draw() const
 {
     DrawLasso();
     DrawPlayer();
+    DrawScore();
 }
 
 void dino::Player::DrawLasso() const
@@ -237,6 +242,26 @@ void dino::Player::DrawPlayer() const
 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Player::DrawScore() const
+{
+    std::string scoreText = std::to_string(m_score);
+
+    Vec2 pos = {10, 125 + id * 25};
+
+    std::vector<jv::gpu::Vertex> vs;
+
+    jv::util::Color colorBackground;
+    colorBackground.a = 0;
+
+    GenVertices_Text(vs, scoreText, Color_BLACK, colorBackground, Vec2{m_pos.x, m_pos.y - 40});
+
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Score", vs);
+
+    jv::gpu::Draw(pVBuf, m_pTextureText);
+
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
 
