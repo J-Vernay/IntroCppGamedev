@@ -2,18 +2,21 @@
 
 #include <dino/dino_animal.h>
 #include <dino/dino_draw_utils.h>
+#include <dino/dino_geometry.h>
+#include <iostream>
+#include <windows.h>
 #include <math.h>
 
 dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, int pindxPlayer,
-    jv::input::GamepadIdx pgamepadIdx)
+    jv::input::GamepadIdx pgamepadIdx, Color pColor)
 {
     m_gamepadIdx = pgamepadIdx;
     m_idxPlayer = pindxPlayer;
     m_pos = pos;
-    m_kind = jv::util::RandomInt32(0, 7);
+    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
     m_pTexture = texture;
-    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+    m_color = pColor;
 }
 
 void dino::Player::Update(double absTime, float deltaTime)
@@ -53,23 +56,47 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     if (m_timerStun <= 0)
     {
-        m_pos.x += m_dir.x * speed * deltaTime;
-        m_pos.y += m_dir.y * speed * deltaTime;
+        m_pos.x += dir.x * speed * deltaTime;
+        m_pos.y += dir.y * speed * deltaTime;
+
+       Trail(deltaTime);
     }
     else
     {
         m_timerStun -= deltaTime;
     }
 
-
     double aliveTime = absTime - m_timeStart;
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 }
 
-void dino::Player::CheckTerrain(Terrain const& m_Terrain)
+void dino::Player::Trail(float deltaTime)
 {
-    m_pos = m_Terrain.ClampPos(m_pos);
+    if(!m_points.empty() && m_points.back().x == m_pos.x && m_points.back().y == m_pos.y) return;
+
+    if (m_points.size() >= 3)
+    {
+        Vec2 lastPoint = m_points.back();
+
+        for (size_t i = 0; i + 2 < m_points.size(); i++)
+        {
+            if (dino::IntersectSegment(m_points[i], m_points[i + 1], lastPoint, m_pos))
+            {
+                m_points.erase(m_points.begin() + i, m_points.end() - 1);
+                break;
+            }
+        }
+    }
+
+    m_points.push_back(m_pos);
+
+    m_timerTrail += deltaTime;
+    if (m_points.size() >= 120)
+    {
+        OutputDebugStringA("hello");
+        m_points.erase(m_points.begin());
+    }
 }
 
 void dino::Player::Draw() const
@@ -100,6 +127,12 @@ void dino::Player::Draw() const
         u1 = 0 + 24 * idxFrame;
         u2 = 24 + 24 * idxFrame;
     }
+
+    std::vector<jv::gpu::Vertex> vsTrail;
+    dino::GenVertices_Polyline(vsTrail, m_points, 10, m_color);
+    jv::gpu::VertexBuffer* pVBufTrail = jv::gpu::CreateVertexBuffer("Trail", vsTrail);
+    jv::gpu::Draw(pVBufTrail, NULL);
+    jv::gpu::DestroyVertexBuffer(pVBufTrail);
 
     if (m_dir.x < 0)
         std::swap(u1, u2);

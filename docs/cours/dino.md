@@ -127,19 +127,18 @@ C) Comment détecter si deux cercles à des positions données sont en collision
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> ...
+> appliquer un deplacement au deux cercles pour quils seloignent, mais cela ne marche pas quand ils sont l'un sur lautrescar sa creer une division par 09 
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
 F) Implémenter : "Les animaux se repoussent entre eux, et aussi les animaux et les dinosaures entre eux."
 Pourquoi y a-t-il duplication de code ?
 
-> ...
-
+> car ce sont deux classes tres similaires
 G) Quelle fonctionnalité du C++ permet de dédupliquer la logique commune entre `dino::Player` et `dino::Animal` ?
 L'appliquer dans la base de code.
 
-> ...
+> l'heritage
 
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.

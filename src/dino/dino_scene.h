@@ -25,10 +25,12 @@ private:
 
     Terrain m_Terrain;
 
+    std::vector<Movable*> m_movable;
     std::deque<Animal> m_animals;
     std::deque<Player> m_players;
     double m_animalSpawnTime = 0;
 
+    void _UpdatePlayer(double absTime, float deltaTime);
     void _UpdateAnimals(double absTime, float deltaTime);
 };
 
