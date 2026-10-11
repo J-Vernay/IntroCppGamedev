@@ -4,6 +4,7 @@
 
 #include <format>
 #include <algorithm>
+#include "dino_geometry.h"
 
 dino::Scene::Scene()
     : m_Terrain{24, 16},
@@ -49,6 +50,8 @@ void dino::Scene::Update(double absTime, float deltaTime)
         e->HandleTerrainClamp(&m_Terrain);
     }
 
+    HandleLassoColisions();
+
     SortEntitys();
 }
 
@@ -71,6 +74,32 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         animal.Update(absTime, deltaTime);
         animal.HandlePhysics(m_entitys);
+    }
+}
+
+void dino::Scene::HandleLassoColisions()
+{
+    for (int i = 0; i < sizeof(m_players) / sizeof(m_players[0]); i++)
+    {
+        std::vector<Vec2>* lassoPoints = m_players[i].GetLassoPoints();
+
+        for (int j = 0; j < sizeof(m_players) / sizeof(m_players[0]); j++)
+        {
+            if (i == j)
+                continue;
+            Vec2 pos = m_players[j].GetPos();
+            Vec2 lastPos = m_players[j].GetLastPos();
+            if (lastPos.x == pos.x && lastPos.y == pos.y)
+                continue;
+            for (int h = lassoPoints->size() - 4; h > 0; h--)
+            {
+                if (dino::IntersectSegment(
+                        lastPos, pos, lassoPoints->at(h), lassoPoints->at(h + 1)))
+                {
+                    m_players[i].HandleLassoOpponentCollision(h);
+                }
+            }
+        }
     }
 }
 

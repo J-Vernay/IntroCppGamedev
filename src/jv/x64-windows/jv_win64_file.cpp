@@ -1,5 +1,5 @@
 ﻿#include <jv/jv.h>
-
+#include <string>
 #include <Windows.h>
 
 std::vector<unsigned char> jv::util::LoadAsset(std::string_view name)

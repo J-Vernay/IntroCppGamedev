@@ -21,9 +21,16 @@ public:
 
     void TakeDamage(double absTime);
 
-    
+    std::vector<Vec2>* GetLassoPoints();
 
     void HandleTerrainClamp(dino::Terrain* terrain) override;
+
+    void HandleLasso();
+
+    Vec2 GetPos();
+    Vec2 GetLastPos();
+
+    void HandleLassoOpponentCollision(int n);
 
 
     ~Player();

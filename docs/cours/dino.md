@@ -185,14 +185,14 @@ Quelle méthode de std::vector utiliser ?
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?
 
-‍...
+‍Avec 120 segments par lasso, 120*4 = 480 calculs par frame
 
 D) Implémenter : "Quand un joueur passe par dessus le lasso d'un autre joueur, le début du lasso est détruit jusqu'à l'intersection."
 Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' interagir entre elles.
 
 E) Comment détecter qu'une position est à l'intérieur d'un contour fermé définis par des segments ?
 
-‍...
+‍On envoie un rayon dans une direction, si le rayon touche un nombre de segments impair, c'est qu'il est a l'intérieur.
 
 F) Implémenter via une logique commune, comme mentionné dans (3.H) : 
 - Quand un dinosaure est dans une boucle de lasso, il se prend des dégâts (= immobilisation 3 secondes + animation).

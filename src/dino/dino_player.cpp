@@ -3,6 +3,8 @@
 #include <dino/dino_player.h>
 #include <dino/dino_geometry.h>
 #include <math.h>
+#include <vector>
+
 
 dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx  gamepadIdx, int color) : dino::Entity(pos, absTime)
 {
@@ -31,12 +33,8 @@ void dino::Player::Update(double absTime, float deltaTime)
     UpdateInputs(absTime, deltaTime);
     UpdateFrameRate(absTime);
 
-    m_lassoPoints.push_back(m_pos);
-    if (m_lassoPoints.size() > 120)
-    {
-        m_lassoPoints.erase(m_lassoPoints.begin());
-    }
-
+    HandleLasso();
+    
     DetectLassoColision();
 
     double aliveTime = absTime - m_timeStart;
@@ -48,6 +46,26 @@ void dino::Player::HandleTerrainClamp(dino::Terrain* terrain)
 {
     m_pos = terrain->ClampPos(m_pos);
 }
+
+void dino::Player::HandleLasso()
+{
+    m_lassoPoints.push_back(m_pos);
+    if (m_lassoPoints.size() > 120)
+    {
+        m_lassoPoints.erase(m_lassoPoints.begin());
+    }
+}
+
+
+dino::Vec2 dino::Player::GetPos()
+{
+    return m_pos;
+}
+dino::Vec2 dino::Player::GetLastPos()
+{
+    return m_lastPos;
+}
+
 
 void dino::Player::UpdateFrameRate(double absTime)
 {
@@ -116,10 +134,10 @@ void dino::Player::DetectLassoColision()
 {
     if (m_lastPos.x == m_pos.x && m_lastPos.y == m_pos.y)
         return;
-    for (int i = 0; i < m_lassoPoints.size() - 1; i++)
+    for (int i = m_lassoPoints.size() - 4; i > 0; i--)
     {
         if (dino::IntersectSegment(m_lastPos, m_pos, m_lassoPoints.at(i), m_lassoPoints.at(i + 1))) {
-            HandleLassoColision(i);
+            HandleLassoColision(m_lassoPoints.size() - i);
             return;
         }
     }
@@ -130,13 +148,21 @@ void dino::Player::HandleLassoColision(int n)
     m_lassoPoints.erase(m_lassoPoints.end() - n, m_lassoPoints.end());
 }
 
-
+void dino::Player::HandleLassoOpponentCollision(int n)
+{
+    m_lassoPoints.erase(m_lassoPoints.begin(), m_lassoPoints.begin() + n);
+}
 
 void dino::Player::TakeDamage(double absTime)
 {
     m_state = damage;
     m_lastDamageTime = absTime;
     m_idxFrame = int32_t(absTime * 8) % 3;
+}
+
+std::vector<dino::Vec2>* dino::Player::GetLassoPoints()
+{
+    return &m_lassoPoints;
 }
 
 void dino::Player::Draw() const

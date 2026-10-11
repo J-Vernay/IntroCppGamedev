@@ -35,6 +35,8 @@ private:
     double m_animalSpawnTime = 0;
 
     void _UpdateAnimals(double absTime, float deltaTime);
+
+    void HandleLassoColisions();
 };
 
 } // namespace dino
