@@ -22,7 +22,7 @@ et à aller chercher les réponses proactivement.
 
 ## Examen papier (30%)
 
-Vous réaliserez un examen sur papier (date à confirmer).
+Vous réaliserez un examen sur papier le mercredi 14 octobre 2026.
 Cet examen reprend ce qui a été vu le long du cours,
 que ce soit dans le code écrit en cours (dans la branche VERNAY_Julien sur GitHub),
 dans les questions des exercices, et dans les notes de cours (en PDF dans le dépôt).
