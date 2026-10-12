@@ -29,6 +29,11 @@ void dino::Animal::HandleTerrainClamp(dino::Terrain* terrain)
     }
 }
 
+void dino::Animal::HandleCapture()
+{
+    isAlive = false;
+}
+
 void dino::Animal::Update(double absTime, float deltaTime)
 {
     float speed = 30;

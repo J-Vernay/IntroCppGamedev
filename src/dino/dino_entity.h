@@ -37,6 +37,12 @@ public:
 
     virtual void HandleTerrainClamp(dino::Terrain* terrain) = 0;
 
+    int RayCastCollisionCheck(std::vector<Vec2> lassoPoints, int startIndex);
+
+    virtual void HandleCapture() = 0;
+
+    bool isAlive = true;
+
 protected:
     Vec2 m_pos = {0, 0};
     double m_timeStart = 0;

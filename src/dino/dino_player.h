@@ -25,12 +25,15 @@ public:
 
     void HandleTerrainClamp(dino::Terrain* terrain) override;
 
+    void HandleCapture() override;
+
     void HandleLasso();
 
     Vec2 GetPos();
     Vec2 GetLastPos();
 
     void HandleLassoOpponentCollision(int n);
+    void HandleLassoColision(int n);
 
 
     ~Player();
@@ -43,7 +46,6 @@ private:
     void DrawLasso() const;
 
     void DetectLassoColision();
-    void HandleLassoColision(int n);
 
     enum playerState
     {
@@ -69,6 +71,7 @@ private:
     double m_stunDuration;
     int32_t m_kind;
     jv::input::GamepadIdx m_gamepad;
+    bool hasTookDamage = false;
 };
 
 } // namespace dino

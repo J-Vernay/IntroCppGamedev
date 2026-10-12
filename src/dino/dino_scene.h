@@ -37,6 +37,10 @@ private:
     void _UpdateAnimals(double absTime, float deltaTime);
 
     void HandleLassoColisions();
+
+    void CheckEntitysInLoop(std::vector<Vec2> lassoPoints, int startIndex);
+
+    void CleanEntitys();
 };
 
 } // namespace dino

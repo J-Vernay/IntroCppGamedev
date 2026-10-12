@@ -21,6 +21,7 @@ public:
     Animal(const Animal&) = delete;
 
     void HandleTerrainClamp(dino::Terrain* terrain) override;
+    void HandleCapture() override;
 
 private:
     int32_t m_kind;

@@ -35,7 +35,13 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     HandleLasso();
     
-    DetectLassoColision();
+    //DetectLassoColision();
+
+    if (hasTookDamage)
+    {
+        hasTookDamage = false;
+        TakeDamage(absTime);
+    }
 
     double aliveTime = absTime - m_timeStart;
     if (aliveTime < 1)
@@ -46,6 +52,12 @@ void dino::Player::HandleTerrainClamp(dino::Terrain* terrain)
 {
     m_pos = terrain->ClampPos(m_pos);
 }
+
+void dino::Player::HandleCapture()
+{
+    hasTookDamage = true;
+}
+
 
 void dino::Player::HandleLasso()
 {
@@ -89,7 +101,7 @@ void dino::Player::UpdateFrameRate(double absTime)
 
 void dino::Player::UpdateInputs(double absTime, float deltaTime)
 {
-    float speed = 30;
+    float speed = 60;
 
     jv::input::Gamepad gamepad;
 
@@ -150,7 +162,7 @@ void dino::Player::HandleLassoColision(int n)
 
 void dino::Player::HandleLassoOpponentCollision(int n)
 {
-    m_lassoPoints.erase(m_lassoPoints.begin(), m_lassoPoints.begin() + n);
+   m_lassoPoints.erase(m_lassoPoints.begin(), m_lassoPoints.begin() + n);
 }
 
 void dino::Player::TakeDamage(double absTime)
