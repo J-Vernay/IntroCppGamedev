@@ -21,6 +21,11 @@ bool dino::Movable::OrderByPosY(Movable const* a, Movable const* b)
     return a->m_pos.y < b->m_pos.y;
 }
 
+dino::Vec2 dino::Movable::GetPos()
+{
+    return m_pos;
+}
+
 void dino::Movable::CheckTerrain(Terrain const& m_Terrain)
 {
     Vec2 oldPos = m_pos;

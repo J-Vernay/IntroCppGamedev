@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include <dino/dino_main.h>
-#include <dino/dino_animal.h>
-#include <dino/dino_terrain.h>
-#include <dino/dino_player.h>
 #include <deque>
+#include <dino/dino_animal.h>
+#include <dino/dino_main.h>
+#include <dino/dino_player.h>
+#include <dino/dino_terrain.h>
 
 namespace dino
 {
@@ -16,6 +16,7 @@ public:
     ~Scene();
     void Update(double absTime, float deltaTime);
     void Draw() const;
+
 
 private:
     jv::gpu::Texture* m_pTextureText = nullptr;
@@ -30,8 +31,11 @@ private:
     std::deque<Player> m_players;
     double m_animalSpawnTime = 0;
 
+    
     void _UpdatePlayer(double absTime, float deltaTime);
+    void CheckLoop(Player& player);
     void _UpdateAnimals(double absTime, float deltaTime);
 };
+
 
 } // namespace dino

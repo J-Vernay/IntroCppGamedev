@@ -69,35 +69,28 @@ void dino::Player::Update(double absTime, float deltaTime)
     double aliveTime = absTime - m_timeStart;
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
-}
 
-void dino::Player::Trail(float deltaTime)
-{
-    if(!m_points.empty() && m_points.back().x == m_pos.x && m_points.back().y == m_pos.y) return;
+    m_timer += deltaTime;
 
-    if (m_points.size() >= 3)
+    while (m_points.size() > 120)
     {
-        Vec2 lastPoint = m_points.back();
-
-        for (size_t i = 0; i + 2 < m_points.size(); i++)
-        {
-            if (dino::IntersectSegment(m_points[i], m_points[i + 1], lastPoint, m_pos))
-            {
-                m_points.erase(m_points.begin() + i, m_points.end() - 1);
-                break;
-            }
-        }
-    }
-
-    m_points.push_back(m_pos);
-
-    m_timerTrail += deltaTime;
-    if (m_points.size() >= 120)
-    {
-        OutputDebugStringA("hello");
         m_points.erase(m_points.begin());
     }
 }
+
+void dino::Player::TakeDamage()
+{
+    m_timerStun = 3;
+}
+
+
+void dino::Player::Trail(float deltaTime)
+{
+    if (!m_points.empty() && m_points.back().x == m_pos.x && m_points.back().y == m_pos.y)
+        return;
+    m_points.push_back(m_pos);
+} 
+
 
 void dino::Player::Draw() const
 {
@@ -151,4 +144,26 @@ void dino::Player::Draw() const
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+std::vector<dino::Vec2> dino::Player::CheckIfLoop()
+{
+    if (m_points.size() >= 4)
+    {
+        Vec2 lastPoint = m_points[m_points.size() - 1];
+        Vec2 lastToLastPoint = m_points[m_points.size() - 2];
+
+        for (size_t i = 0; i + 3 < m_points.size(); i++)
+        {
+            if (dino::IntersectSegment(m_points[i], m_points[i + 1], lastToLastPoint, lastPoint))
+            {
+                std::vector<Vec2> pointBoucle(m_points.begin() + i, m_points.end() - 1);
+                m_points.erase(m_points.begin() + i, m_points.end() - 1);
+                return pointBoucle;
+            }
+        }
+    }
+
+    return {};
+
 }

@@ -1,9 +1,10 @@
 ﻿
-#include <dino/dino_draw_utils.h>
-#include <dino/dino_scene.h>
 #include <algorithm>
-#include <format>
+#include <dino/dino_draw_utils.h>
 #include <dino/dino_geometry.h>
+#include <dino/dino_scene.h>
+#include <format>
+#include <iostream>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
@@ -33,6 +34,12 @@ dino::Scene::~Scene()
 void dino::Scene::Update(double absTime, float deltaTime)
 {
     m_lastDeltaTime = deltaTime;
+    m_movable.clear();
+
+    for (Animal& animal : m_animals)
+    {
+        m_movable.push_back(&animal);
+    }
 
     m_Terrain.Update(absTime, deltaTime);
 
@@ -40,36 +47,33 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     _UpdatePlayer(absTime, deltaTime);
 
-    for (Animal& animal : m_animals)
-    {
-        m_movable.push_back(&animal);
-    }
-
-    
     std::sort(m_movable.begin(), m_movable.end(), Movable::OrderByPosY);
 }
 
 void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
 {
 
-    for (Player& player : m_players)
+    for (size_t i = 0; i < m_players.size(); i++)
     {
-        player.Update(absTime, deltaTime);
-        player.CheckTerrain(m_Terrain);
+        Player& player = m_players[i];
+        m_movable.push_back(&player);
+
     }
 
-    for (int i = 0; i < m_players.size(); ++i)
-        for (int j = i + 1; j < m_players.size(); ++j)
-            Movable::ResolveCollision(m_players[i], m_players[j]);
-
-    for (int i = 0; i < m_players.size(); ++i)
-        for (int j = 0; j < m_animals.size(); ++j)
-            Movable::ResolveCollision(m_players[i], m_animals[j]);
-
-    for (size_t p = 0; p < m_players.size(); p++)
+    for (size_t i = 0; i < m_players.size(); i++)
     {
-        Player& player = m_players[p];
-        m_movable.push_back(&player);
+        Player& player = m_players[i];
+        
+        player.Update(absTime, deltaTime);
+        player.CheckTerrain(m_Terrain);
+        CheckLoop(player);
+
+        for (int j = i + 1; j < m_players.size(); ++j)
+            Movable::ResolveCollision(player, m_players[j]);
+
+        for (int j = 0; j < m_animals.size(); ++j)
+            Movable::ResolveCollision(player, m_animals[j]);
+
 
         if (player.m_points.size() < 2)
             continue;
@@ -77,21 +81,60 @@ void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
         Vec2 last = player.m_points.back();
         Vec2 lastToLast = player.m_points[player.m_points.size() - 2];
 
-        for (size_t i = 0; i < m_players.size(); i++)
+        for (size_t y = 0; y < m_players.size(); y++)
         {
-            if (i == p)
+            if (y == i)
                 continue;
 
-            auto& pts = m_players[i].m_points;
+            auto& pts = m_players[y].m_points;
 
-            for (size_t y = 0; y + 1 < pts.size(); y++)
+            for (size_t x = 0; x + 1 < pts.size(); x++)
             {
-                if (dino::IntersectSegment(lastToLast, last, pts[y], pts[y + 1]))
+                if (dino::IntersectSegment(lastToLast, last, pts[x], pts[x + 1]))
                 {
-                    pts.erase(pts.begin(), pts.begin() + y + 1);
+                    pts.erase(pts.begin(), pts.begin() + x + 1);
                     break;
                 }
             }
+        }
+    }
+}
+
+void dino::Scene::CheckLoop(Player& player)
+{
+    Vec2 vecZero = Vec2(0, 0);
+
+    std::vector<dino::Vec2> temp_point = player.CheckIfLoop();
+    int size = temp_point.size();
+    if (temp_point.size() > 0)
+    {
+        for (size_t i = m_movable.size(); i >0 ; i--)
+        {
+            int counter = 0;
+            for (size_t y = 0; y < temp_point.size() - 1; y++)
+            {
+                if (dino::IntersectSegment(
+                        temp_point[y], temp_point[y + 1], m_movable[i-1]->GetPos(), vecZero))
+                {
+                    ++counter;
+                }
+            }
+
+            if (counter % 2 == 0)
+                continue;
+
+            Movable* target = m_movable[i-1];
+
+            std::erase_if(m_animals, [&](const Animal& a) { return &a == target; });
+
+            for (Player& playerCop : m_players)
+            {
+                if (target == &playerCop && &playerCop != &player)
+                {
+                    playerCop.TakeDamage();
+                }
+            }
+            std::erase(m_movable, target);
         }
     }
 }

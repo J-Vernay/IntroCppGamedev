@@ -13,7 +13,7 @@ namespace dino {
 
 		/// Affiche l'animal
 		virtual void Draw() const = 0;
-
+        dino::Vec2 GetPos();
 	    void CheckTerrain(Terrain const& m_Terrain);
 
 		

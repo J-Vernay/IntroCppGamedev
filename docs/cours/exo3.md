@@ -34,7 +34,8 @@ Quel(s) fichier(s) apparait(ssent) ?
 
 Dans la barre de menu de Visual Studio :
 - Cliquer sur "Affichage / View" puis "Terminal"
-- Entrer la commande `lib /list .\x64-windows\Debug\JV.lib | findstr obj`
+- Entrer la commande `lib /list .\x64-windows\Debug\JV.lib | 
+- str obj`
 
 E) Que contient le fichier `JV.lib` ?
 
