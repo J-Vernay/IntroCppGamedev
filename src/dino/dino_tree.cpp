@@ -1,7 +1,8 @@
 ﻿#include <dino/dino_tree.h>
 
-dino::Tree::Tree(Vec2 pos, int32_t kind, jv::gpu::Texture* texture) : Entity(pos)
+dino::Tree::Tree(Vec2 pos, double absTime, int32_t kind, jv::gpu::Texture* texture) : Entity(pos)
 {
+    m_timeStart = absTime;
     m_kind = kind;
     m_pTexture = texture;
 }
@@ -12,6 +13,9 @@ dino::Tree::~Tree()
 
 void dino::Tree::Update(double absTime, float deltaTime, Terrain& terrain)
 {
+    double aliveTime = absTime - m_timeStart;
+    if (aliveTime < InactiveTime)
+        m_alpha = uint8_t(UINT8_MAX * (aliveTime / InactiveTime));
 }
 
 void dino::Tree::Draw() const
@@ -20,6 +24,7 @@ void dino::Tree::Draw() const
     float u1 = 48 + 80 * m_kind, u2 = 80 + 80 * m_kind, v1 = 16, v2 = 64;
 
     jv::util::Color color = Color_WHITE;
+    color.a = m_alpha;
 
     std::vector<jv::gpu::Vertex> vs;
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 48}, Vec2{u1, v1}, color);
@@ -34,14 +39,26 @@ void dino::Tree::Draw() const
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
 
-void dino::Tree::OnCaughtInLoop()
+int32_t dino::Tree::OnCaughtInLoop(float absTime)
 {
+    double aliveTime = absTime - m_timeStart;
+    if (aliveTime < InactiveTime)
+        return 0;
     m_bShouldDie = true;
+
+    return 0;
+}
+
+void dino::Tree::ResetTime(float absTime)
+{
+    m_timeStart = absTime;
 }
 
 bool dino::Tree::ShouldStartGame()
 {
-    return m_bShouldDie;
+    bool startGame = m_bShouldDie;
+    m_bShouldDie = false;
+    return startGame;
 }
 
 void dino::Tree::OnOutsideTerrain()

@@ -24,7 +24,7 @@ public:
 
     Vec2 GetPos() const;
     Vec2 GetLastPos() const;
-    virtual void OnCaughtInLoop() = 0;
+    virtual int32_t OnCaughtInLoop(float absTime) = 0;
     bool m_bCaughtInLoop = false;
     bool m_bShouldDie = false;
 

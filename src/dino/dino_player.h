@@ -32,7 +32,7 @@ public:
 
     void DrawTrail() const;
 
-    void OnCaughtInLoop() override;
+    int32_t OnCaughtInLoop(float absTime) override;
 
     /// Détruit les ressources associées au joueur.
     ~Player();
@@ -42,6 +42,10 @@ public:
     PointList GetTrail();
 
     void CutLoop(int32_t loopPoint1, int32_t loopPoint2);
+
+    Color GetColor() const;
+
+    int32_t m_score = 0;
 
 private:
     enum State

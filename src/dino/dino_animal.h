@@ -20,12 +20,13 @@ public:
     /// Affiche l'animal
     void Draw() const override;
 
-    void OnCaughtInLoop() override;
+    int32_t OnCaughtInLoop(float absTime) override;
 
     /// Détruit les ressources associées à l'animal.
     ~Animal();
 
 private:
+    static constexpr int32_t OnCaughtScore = 10;
     double m_timeStart;
     uint8_t m_alpha = 0;
     Vec2 m_dir;

@@ -42,8 +42,9 @@ private:
 
     std::vector<std::pair<Vec2, Vec2>> m_playerLastMoves;
 
-    static constexpr float GameTime = 60;
-    float m_timer = GameTime;
+    static constexpr int ScorePerAnimal = 10;
+    static constexpr float GameDuration = 60;
+    float m_timer;
     bool m_bPause = false;
     bool m_bGameStarted = false;
 
@@ -60,10 +61,12 @@ private:
     void _UpdatePlayers(double absTime, float deltaTime);
     void _UpdateAnimals(double absTime, float deltaTime);
     void _UpdateCollisions(double absTime, float deltaTime);
+    void _UpdateTrees(double absTime, float deltaTime);
     void _CheckGameStart();
     void _RefreshEntities();
     void _DrawTimer() const;
-    void _OnPlayerLoop(Player* pPlayer, int32_t start, int32_t end);
+    void _DrawScoreboard() const;
+    void _OnPlayerLoop(Player* pPlayer, int32_t start, int32_t end, float absTime);
 };
 
 } // namespace dino

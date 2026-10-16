@@ -249,10 +249,12 @@ void dino::Player::DrawTrail() const
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
 
-void dino::Player::OnCaughtInLoop()
+int32_t dino::Player::OnCaughtInLoop(float absTime)
 {
     m_state = HURT;
     m_hurtTimer = 3;
+
+    return 0;
 }
 
 std::pair<int32_t, int32_t> dino::Player::CheckLoop()
@@ -291,6 +293,11 @@ void dino::Player::CutLoop(int32_t loopPoint1, int32_t loopPoint2)
     m_pastPositions.erase(
         m_pastPositions.begin() + loopPoint1,
         m_pastPositions.begin() + loopPoint2);
+}
+
+jv::util::Color dino::Player::GetColor() const
+{
+    return m_color;
 }
 
 void dino::Player::CheckPlayerTrailOverlap(std::vector<std::pair<Vec2, Vec2>> playersLastMove)

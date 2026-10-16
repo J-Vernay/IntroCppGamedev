@@ -21,7 +21,7 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
   peut en entourer un pour lancer la partie avec un terrain correspondant à cette saison.
 ✅ Les joueurs ne peuvent se connecter/déconnecter que sur le lobby.
   Les joueurs ne peuvent mettre en pause que quand le jeu est en cours.
-- Quand le chronomètre expire, on est de retour dans l'état "lobby".
+✅ Quand le chronomètre expire, on est de retour dans l'état "lobby".
   Les arbres sont translucides pendant 5 secondes et ne peuvent pas être sélectionnés.
 
 ## Scoring

@@ -74,9 +74,11 @@ void dino::Animal::Draw() const
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
 
-void dino::Animal::OnCaughtInLoop()
+int32_t dino::Animal::OnCaughtInLoop(float absTime)
 {
     m_bShouldDie = true;
+
+    return OnCaughtScore;
 }
 
 void dino::Animal::OnOutsideTerrain()

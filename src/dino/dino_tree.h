@@ -12,7 +12,7 @@ class Tree : public Entity
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Tree(Vec2 pos, int32_t kind, jv::gpu::Texture* texture);
+    Tree(Vec2 pos, double absTime, int32_t kind, jv::gpu::Texture* texture);
 
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime, Terrain& terrain) override;
@@ -20,7 +20,9 @@ public:
     /// Affiche l'animal
     void Draw() const override;
 
-    void OnCaughtInLoop() override;
+    int32_t OnCaughtInLoop(float absTime) override;
+
+    void ResetTime(float absTime);
 
     bool ShouldStartGame();
 
@@ -28,6 +30,9 @@ public:
     ~Tree();
 
 private:
+    static constexpr float InactiveTime = 5;
+    double m_timeStart;
+    uint8_t m_alpha = 0;
     int32_t m_kind;
     jv::gpu::Texture* m_pTexture;
 

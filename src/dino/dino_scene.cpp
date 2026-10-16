@@ -14,6 +14,7 @@ dino::Scene::Scene() : m_terrain{24, 16}
     m_animalTexture = dino::LoadImageAsset("animals.bmp");
     m_playerTexture = dino::LoadImageAsset("dinosaurs.bmp");
     m_treeTexture = dino::LoadImageAsset("terrain.bmp");
+    m_timer = GameDuration;
 
     m_terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
@@ -26,7 +27,7 @@ dino::Scene::Scene() : m_terrain{24, 16}
 
     for (int i = 0; i < 4; i++)
     {
-        Tree& tree = m_trees.emplace_back(m_terrain.GenerateRandomSpawn(), i, m_treeTexture);
+        Tree& tree = m_trees.emplace_back(m_terrain.GenerateRandomSpawn(), 0, i, m_treeTexture);
         m_entities.push_back(&tree);
     }
 }
@@ -54,15 +55,40 @@ void dino::Scene::Update(double absTime, float deltaTime)
     if (m_bGameStarted) m_timer -= deltaTime;
 
     _UpdatePlayers(absTime, deltaTime);
+
     if (!m_bGameStarted)
+    {
+        _UpdateTrees(absTime, deltaTime);
         _CheckGameStart();
+    }
+    else
+    {
+        _UpdateAnimals(absTime, deltaTime);
+    }
+
     _UpdateCollisions(absTime, deltaTime);
-    _UpdateAnimals(absTime, deltaTime);
+
+    if (m_bGameStarted && m_timer <= 0)
+    {
+        // Return to lobby.
+        m_bGameStarted = false;
+        for (Tree& tree : m_trees)
+        {
+            tree.ResetTime(absTime);
+        }
+        _RefreshEntities();
+    }
 }
 
 void dino::Scene::_StartGame(int32_t idxSeason)
 {
     m_bGameStarted = true;
+    m_timer = GameDuration;
+    m_animals.clear();
+    for (Player* player : m_activePlayers)
+    {
+        player->m_score = 0;
+    }
     m_terrain.SetSeason(idxSeason);
     _RefreshEntities();
 }
@@ -132,7 +158,7 @@ void dino::Scene::_UpdatePlayers(double absTime, float deltaTime)
         std::pair<int32_t, int32_t> loop = m_activePlayers[i]->CheckLoop();
         if (loop.first != -1)
         {
-            _OnPlayerLoop(m_activePlayers[i], loop.first, loop.second);
+            _OnPlayerLoop(m_activePlayers[i], loop.first, loop.second, absTime);
         }
     }
 }
@@ -146,7 +172,7 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     // Spawner un animal si besoin.
     constexpr double kStartSpawnTime = 1;
     constexpr double kEndSpawnTime = 0.1;
-    float t = 1 - m_timer / GameTime;
+    float t = 1 - m_timer / GameDuration;
     float lerpSpawnTime = (kEndSpawnTime - kStartSpawnTime) * t + kStartSpawnTime;
 
     if (absTime - m_animalSpawnTime >= lerpSpawnTime)
@@ -185,27 +211,29 @@ void dino::Scene::_UpdateCollisions(double absTime, float deltaTime)
         }
     }
 
-    // Les animaux se poussent entre eux.
-    for (int i = 0; i < m_animals.size(); i++)
+    if (m_bGameStarted)
     {
-        for (int j = i + 1; j < m_animals.size(); j++)
+        // Les animaux se poussent entre eux.
+        for (int i = 0; i < m_animals.size(); i++)
         {
-            m_animals[i].Collide(m_animals[j], m_terrain);
+            for (int j = i + 1; j < m_animals.size(); j++)
+            {
+                m_animals[i].Collide(m_animals[j], m_terrain);
+            }
+        }
+
+        // Les joueurs se poussent avec les animaux.
+        for (int i = 0; i < m_activePlayers.size(); i++)
+        {
+            for (int j = 0; j < m_animals.size(); j++)
+            {
+                m_activePlayers[i]->Collide(m_animals[j], m_terrain);
+            }
         }
     }
-
-    // Les joueurs se poussent avec les animaux.
-    for (int i = 0; i < m_activePlayers.size(); i++)
+    else
     {
-        for (int j = 0; j < m_animals.size(); j++)
-        {
-            m_activePlayers[i]->Collide(m_animals[j], m_terrain);
-        }
-    }
-
-    // Les joueurs et les arbres se poussent entre eux.
-    if (!m_bGameStarted)
-    {
+        // Les joueurs et les arbres se poussent entre eux.
         for (int i = 0; i < m_activePlayers.size(); i++)
         {
             for (int j = 0; j < m_trees.size(); j++)
@@ -213,6 +241,23 @@ void dino::Scene::_UpdateCollisions(double absTime, float deltaTime)
                 m_activePlayers[i]->Collide(m_trees[j], m_terrain);
             }
         }
+
+        // Les arbres se poussent entre eux.
+        for (int i = 0; i < m_trees.size(); i++)
+        {
+            for (int j = i + 1; j < m_trees.size(); j++)
+            {
+                m_trees[i].Collide(m_trees[j], m_terrain);
+            }
+        }
+    }
+}
+
+void dino::Scene::_UpdateTrees(double absTime, float deltaTime)
+{
+    for (Tree& tree : m_trees)
+    {
+        tree.Update(absTime, deltaTime, m_terrain);
     }
 }
 
@@ -231,11 +276,14 @@ void dino::Scene::_CheckGameStart()
 void dino::Scene::_RefreshEntities()
 {
     m_entities.clear();
+
     for (Player* player : m_activePlayers)
         m_entities.push_back(player);
-    for (Animal& animal : m_animals)
-        m_entities.push_back(&animal);
-    if (!m_bGameStarted)
+
+    if (m_bGameStarted)
+        for (Animal& animal : m_animals)
+            m_entities.push_back(&animal);
+    else
         for (Tree& tree : m_trees)
             m_entities.push_back(&tree);
 }
@@ -255,6 +303,28 @@ void dino::Scene::_DrawTimer() const
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Timer", vs);
     jv::gpu::Draw(pVBuf, m_pTextureText, {{0, 0}, 0, {renderScale, renderScale}});
     jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Scene::_DrawScoreboard() const
+{
+    for (int i = 0; i < m_activePlayers.size(); i++)
+    {
+        std::string text = std::format("{:04}", m_activePlayers[i]->m_score);
+        std::vector<jv::gpu::Vertex> vs;
+
+        float renderScale = 2;
+
+        Vec2 renderSize = jv::gpu::GetRenderSize();
+        Vec2 textSize = GenVertices_Text(vs, text, m_activePlayers[i]->GetColor(), Color_TRANSPARENT, {0, (renderSize.y / 2) / renderScale});
+        float scoreboardHeight = textSize.y * m_activePlayers.size();
+        for (jv::gpu::Vertex& vertex : vs)
+        {
+            vertex.pos = {vertex.pos.x, vertex.pos.y - scoreboardHeight / 2 + i * textSize.y};
+        }
+        jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Scoreboard", vs);
+        jv::gpu::Draw(pVBuf, m_pTextureText, {{0, 0}, 0, {renderScale, renderScale}});
+        jv::gpu::DestroyVertexBuffer(pVBuf);
+    }
 }
 
 void dino::Scene::SortEntities()
@@ -278,6 +348,8 @@ void dino::Scene::Draw() const
     if (m_bGameStarted)
         _DrawTimer();
 
+    _DrawScoreboard();
+
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {
         std::string text = std::format("dTime={:04.1f}ms", m_lastDeltaTime * 1000.0);
@@ -289,7 +361,7 @@ void dino::Scene::Draw() const
     }
 }
 
-void dino::Scene::_OnPlayerLoop(Player* pPlayer, int32_t start, int32_t end)
+void dino::Scene::_OnPlayerLoop(Player* pPlayer, int32_t start, int32_t end, float absTime)
 {
     int minLoopSize = 10;
 
@@ -322,7 +394,8 @@ void dino::Scene::_OnPlayerLoop(Player* pPlayer, int32_t start, int32_t end)
             // Odd segment hit count = in loop.
             if (segmentHitCount % 2 == 1)
             {
-                entity->OnCaughtInLoop();
+                int32_t gainedScore = entity->OnCaughtInLoop(absTime);
+                pPlayer->m_score += gainedScore;
             }
         }
     }
