@@ -11,7 +11,7 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 
 ## Flow du jeu
 
-- Un chronomètre de 60 secondes est affiché en haut de l'écran (centré horizontalement) et décroit.
+- Un chronomètre de 60 secondes est affiché en haut de l'écran (centré horizontalement) et décroit. fait
 - Plus le chronomètre est bas, plus les animaux apparaissent vite.
 - En cours de partie, n'importe quel joueur peut mettre en pause avec start.
 - En pause, les animaux, joueurs, et le chronomètre, ne bougent pas.

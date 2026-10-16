@@ -50,7 +50,7 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     std::sort(m_movable.begin(), m_movable.end(), Movable::OrderByPosY);
 
-    m_timer -= deltaTime;
+    m_timer = std::clamp(m_timer -deltaTime, 0.0f, 60.0f);
 }
 
 void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
@@ -144,10 +144,15 @@ void dino::Scene::CheckLoop(Player& player)
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
 {
-    // Spawner un animal si besoin.
 
-    constexpr double kSpawnTime = 0.3;
-    if (absTime - m_animalSpawnTime >= kSpawnTime)
+    constexpr double kMaxSpawnInterval = 3.0; 
+    constexpr double kMinSpawnInterval = 0.3; 
+
+    double progress = 1.0 - std::clamp(m_timer / 60.0, 0.0, 1.0);
+
+    double spawnInterval = kMaxSpawnInterval + (kMinSpawnInterval - kMaxSpawnInterval) * progress;
+
+    if (absTime - m_animalSpawnTime >= spawnInterval)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
@@ -170,9 +175,11 @@ void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
     
+    //Convertit le timer en string en arrondissant
     std::string timeStr = std::to_string(std::lround(m_timer));
     std::string_view time = timeStr;
     
+    //creer le visuel du timer
     std::vector<jv::gpu::Vertex> vsTimer;
     dino::GenVertices_Text(
         vsTimer, time, Color_BLACK, Color_TRANSPARENT, Vec2(m_whereTimer.x, m_whereTimer.y));
