@@ -5,6 +5,7 @@
 #include <dino/dino_scene.h>
 #include <format>
 #include <iostream>
+#include <string>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
@@ -48,6 +49,8 @@ void dino::Scene::Update(double absTime, float deltaTime)
     _UpdatePlayer(absTime, deltaTime);
 
     std::sort(m_movable.begin(), m_movable.end(), Movable::OrderByPosY);
+
+    m_timer -= deltaTime;
 }
 
 void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
@@ -160,15 +163,25 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     for (int i = 0; i < m_animals.size(); ++i)
         for (int j = i + 1; j < m_animals.size(); ++j)
             Movable::ResolveCollision(m_animals[i], m_animals[j]);
+
 }
 
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
+    
+    std::string timeStr = std::to_string(std::lround(m_timer));
+    std::string_view time = timeStr;
+    
+    std::vector<jv::gpu::Vertex> vsTimer;
+    dino::GenVertices_Text(
+        vsTimer, time, Color_BLACK, Color_TRANSPARENT, Vec2(m_whereTimer.x, m_whereTimer.y));
+    jv::gpu::VertexBuffer* pVBufTimer = jv::gpu::CreateVertexBuffer("Timer", vsTimer);
+    jv::gpu::Draw(pVBufTimer, m_pTextureText);
+    jv::gpu::DestroyVertexBuffer(pVBufTimer);
 
     for (Movable const* entity : m_movable)
         entity->Draw();
-
     // Nombre de millisecondes qu'il a fallu pour afficher la frame précédente.
     {
         std::string text = std::format("dTime={:04.1f}ms", m_lastDeltaTime * 1000.0);

@@ -18,6 +18,7 @@ exo4::Image exo4::LoadImageAsset(std::string_view imageName)
         return {}; // Fichier trop petit
     uint32_t dataOffset = *(uint32_t*)(pFile + 0x000A);
 
+
     // Interprétation des données
     uint32_t  
         width = *(uint32_t*)(pFile + 0x0012);

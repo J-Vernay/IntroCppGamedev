@@ -30,8 +30,8 @@ private:
     std::deque<Animal> m_animals;
     std::deque<Player> m_players;
     double m_animalSpawnTime = 0;
-
-    
+    float m_timer = 60;
+    jv::util::Vec2 m_whereTimer = Vec2(480/2, 10);   
     void _UpdatePlayer(double absTime, float deltaTime);
     void CheckLoop(Player& player);
     void _UpdateAnimals(double absTime, float deltaTime);
