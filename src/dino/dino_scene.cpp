@@ -34,6 +34,17 @@ dino::Scene::~Scene()
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
+    for (Player& player : m_players)
+    {
+        if (player.IsPause())
+        {
+            m_isPaused = !m_isPaused;
+        }
+    }
+
+    if (m_isPaused)
+            return;
+
     m_lastDeltaTime = deltaTime;
     m_movable.clear();
 

@@ -26,10 +26,10 @@ et les exemples dans le code :
 > b) Méthode
 > c) Attribut
 > d) Instance
-> e) Constructeur
+> e) ConstructeurFonction membre responsable d'initialiser
 > 
 > DEFINITIONS :
-> 1. Fonction membre responsable d'initialiser l'état
+> 1.  l'état
 > 2. Type encapsulant un comportement et l'état nécessaire à ce comportement
 > 3. Zone mémoire allouée pour stocker l'état d'une classe
 > 4. Fonction membre qui peut accéder implicitement à l'état d'une classe

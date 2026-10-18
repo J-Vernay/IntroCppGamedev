@@ -59,7 +59,7 @@ void dino::Player::Update(double absTime, float deltaTime)
         m_pos.x += dir.x * speed * deltaTime;
         m_pos.y += dir.y * speed * deltaTime;
 
-       Trail(deltaTime);
+       _Trail(deltaTime);
     }
     else
     {
@@ -83,8 +83,21 @@ void dino::Player::TakeDamage()
     m_timerStun = 3;
 }
 
+bool dino::Player::IsPause()
+{
+    jv::input::Gamepad keyboard;
+    if (jv::input::GetGamepad(m_gamepadIdx, keyboard))
+    {
+        if (keyboard.start ) {
+            m_IsPaused = !m_IsPaused;
+            return true;
+        }
+    }
+    return false;
+}
 
-void dino::Player::Trail(float deltaTime)
+
+void dino::Player::_Trail(float deltaTime)
 {
     if (!m_points.empty() && m_points.back().x == m_pos.x && m_points.back().y == m_pos.y)
         return;

@@ -48,7 +48,7 @@ Quel est le top 3 des pièces de théâtre ayant le plus de caractères ?
 E) Mettre "NbCaracteres" en ordonnée et "NbMots" en abscisse.
 Quel type de lien relie ces deux variables ?
 
-> plus il ya de character dans une piece, plus il aura egalement fde mot
+> plus il ya de character dans une piece, plus il aura egalement de mot c'est lineaire
 
 F) En moyenne, combien y a-t-il de caractères par mot ?
 
@@ -57,7 +57,7 @@ F) En moyenne, combien y a-t-il de caractères par mot ?
 G) Mettre "NbMotsUniques" en ordonnée et "NbMots" en abscisse.
 Quel type de lien relie ces deux variables ? Pourquoi ?
 
-> plus tu a de mot plus tu a de mots uniques, cela est assez lineaire
+> C'est sous lineaire
 
 H) Mettre "msCountLetters" en ordonnée et "NbCaracteres" en abscisse.
 Quel type de lien relie ces deux variables ? Pourquoi ?

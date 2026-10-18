@@ -19,6 +19,7 @@ public:
     std::vector<dino::Vec2> CheckIfLoop();
     void Update(double absTime, float deltaTime);
     void TakeDamage();
+    bool IsPause();
     std::vector<Vec2> m_points;
 
 private:
@@ -30,7 +31,7 @@ private:
     float m_timer;
     std::vector<jv::gpu::Vertex> m_trailVertex;
     Color m_color;
-    void Trail(float deltaTime);
-
+    void _Trail(float deltaTime);
+    bool m_IsPaused = false;
 };
 };

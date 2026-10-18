@@ -35,6 +35,7 @@ private:
     void _UpdatePlayer(double absTime, float deltaTime);
     void CheckLoop(Player& player);
     void _UpdateAnimals(double absTime, float deltaTime);
+    bool m_isPaused = false;
 };
 
 
