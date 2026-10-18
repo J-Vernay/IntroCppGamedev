@@ -6,6 +6,7 @@
 #include <dino/dino_player.h>
 #include <dino/dino_terrain.h>
 #include <dino/PlayerState.cpp> 
+#include <dino/dino_tree.h>
 
 namespace dino
 {
@@ -23,6 +24,7 @@ private:
     jv::gpu::Texture* m_pTextureText = nullptr;
     float m_lastDeltaTime = 0;
     jv::gpu::Texture* m_pTexture;
+    jv::gpu::Texture* m_pTextureTree;
     jv::gpu::Texture* m_pTextureDinosaurs;
 
     Terrain m_Terrain;
@@ -30,6 +32,8 @@ private:
     std::vector<Movable*> m_movable;
     std::deque<Animal> m_animals;
     std::deque<Player> m_players;
+    std::deque<dino_tree> m_trees;
+
     double m_animalSpawnTime = 0;
     float m_timer = 60;
     jv::util::Vec2 m_whereTimer = Vec2(480/2, 10);   

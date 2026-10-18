@@ -11,6 +11,7 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
     m_pTexture = dino::LoadImageAsset("animals.bmp");
+    m_pTextureTree = dino::LoadImageAsset("terrain.bmp");
     m_pTextureDinosaurs = dino::LoadImageAsset("dinosaurs.bmp");
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
@@ -26,6 +27,8 @@ dino::Scene::Scene() : m_Terrain{24, 16}
         jv::input::GamepadIdx::Gamepad2, Color_YELLOW, state);
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 3,
         jv::input::GamepadIdx::Gamepad3, Color_GREEN, state);
+
+    m_trees.emplace_back(dino_tree(Vec2(480/2, 360/2), m_pTextureTree, 0));
 }
 
 dino::Scene::~Scene()
@@ -189,6 +192,10 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
 void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
+
+    for (dino_tree const& tree : m_trees)
+        tree.Draw();   
+
     
     //Convertit le timer en string en arrondissant
     std::string timeStr = std::to_string(std::lround(m_timer));

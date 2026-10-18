@@ -154,6 +154,7 @@
     <ClInclude Include="..\src\dino\dino_player.h" />
     <ClInclude Include="..\src\dino\dino_scene.h" />
     <ClInclude Include="..\src\dino\dino_terrain.h" />
+    <ClInclude Include="..\src\dino\dino_tree.h" />
     <ClInclude Include="..\src\dino\Movable.h" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,7 @@
     <ClCompile Include="..\src\dino\dino_player.cpp" />
     <ClCompile Include="..\src\dino\dino_scene.cpp" />
     <ClCompile Include="..\src\dino\dino_terrain.cpp" />
+    <ClCompile Include="..\src\dino\dino_tree.cpp" />
     <ClCompile Include="..\src\dino\Movable.cpp" />
     <ClCompile Include="..\src\dino\PlayerState.cpp" />
   </ItemGroup>

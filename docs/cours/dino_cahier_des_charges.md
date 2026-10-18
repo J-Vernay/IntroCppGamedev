@@ -16,8 +16,8 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 - En cours de partie, n'importe quel joueur peut mettre en pause avec start. fait
 - En pause, les animaux, joueurs, et le chronomètre, ne bougent pas. fait
 - Avant la première partie, les joueurs sont dans l'état de "lobby" 
-  et peuvent se connecter (start) ou se déconnecter (select).
-- Un arbre de chaque saison est affiché sur le lobby ; n'importe quel joueur
+  et peuvent se connecter (start) ou se déconnecter (select). fait
+- Un arbre de chaque saison est affiché sur le lobby ; n'importe quel joueur 
   peut en entourer un pour lancer la partie avec un terrain correspondant à cette saison.
 - Les joueurs ne peuvent se connecter/déconnecter que sur le lobby.
   Les joueurs ne peuvent mettre en pause que quand le jeu est en cours.
