@@ -3,7 +3,7 @@
 #include <dino/dino_main.h>
 #include <dino/dino_terrain.h>
 #include <dino/Movable.h>
-
+#include <dino/PlayerState.cpp> 
 namespace dino
 {
 
@@ -12,7 +12,7 @@ class Player: public Movable
 public:
     /// Initialise le joueur avec un type au hasard.
     Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, int pindxPlayer,
-        jv::input::GamepadIdx pgamepadIdx, Color pColor);
+        jv::input::GamepadIdx pgamepadIdx, Color pColor, PlayerState pState);
 
     /// Affiche le joueur
     void Draw() const override;
@@ -21,6 +21,8 @@ public:
     void TakeDamage();
     bool IsPause();
     std::vector<Vec2> m_points;
+    bool m_isSpawned = false;
+
 
 private:
     jv::input::GamepadIdx m_gamepadIdx;
@@ -33,5 +35,6 @@ private:
     Color m_color;
     void _Trail(float deltaTime);
     bool m_IsPaused = false;
+    PlayerState m_currentState;
 };
 };

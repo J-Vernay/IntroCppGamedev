@@ -12,10 +12,10 @@ En cas de doute sur ce qui est attendu, se référer à l'exécutable fourni à 
 ## Flow du jeu
 
 - Un chronomètre de 60 secondes est affiché en haut de l'écran (centré horizontalement) et décroit. fait
-- Plus le chronomètre est bas, plus les animaux apparaissent vite.
-- En cours de partie, n'importe quel joueur peut mettre en pause avec start.
-- En pause, les animaux, joueurs, et le chronomètre, ne bougent pas.
-- Avant la première partie, les joueurs sont dans l'état de "lobby"
+- Plus le chronomètre est bas, plus les animaux apparaissent vite. fait
+- En cours de partie, n'importe quel joueur peut mettre en pause avec start. fait
+- En pause, les animaux, joueurs, et le chronomètre, ne bougent pas. fait
+- Avant la première partie, les joueurs sont dans l'état de "lobby" 
   et peuvent se connecter (start) ou se déconnecter (select).
 - Un arbre de chaque saison est affiché sur le lobby ; n'importe quel joueur
   peut en entourer un pour lancer la partie avec un terrain correspondant à cette saison.

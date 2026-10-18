@@ -5,6 +5,7 @@
 #include <dino/dino_main.h>
 #include <dino/dino_player.h>
 #include <dino/dino_terrain.h>
+#include <dino/PlayerState.cpp> 
 
 namespace dino
 {
@@ -36,6 +37,7 @@ private:
     void CheckLoop(Player& player);
     void _UpdateAnimals(double absTime, float deltaTime);
     bool m_isPaused = false;
+    PlayerState m_currentState = PlayerState::Lobby;
 };
 
 

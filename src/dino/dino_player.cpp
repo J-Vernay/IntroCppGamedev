@@ -8,7 +8,7 @@
 #include <math.h>
 
 dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, int pindxPlayer,
-    jv::input::GamepadIdx pgamepadIdx, Color pColor)
+    jv::input::GamepadIdx pgamepadIdx, Color pColor, PlayerState pState)
 {
     m_gamepadIdx = pgamepadIdx;
     m_idxPlayer = pindxPlayer;
@@ -17,6 +17,7 @@ dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, int pi
     m_timeStart = absTime;
     m_pTexture = texture;
     m_color = pColor;
+    m_currentState = pState;
 }
 
 void dino::Player::Update(double absTime, float deltaTime)
@@ -28,6 +29,17 @@ void dino::Player::Update(double absTime, float deltaTime)
     Vec2 dir = Vec2(0, 0);
     if (jv::input::GetGamepad(m_gamepadIdx, keyboard))
     {
+        if (m_currentState == PlayerState::Lobby && keyboard.start && !m_isSpawned)
+        {
+            m_isSpawned = true;
+        }
+        else if ((m_currentState == PlayerState::Lobby && keyboard.select && m_isSpawned)){
+            m_isSpawned = false;
+            return;
+        }
+        else if (!m_isSpawned)
+            return;
+
         if (keyboard.dpad_up)
             dir.y -= 1;
         if (keyboard.dpad_down)
@@ -72,7 +84,7 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     m_timer += deltaTime;
 
-    while (m_points.size() > 120)
+    while (m_points.size() > 500)
     {
         m_points.erase(m_points.begin());
     }
@@ -107,6 +119,10 @@ void dino::Player::_Trail(float deltaTime)
 
 void dino::Player::Draw() const
 {
+    if (!m_isSpawned)
+        return;
+        
+
     float u1, u2, v1 = 0, v2 = 24;
 
     if (m_timerStun > 0)

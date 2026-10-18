@@ -16,14 +16,16 @@ dino::Scene::Scene() : m_Terrain{24, 16}
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
     Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
 
+    PlayerState state = PlayerState::Lobby;
+
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 0,
-        jv::input::GamepadIdx::Keyboard, Color_BLUE);
+        jv::input::GamepadIdx::Keyboard, Color_BLUE, state);
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 1,
-        jv::input::GamepadIdx::Gamepad1, Color_RED);
+        jv::input::GamepadIdx::Gamepad1, Color_RED, state);
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 2,
-        jv::input::GamepadIdx::Gamepad2, Color_YELLOW);
+        jv::input::GamepadIdx::Gamepad2, Color_YELLOW, state);
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 3,
-        jv::input::GamepadIdx::Gamepad3, Color_GREEN);
+        jv::input::GamepadIdx::Gamepad3, Color_GREEN, state);
 }
 
 dino::Scene::~Scene()
@@ -34,6 +36,11 @@ dino::Scene::~Scene()
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
+    m_lastDeltaTime = deltaTime;
+    m_movable.clear();
+
+    _UpdatePlayer(absTime, deltaTime);
+
     for (Player& player : m_players)
     {
         if (player.IsPause())
@@ -42,11 +49,8 @@ void dino::Scene::Update(double absTime, float deltaTime)
         }
     }
 
-    if (m_isPaused)
+    if (m_isPaused|| m_currentState == PlayerState::Lobby)
             return;
-
-    m_lastDeltaTime = deltaTime;
-    m_movable.clear();
 
     for (Animal& animal : m_animals)
     {
@@ -57,7 +61,6 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     _UpdateAnimals(absTime, deltaTime);
 
-    _UpdatePlayer(absTime, deltaTime);
 
     std::sort(m_movable.begin(), m_movable.end(), Movable::OrderByPosY);
 
@@ -70,15 +73,14 @@ void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
     for (size_t i = 0; i < m_players.size(); i++)
     {
         Player& player = m_players[i];
-        m_movable.push_back(&player);
-
-    }
-
-    for (size_t i = 0; i < m_players.size(); i++)
-    {
-        Player& player = m_players[i];
         
         player.Update(absTime, deltaTime);
+
+        if (!player.m_isSpawned)
+            continue;
+
+        m_movable.push_back(&player);
+
         player.CheckTerrain(m_Terrain);
         CheckLoop(player);
 
@@ -138,12 +140,14 @@ void dino::Scene::CheckLoop(Player& player)
                 continue;
 
             Movable* target = m_movable[i-1];
+            if (target == &player)
+                continue;
 
             std::erase_if(m_animals, [&](const Animal& a) { return &a == target; });
 
             for (Player& playerCop : m_players)
             {
-                if (target == &playerCop && &playerCop != &player)
+                if (target == &playerCop)
                 {
                     playerCop.TakeDamage();
                 }
