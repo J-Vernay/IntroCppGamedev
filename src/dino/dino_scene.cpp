@@ -19,7 +19,6 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 
     PlayerState state = PlayerState::Lobby;
 
-
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 0,
         jv::input::GamepadIdx::Keyboard, Color_BLUE, state);
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 1,
@@ -36,7 +35,8 @@ void dino::Scene::SpawnTree()
 {
     for (size_t i = 0; i < 4; i++)
     {
-        m_trees.emplace_back(dino_tree(Vec2((480 - 96) / 2 + i * 40, 360 / 2), m_pTextureTree, i));
+        m_trees.emplace_back(
+            dino_tree(Vec2((480 - 96) / 2 + i * 40, 360 / 2), m_pTextureTree, i, m_lastAbsTime));
     }
 }
 
@@ -48,6 +48,7 @@ dino::Scene::~Scene()
 
 void dino::Scene::Update(double absTime, float deltaTime)
 {
+    m_lastAbsTime = absTime;
     m_lastDeltaTime = deltaTime;
     m_movable.clear();
 
@@ -58,6 +59,7 @@ void dino::Scene::Update(double absTime, float deltaTime)
         for (dino_tree& tree : m_trees)
         {
             m_movable.push_back(&tree);
+            tree.Update(absTime, deltaTime);
         }
     }
     else
@@ -98,7 +100,9 @@ void dino::Scene::Update(double absTime, float deltaTime)
         SpawnTree();
         m_currentState = PlayerState::Lobby;
         for (Player& p : m_players)
+        {
             p.ChangeState(PlayerState::Lobby);
+        }
     }
 }
 
@@ -191,13 +195,21 @@ void dino::Scene::CheckLoop(Player& player)
 
             if (m_currentState != PlayerState::Lobby)
             {
-                std::erase_if(m_animals, [&](const Animal& a) { return &a == target; });
+                for (size_t k = 0; k < m_animals.size(); ++k)
+                {
+                    if (&m_animals[k] == target)
+                    {
+                        player.m_score += 10;
+                        m_animals.erase(m_animals.begin() + k);
+                        break;
+                    }
+                }
             }
             else
             {
                 for (dino_tree& tree : m_trees)
                 {
-                    if (target == &tree)
+                    if (target == &tree && tree.IsActive())
                     {
                         m_Terrain.SetSeason(tree.index);
                         m_timer = 60;
@@ -210,6 +222,7 @@ void dino::Scene::CheckLoop(Player& player)
                     for (Player& playerCop : m_players)
                     {
                         playerCop.ChangeState(m_currentState);
+                        playerCop.m_score = 0;
                     }
                     m_trees.clear();
                     return;
@@ -273,6 +286,24 @@ void dino::Scene::Draw() const
     jv::gpu::VertexBuffer* pVBufTimer = jv::gpu::CreateVertexBuffer("Timer", vsTimer);
     jv::gpu::Draw(pVBufTimer, m_pTextureText);
     jv::gpu::DestroyVertexBuffer(pVBufTimer);
+
+    for (size_t i = 0; i < m_players.size(); ++i)
+    {
+        Player const& player = m_players[i];
+
+        if (player.m_isSpawned)
+        {
+            std::string scoreStr = std::to_string(std::lround(player.m_score));
+            std::string_view score = scoreStr;
+
+            std::vector<jv::gpu::Vertex> vsScore;
+            dino::GenVertices_Text(vsScore, score, colors[i], Color_TRANSPARENT,
+                Vec2(m_whereScore.x, m_whereScore.y + (10 * i)));
+            jv::gpu::VertexBuffer* pVBufTimer = jv::gpu::CreateVertexBuffer("score", vsScore);
+            jv::gpu::Draw(pVBufTimer, m_pTextureText);
+            jv::gpu::DestroyVertexBuffer(pVBufTimer);
+        }
+    }
 
     for (Movable const* entity : m_movable)
         entity->Draw();

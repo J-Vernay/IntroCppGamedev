@@ -4,8 +4,9 @@
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_geometry.h>
 #include <iostream>
-#include <windows.h>
 #include <math.h>
+#include <windows.h>
+#include <string>
 
 dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, int pindxPlayer,
     jv::input::GamepadIdx pgamepadIdx, Color pColor, PlayerState pState)
@@ -33,7 +34,8 @@ void dino::Player::Update(double absTime, float deltaTime)
         {
             m_isSpawned = true;
         }
-        else if ((m_currentState == PlayerState::Lobby && keyboard.select && m_isSpawned)){
+        else if ((m_currentState == PlayerState::Lobby && keyboard.select && m_isSpawned))
+        {
             m_isSpawned = false;
             return;
         }
@@ -71,7 +73,7 @@ void dino::Player::Update(double absTime, float deltaTime)
         m_pos.x += dir.x * speed * deltaTime;
         m_pos.y += dir.y * speed * deltaTime;
 
-       _Trail(deltaTime);
+        _Trail(deltaTime);
     }
     else
     {
@@ -97,18 +99,22 @@ void dino::Player::TakeDamage()
 
 bool dino::Player::IsPause()
 {
+
+    if (m_currentState == PlayerState::Lobby)
+        return false;
+
     jv::input::Gamepad pad;
     bool startNow = false;
 
     if (jv::input::GetGamepad(m_gamepadIdx, pad))
         startNow = pad.start;
 
-    bool pressed = startNow && !m_prevStart;  
-    bool released = !startNow && m_prevStart; 
+    bool pressed = startNow && !m_prevStart;
+    bool released = !startNow && m_prevStart;
 
     m_prevStart = startNow;
 
-    if (pressed) 
+    if (pressed && m_isSpawned)
     {
         m_IsPaused = !m_IsPaused;
         return true;
@@ -118,24 +124,20 @@ bool dino::Player::IsPause()
 
 void dino::Player::ChangeState(PlayerState pState)
 {
-    if (m_isSpawned)
-        m_currentState = pState;
+    m_currentState = pState;
 }
-
 
 void dino::Player::_Trail(float deltaTime)
 {
     if (!m_points.empty() && m_points.back().x == m_pos.x && m_points.back().y == m_pos.y)
         return;
     m_points.push_back(m_pos);
-} 
-
+}
 
 void dino::Player::Draw() const
 {
     if (!m_isSpawned)
         return;
-        
 
     float u1, u2, v1 = 0, v2 = 24;
 
@@ -163,6 +165,9 @@ void dino::Player::Draw() const
         u1 = 0 + 24 * idxFrame;
         u2 = 24 + 24 * idxFrame;
     }
+    
+    std::string timeStr = std::to_string(std::lround(m_score));
+    std::string_view time = timeStr;
 
     std::vector<jv::gpu::Vertex> vsTrail;
     dino::GenVertices_Polyline(vsTrail, m_points, 10, m_color);
@@ -208,5 +213,4 @@ std::vector<dino::Vec2> dino::Player::CheckIfLoop()
     }
 
     return {};
-
 }

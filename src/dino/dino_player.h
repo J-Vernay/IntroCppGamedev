@@ -23,6 +23,7 @@ public:
     std::vector<Vec2> m_points;
     bool m_isSpawned = false;
     void ChangeState(PlayerState pState);
+    int m_score = 0;
 
 private:
     jv::input::GamepadIdx m_gamepadIdx;
