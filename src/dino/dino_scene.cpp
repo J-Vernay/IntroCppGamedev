@@ -56,6 +56,11 @@ void dino::Scene::Update(double absTime, float deltaTime)
         }
     }
 
+    for (dino_tree& tree : m_trees)
+    {
+        m_movable.push_back(&tree);
+    }
+
     if (m_isPaused|| m_currentState == PlayerState::Lobby)
             return;
 
@@ -97,6 +102,8 @@ void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
         for (int j = 0; j < m_animals.size(); ++j)
             Movable::ResolveCollision(player, m_animals[j]);
 
+        for (int j = 0; j < m_trees.size(); ++j)
+            Movable::ResolveCollision(player, m_trees[j]);
 
         if (player.m_points.size() < 2)
             continue;
@@ -195,10 +202,7 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
 
 void dino::Scene::Draw() const
 {
-    m_Terrain.Draw();
-
-    for (dino_tree const& tree : m_trees)
-        tree.Draw();   
+    m_Terrain.Draw(); 
 
     
     //Convertit le timer en string en arrondissant

@@ -6,7 +6,7 @@
 namespace dino
 {
 
-class dino_tree: Movable
+class dino_tree:public Movable
 {
 public:
     dino_tree(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndex);
@@ -14,7 +14,5 @@ public:
 
 private:
     int index;
-    jv::gpu::Texture* m_texture;
-    Vec2 m_pos;
 };
 } 

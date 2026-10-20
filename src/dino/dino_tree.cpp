@@ -3,7 +3,7 @@
 dino::dino_tree::dino_tree(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndex)
 {
     m_pos = pPos;
-    m_texture = pTexture;
+    m_pTexture = pTexture;
     index = pIndex;
 }
 
@@ -25,6 +25,6 @@ void dino::dino_tree::Draw() const
     vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Tree", vs);
-    jv::gpu::Draw(pVBuf, m_texture);
+    jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
