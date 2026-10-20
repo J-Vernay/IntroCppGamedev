@@ -11,8 +11,6 @@ class dino_tree:public Movable
 public:
     dino_tree(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndex);
     void Draw() const override;
-
-private:
     int index;
 };
 } 

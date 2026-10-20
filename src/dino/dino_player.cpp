@@ -97,15 +97,29 @@ void dino::Player::TakeDamage()
 
 bool dino::Player::IsPause()
 {
-    jv::input::Gamepad keyboard;
-    if (jv::input::GetGamepad(m_gamepadIdx, keyboard))
+    jv::input::Gamepad pad;
+    bool startNow = false;
+
+    if (jv::input::GetGamepad(m_gamepadIdx, pad))
+        startNow = pad.start;
+
+    bool pressed = startNow && !m_prevStart;  
+    bool released = !startNow && m_prevStart; 
+
+    m_prevStart = startNow;
+
+    if (pressed) 
     {
-        if (keyboard.start ) {
-            m_IsPaused = !m_IsPaused;
-            return true;
-        }
+        m_IsPaused = !m_IsPaused;
+        return true;
     }
     return false;
+}
+
+void dino::Player::ChangeState(PlayerState pState)
+{
+    if (m_isSpawned)
+        m_currentState = pState;
 }
 
 

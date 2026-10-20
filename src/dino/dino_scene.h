@@ -42,6 +42,7 @@ private:
     void _UpdateAnimals(double absTime, float deltaTime);
     bool m_isPaused = false;
     PlayerState m_currentState = PlayerState::Lobby;
+    void SpawnTree();
 };
 
 

@@ -1,13 +1,13 @@
 ﻿#pragma once
 
+#include <dino/Movable.h>
+#include <dino/PlayerState.cpp>
 #include <dino/dino_main.h>
 #include <dino/dino_terrain.h>
-#include <dino/Movable.h>
-#include <dino/PlayerState.cpp> 
 namespace dino
 {
 
-class Player: public Movable
+class Player : public Movable
 {
 public:
     /// Initialise le joueur avec un type au hasard.
@@ -22,7 +22,7 @@ public:
     bool IsPause();
     std::vector<Vec2> m_points;
     bool m_isSpawned = false;
-
+    void ChangeState(PlayerState pState);
 
 private:
     jv::input::GamepadIdx m_gamepadIdx;
@@ -36,5 +36,6 @@ private:
     void _Trail(float deltaTime);
     bool m_IsPaused = false;
     PlayerState m_currentState;
+    bool m_prevStart = false;
 };
-};
+}; // namespace dino

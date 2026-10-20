@@ -19,6 +19,7 @@ dino::Scene::Scene() : m_Terrain{24, 16}
 
     PlayerState state = PlayerState::Lobby;
 
+
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 0,
         jv::input::GamepadIdx::Keyboard, Color_BLUE, state);
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 1,
@@ -28,11 +29,15 @@ dino::Scene::Scene() : m_Terrain{24, 16}
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 3,
         jv::input::GamepadIdx::Gamepad3, Color_GREEN, state);
 
+    SpawnTree();
+}
+
+void dino::Scene::SpawnTree()
+{
     for (size_t i = 0; i < 4; i++)
     {
-        m_trees.emplace_back(dino_tree(Vec2((480-96)/2 + i * 40, 360/2), m_pTextureTree, i));
+        m_trees.emplace_back(dino_tree(Vec2((480 - 96) / 2 + i * 40, 360 / 2), m_pTextureTree, i));
     }
-    
 }
 
 dino::Scene::~Scene()
@@ -48,35 +53,53 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     _UpdatePlayer(absTime, deltaTime);
 
-    for (Player& player : m_players)
+    if (m_currentState == PlayerState::Lobby && m_trees.size() > 0)
     {
-        if (player.IsPause())
+        for (dino_tree& tree : m_trees)
         {
-            m_isPaused = !m_isPaused;
+            m_movable.push_back(&tree);
+        }
+    }
+    else
+    {
+        for (Animal& animal : m_animals)
+        {
+            m_movable.push_back(&animal);
         }
     }
 
-    for (dino_tree& tree : m_trees)
+    for (Player& player : m_players)
     {
-        m_movable.push_back(&tree);
+        CheckLoop(player);
     }
 
-    if (m_isPaused|| m_currentState == PlayerState::Lobby)
-            return;
-
-    for (Animal& animal : m_animals)
-    {
-        m_movable.push_back(&animal);
-    }
+    if (m_isPaused || m_currentState == PlayerState::Lobby)
+        return;
 
     m_Terrain.Update(absTime, deltaTime);
 
     _UpdateAnimals(absTime, deltaTime);
 
+    m_movable.clear();
+    for (Player& p : m_players)
+        if (p.m_isSpawned)
+            m_movable.push_back(&p);
+    for (Animal& a : m_animals)
+        m_movable.push_back(&a);
 
     std::sort(m_movable.begin(), m_movable.end(), Movable::OrderByPosY);
 
-    m_timer = std::clamp(m_timer -deltaTime, 0.0f, 60.0f);
+    m_timer = std::clamp(m_timer - deltaTime, 0.0f, 60.0f);
+
+    if (m_timer == 0)
+    {
+        m_movable.clear();
+        m_animals.clear();
+        SpawnTree();
+        m_currentState = PlayerState::Lobby;
+        for (Player& p : m_players)
+            p.ChangeState(PlayerState::Lobby);
+    }
 }
 
 void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
@@ -85,16 +108,23 @@ void dino::Scene::_UpdatePlayer(double absTime, float deltaTime)
     for (size_t i = 0; i < m_players.size(); i++)
     {
         Player& player = m_players[i];
-        
+
+        m_movable.push_back(&player);
+
+        if (player.IsPause())
+        {
+            m_isPaused = !m_isPaused;
+        }
+
+        if (m_isPaused)
+            return;
+
         player.Update(absTime, deltaTime);
 
         if (!player.m_isSpawned)
             continue;
 
-        m_movable.push_back(&player);
-
         player.CheckTerrain(m_Terrain);
-        CheckLoop(player);
 
         for (int j = i + 1; j < m_players.size(); ++j)
             Movable::ResolveCollision(player, m_players[j]);
@@ -138,34 +168,63 @@ void dino::Scene::CheckLoop(Player& player)
     int size = temp_point.size();
     if (temp_point.size() > 0)
     {
-        for (size_t i = m_movable.size(); i >0 ; i--)
+        for (size_t i = m_movable.size(); i > 0; i--)
         {
             int counter = 0;
             for (size_t y = 0; y < temp_point.size() - 1; y++)
             {
-                if (dino::IntersectSegment(
-                        temp_point[y], temp_point[y + 1], m_movable[i-1]->GetPos(), vecZero))
+                if (dino::IntersectSegment(temp_point[y], temp_point[(y + 1) % temp_point.size()],
+                        m_movable[i - 1]->GetPos(), vecZero))
                 {
                     ++counter;
                 }
             }
 
             if (counter % 2 == 0)
+            {
                 continue;
+            }
 
-            Movable* target = m_movable[i-1];
+            Movable* target = m_movable[i - 1];
             if (target == &player)
                 continue;
 
-            std::erase_if(m_animals, [&](const Animal& a) { return &a == target; });
+            if (m_currentState != PlayerState::Lobby)
+            {
+                std::erase_if(m_animals, [&](const Animal& a) { return &a == target; });
+            }
+            else
+            {
+                for (dino_tree& tree : m_trees)
+                {
+                    if (target == &tree)
+                    {
+                        m_Terrain.SetSeason(tree.index);
+                        m_timer = 60;
+                        m_currentState = PlayerState::InGame;
+                        break;
+                    }
+                }
+                if (m_currentState == PlayerState::InGame)
+                {
+                    for (Player& playerCop : m_players)
+                    {
+                        playerCop.ChangeState(m_currentState);
+                    }
+                    m_trees.clear();
+                    return;
+                }
+            }
 
             for (Player& playerCop : m_players)
             {
+
                 if (target == &playerCop)
                 {
                     playerCop.TakeDamage();
                 }
             }
+
             std::erase(m_movable, target);
         }
     }
@@ -174,8 +233,8 @@ void dino::Scene::CheckLoop(Player& player)
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
 {
 
-    constexpr double kMaxSpawnInterval = 3.0; 
-    constexpr double kMinSpawnInterval = 0.3; 
+    constexpr double kMaxSpawnInterval = 3.0;
+    constexpr double kMinSpawnInterval = 0.3;
 
     double progress = 1.0 - std::clamp(m_timer / 60.0, 0.0, 1.0);
 
@@ -197,19 +256,17 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     for (int i = 0; i < m_animals.size(); ++i)
         for (int j = i + 1; j < m_animals.size(); ++j)
             Movable::ResolveCollision(m_animals[i], m_animals[j]);
-
 }
 
 void dino::Scene::Draw() const
 {
-    m_Terrain.Draw(); 
+    m_Terrain.Draw();
 
-    
-    //Convertit le timer en string en arrondissant
+    // Convertit le timer en string en arrondissant
     std::string timeStr = std::to_string(std::lround(m_timer));
     std::string_view time = timeStr;
-    
-    //creer le visuel du timer
+
+    // creer le visuel du timer
     std::vector<jv::gpu::Vertex> vsTimer;
     dino::GenVertices_Text(
         vsTimer, time, Color_BLACK, Color_TRANSPARENT, Vec2(m_whereTimer.x, m_whereTimer.y));
