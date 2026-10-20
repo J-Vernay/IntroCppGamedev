@@ -1,4 +1,4 @@
-#include "dino_tree.h"
+﻿#include "dino_tree.h"
 
 dino::dino_tree::dino_tree(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndex)
 {
@@ -9,20 +9,18 @@ dino::dino_tree::dino_tree(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndex)
 
 void dino::dino_tree::Draw() const
 {
-    float u1 = 48, u2 = 96, v1 = 16, v2 = 88;
+    float u1 = 48, u2 = 80, v1 = 16, v2 = 64;
 
-    u1 += 48 * index;
-    u2 += 96 * index;
-    v1 += 16 * index;
-    v2 += 88 * index;
+    u1 += (48+32) * index;
+    u2 += (48 + 32) * index;
 
     jv::util::Color color = Color_WHITE;
 
     std::vector<jv::gpu::Vertex> vs;
-    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 48}, Vec2{u1, v1}, color);
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 48}, Vec2{u2, v1}, color);
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
-    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 48}, Vec2{u2, v1}, color);
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
     vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
 

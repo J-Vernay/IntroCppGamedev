@@ -28,7 +28,11 @@ dino::Scene::Scene() : m_Terrain{24, 16}
     m_players.emplace_back(m_Terrain.GenerateRandomSpawn(), 0, m_pTextureDinosaurs, 3,
         jv::input::GamepadIdx::Gamepad3, Color_GREEN, state);
 
-    m_trees.emplace_back(dino_tree(Vec2(480/2, 360/2), m_pTextureTree, 0));
+    for (size_t i = 0; i < 4; i++)
+    {
+        m_trees.emplace_back(dino_tree(Vec2((480-96)/2 + i * 40, 360/2), m_pTextureTree, i));
+    }
+    
 }
 
 dino::Scene::~Scene()
