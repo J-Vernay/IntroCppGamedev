@@ -6,6 +6,9 @@ dino::Tree::Tree(Vec2 pos, double absTime, int index, Scene* ptr) : Entity(pos, 
     m_pTexture = dino::LoadImageAsset("terrain.bmp");
     this->index = index;
     scenePtr = ptr;
+    m_timerSpawn = 5;
+    m_isTreeEnable = false;
+    m_currentAlpha = static_cast<float>(255) / 2;
 }
 
 dino::Tree::~Tree()
@@ -21,6 +24,7 @@ void dino::Tree::Draw() const
     float v2 = 112;
 
     jv::util::Color color = Color_WHITE;
+    color.a = m_currentAlpha;
 
     std::vector<jv::gpu::Vertex> vs;
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
@@ -37,6 +41,7 @@ void dino::Tree::Draw() const
 
 void dino::Tree::CatchByPlayer()
 {
+    if (!m_isTreeEnable) return;
     scenePtr->StartGame(index);
 }
 
@@ -47,5 +52,20 @@ void dino::Tree::ResolveTerrainPos(Terrain& terrain)
 
 void dino::Tree::Update(double absTime, float deltaTime)
 {
+    UpdateTimerSpawn(absTime, deltaTime);
+}
 
+void dino::Tree::UpdateTimerSpawn(double absTime, float deltaTime)
+{
+    if (m_isTreeEnable)return;
+
+    if (m_timerSpawn > 0)
+    {
+        m_timerSpawn -= deltaTime;
+    }
+    else
+    {
+        m_isTreeEnable = true;
+        m_currentAlpha = 255;
+    }
 }

@@ -16,9 +16,13 @@ public:
     void CatchByPlayer() override;
     void ResolveTerrainPos(Terrain& terrain) override;
     void Update(double absTime, float deltaTime) override;
+    void UpdateTimerSpawn(double absTime, float deltaTime);
 
 private:
     int index;
     Scene* scenePtr;
+    bool m_isTreeEnable;
+    float m_timerSpawn;
+    float m_currentAlpha;
 };
 }
