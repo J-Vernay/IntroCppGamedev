@@ -8,28 +8,28 @@
 #include <windows.h>
 #include <string>
 
-dino::Player::Player(Vec2 pos, double absTime, jv::gpu::Texture* texture, int pindxPlayer,
-    jv::input::GamepadIdx pgamepadIdx, Color pColor, PlayerState pState)
+dino::Player::Player(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndxPlayer,
+    jv::input::GamepadIdx pGamepadIdx, Color pColor, PlayerState pState)
 {
-    m_gamepadIdx = pgamepadIdx;
-    m_idxPlayer = pindxPlayer;
-    m_pos = pos;
+    m_gamepadIdx = pGamepadIdx;
+    m_idxPlayer = pIndxPlayer;
+    m_pos = pPos;
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
-    m_timeStart = absTime;
-    m_pTexture = texture;
+    m_pTexture = pTexture;
     m_color = pColor;
     m_currentState = pState;
 }
 
-void dino::Player::Update(double absTime, float deltaTime)
+void dino::Player::Update(double pAbsTime, float pDeltaTime)
 {
     float speed = 100;
-    m_absTime = absTime;
+    m_absTime = pAbsTime;
 
     jv::input::Gamepad keyboard;
     Vec2 dir = Vec2(0, 0);
     if (jv::input::GetGamepad(m_gamepadIdx, keyboard))
     {
+        //fait apparaitre ou disparaitre le joueur
         if (m_currentState == PlayerState::Lobby && keyboard.start && !m_isSpawned)
         {
             m_isSpawned = true;
@@ -42,6 +42,7 @@ void dino::Player::Update(double absTime, float deltaTime)
         else if (!m_isSpawned)
             return;
 
+        //input de direction
         if (keyboard.dpad_up)
             dir.y -= 1;
         if (keyboard.dpad_down)
@@ -51,6 +52,7 @@ void dino::Player::Update(double absTime, float deltaTime)
         if (keyboard.dpad_left)
             dir.x -= 1;
 
+        //sprint
         if (keyboard.btn_right)
         {
             m_bRunning = true;
@@ -60,9 +62,10 @@ void dino::Player::Update(double absTime, float deltaTime)
         {
             m_bRunning = false;
         }
+        //degat
         if (keyboard.btn_left)
         {
-            m_timerStun = 3;
+            m_timerStun = m_stunLenght;
         }
     }
 
@@ -70,42 +73,39 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     if (m_timerStun <= 0)
     {
-        m_pos.x += dir.x * speed * deltaTime;
-        m_pos.y += dir.y * speed * deltaTime;
+        m_pos.x += dir.x * speed * pDeltaTime;
+        m_pos.y += dir.y * speed * pDeltaTime;
 
-        _Trail(deltaTime);
+        _Trail();
     }
     else
     {
-        m_timerStun -= deltaTime;
+        m_timerStun -= pDeltaTime;
     }
 
-    double aliveTime = absTime - m_timeStart;
-    if (aliveTime < 1)
-        m_alpha = uint8_t(UINT8_MAX * aliveTime);
-
-    m_timer += deltaTime;
-
-    while (m_points.size() > 500)
+    //longueur max de la train (2 secondes)
+    while (m_points.size() > m_maxLenghtTrail)
     {
         m_points.erase(m_points.begin());
     }
 }
 
+//si le player se fait attraper dans un lasso
 void dino::Player::TakeDamage()
 {
-    m_timerStun = 3;
+    m_timerStun = m_stunLenght;
 }
 
 bool dino::Player::IsPause()
 {
-
+    //ne peut pas mettre en pause si dans le lobby
     if (m_currentState == PlayerState::Lobby)
         return false;
 
     jv::input::Gamepad pad;
     bool startNow = false;
 
+    //verifier que linput se declanche quune fois
     if (jv::input::GetGamepad(m_gamepadIdx, pad))
         startNow = pad.start;
 
@@ -127,7 +127,7 @@ void dino::Player::ChangeState(PlayerState pState)
     m_currentState = pState;
 }
 
-void dino::Player::_Trail(float deltaTime)
+void dino::Player::_Trail()
 {
     if (!m_points.empty() && m_points.back().x == m_pos.x && m_points.back().y == m_pos.y)
         return;

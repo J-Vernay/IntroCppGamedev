@@ -10,8 +10,6 @@ namespace dino {
 	public:
 		static void ResolveCollision(Movable& a, Movable& b);
         static bool OrderByPosY(Movable const* a, Movable const* b);
-
-		/// Affiche l'animal
 		virtual void Draw() const = 0;
         dino::Vec2 GetPos();
 	    void CheckTerrain(Terrain const& m_Terrain);

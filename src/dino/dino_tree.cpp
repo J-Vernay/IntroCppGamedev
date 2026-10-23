@@ -4,13 +4,14 @@ dino::dino_tree::dino_tree(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndex, do
 {
     m_pos = pPos;
     m_pTexture = pTexture;
-    index = pIndex;
+    m_index = pIndex;
     m_timeStart = pAbsTime;
 }
 
-void dino::dino_tree::Update(double absTime, float deltaTime)
+///apparition d'arbre en 5 secondes
+void dino::dino_tree::Update(double pAbsTime, float pDeltaTime)
 {
-    m_aliveTime = absTime - m_timeStart;
+    m_aliveTime = pAbsTime - m_timeStart;
     if (m_aliveTime < 5)
         m_alpha = uint8_t(UINT8_MAX * m_aliveTime/5);
 }
@@ -24,8 +25,8 @@ void dino::dino_tree::Draw() const
 {
     float u1 = 48, u2 = 80, v1 = 16, v2 = 64;
 
-    u1 += (48+32) * index;
-    u2 += (48 + 32) * index;
+    u1 += (48+32) * m_index;
+    u2 += (48 + 32) * m_index;
 
     jv::util::Color color = jv::util::Color({Color_WHITE.r, Color_WHITE.g, Color_WHITE.b, m_alpha});
 

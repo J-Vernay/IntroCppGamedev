@@ -15,8 +15,11 @@ private:
 public:
     dino_tree(Vec2 pPos, jv::gpu::Texture* pTexture, int pIndex, double pAbsTime);
     void Draw() const override;
+
+    ///renvoie si l'arbre est actif depuis plus de 5 secondes
     bool IsActive();
-    void Update(double absTime, float deltaTime);
-    int index;
+    void Update(double pAbsTime, float pDeltaTime);
+
+    int m_index;
 };
 } 

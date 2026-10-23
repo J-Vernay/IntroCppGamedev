@@ -73,7 +73,7 @@ Double-cliquer sur "vector-char" dans la légende pour n'afficher que cette cour
 Puis cliquer sur "vector-Struct256", "vector-Struct1024", "vector-Struct4096".
 Pourquoi les performances de l'itération sur `vector` dépendent du type stocké ?
 
-> ...
+> Ton cache a une taille limiter, donc quand ta un type de struc petit, tu peux en charger plusieurs a la fois, mais dans le cas ou ils sont trop grand sa prend deja tout ton cache en une fois.
 
 L) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMS" en ordonnée.
 Double-cliquer sur "vector-Struct4096" dans la légende pour n'afficher que cette courbe.

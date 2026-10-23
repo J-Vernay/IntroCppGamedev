@@ -3,26 +3,27 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture)
+dino::Animal::Animal(Vec2 pPos, double pAbsTime, jv::gpu::Texture* pTexture)
 {
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
-    m_timeStart = absTime;
-    m_pTexture = texture;
-    m_pos = pos;
+    m_timeStart = pAbsTime;
+    m_pTexture = pTexture;
+    m_pos = pPos;
 }
 
-void dino::Animal::Update(double absTime, float deltaTime)
+void dino::Animal::Update(double pAbsTime, float pDeltaTime)
 {
-    double aliveTime = absTime - m_timeStart;
+    double aliveTime = pAbsTime - m_timeStart;
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 
+    //calcule de la position en fonction de sa vitesse et direction
     float speed = 30;
-    m_pos.x += m_dir.x * deltaTime * speed;
-    m_pos.y += m_dir.y * deltaTime * speed;
+    m_pos.x += m_dir.x * pDeltaTime * speed;
+    m_pos.y += m_dir.y * pDeltaTime * speed;
 
-    m_idxFrame = int32_t(absTime * 8) % 4;
+    m_idxFrame = int32_t(pAbsTime * 8) % 4;
 }
 
 void dino::Animal::Draw() const
@@ -70,6 +71,8 @@ void dino::Animal::Draw() const
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
 
+
+//fait changer l'animal de direction
 void dino::Animal::_ReactTerrain()
 {
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
