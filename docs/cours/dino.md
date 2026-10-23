@@ -26,6 +26,8 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
+	A classe animal :
+	A 
 > ...
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
@@ -33,6 +35,8 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 (sur la ligne de l'accolade fermante). Dans la fenêtre "Espion 1 / Watch 1",
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
+	A jv :: gpu :: vertex :: buffer :
+	A il y a 468 vertex buffer si 168 triangle sur le terrain, et si chaque animal est a 6 vertices donc 2 triangle. on a aussi un texte de 78
 
 > ...
 
@@ -40,22 +44,19 @@ D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
-
-C'est sont destructeur, il libere la texture a la destruction de l'object
+	A c'est un destructeur, une methode qui permet de libérer les ressource, il est appeller a la fin du programme a la ligne "shut line 25" puis "destruceur de scene" puis"destructeur deque" puis enfin appelle le destructeur de animal (on parle de owner ship / responcabiliter, qui est responcable de libérer les ressource  )
 
 > ...
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
-
-on veux manipuler les animaux presents dans la collection, si on enlever la reférence "&" la logique s'exectutera sur les copie, et non les originaux
+	A 
+	A animal sans &, la variable local et du premier obj ne parle pas des meme emplacement mémoire, on a une pris par valeur/copie car tout les membre sont egaux 
 
 > ...
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
-	dans dino animal.h, on interdis la contruction par copie et  l'affection aussi
-
-> ...
+	A sois, l'operateur par défaut (copie constructeur et opécteur=) ne sont s'attisfesant, on peux l'implémenter sois meme ou interdire les fonction de copie ( avec un = delete)
 
 Remettre l'esperluette.
 
