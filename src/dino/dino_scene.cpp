@@ -3,6 +3,7 @@
 #include <dino/dino_scene.h>
 #include <dino/dino_player.h>
 #include <dino/dino_geometry.h>
+#include <string>
 #include <format>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
@@ -32,6 +33,8 @@ dino::Scene::~Scene() {
 void dino::Scene::Update(double absTime, float deltaTime)
 {
     m_lastDeltaTime = deltaTime;
+
+    m_timer -= deltaTime;
 
     m_Terrain.Update(absTime, deltaTime);
 
@@ -92,6 +95,16 @@ void dino::Scene::Draw() const
         jv::gpu::Draw(pVBuf, m_pTextureText);
         jv::gpu::DestroyVertexBuffer(pVBuf);
     }
+
+    std::string timeText = std::to_string(int(m_timer));
+    std::string_view time = timeText;
+
+    std::vector<jv::gpu::Vertex> vsTimer;
+    dino::GenVertices_Text(
+        vsTimer, time, Color_BLACK, Color_TRANSPARENT, Vec2(m_tmerPos.x, m_tmerPos.y));
+    jv::gpu::VertexBuffer* pVBufTimer = jv::gpu::CreateVertexBuffer("Timer", vsTimer);
+    jv::gpu::Draw(pVBufTimer, m_pTextureText);
+    jv::gpu::DestroyVertexBuffer(pVBufTimer);
 }
 
 void dino::Scene::LassoCollisionCheck()
