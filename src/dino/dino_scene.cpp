@@ -2,12 +2,14 @@
 #include <dino/dino_draw_utils.h>
 #include <dino/dino_scene.h>
 #include <dino/dino_player.h>
+#include <dino/dino_geometry.h>
 #include <format>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
     m_pTextureText = dino::LoadImageAsset("monogram-bitmap.bmp");
     m_pTexturePlayer = dino::LoadImageAsset("dinosaurs.bmp");
+    m_pTextureAnimal = dino::LoadImageAsset("animals.bmp");
 
     m_Terrain.SetSeason(jv::util::RandomInt32(0, 3));
 
@@ -37,8 +39,7 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     for (Player& player : m_players)
     {
-        player.Update(absTime, deltaTime);
-        player.DetectBounds(m_Terrain);
+        player.Update(absTime, deltaTime, m_Terrain);
     }
 
     for (int i = 0; i < m_players.size(); ++i)
@@ -52,6 +53,8 @@ void dino::Scene::Update(double absTime, float deltaTime)
     for (int i = 0; i < m_players.size(); ++i)
         for (int j = 0; j < m_animals.size(); ++j)
             Entity::ResolveCollision(m_players[i], m_animals[j]);
+
+    LassoCollisionCheck();
 }
 
 void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
@@ -63,14 +66,11 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
     {
         m_animalSpawnTime = absTime;
         Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
-        m_animals.emplace_back(spawnPos, dino::LoadImageAsset("animals.bmp"), absTime);
+        m_animals.emplace_back(spawnPos, m_pTextureAnimal, absTime);
     }
 
     for (Animal& animal : m_animals)
-    {
-        animal.Update(absTime, deltaTime);
-        animal.DetectBounds(m_Terrain);
-    }
+        animal.Update(absTime, deltaTime, m_Terrain);
 }
 
 void dino::Scene::Draw() const
@@ -92,4 +92,33 @@ void dino::Scene::Draw() const
         jv::gpu::Draw(pVBuf, m_pTextureText);
         jv::gpu::DestroyVertexBuffer(pVBuf);
     }
+}
+
+void dino::Scene::LassoCollisionCheck()
+{
+    std::vector<Vec2> loop;
+
+    for (Player& player : m_players)
+    {
+        loop.clear();
+        if (!player.FindLassoLoop(loop))
+            continue;
+
+        for (Animal& animal : m_animals)
+        {
+            if (isInside(loop, animal.GetPos()))
+                animal.Caught();
+        }
+
+        for (Player& other : m_players)
+        {
+            if (&other == &player)
+                continue;
+            if (isInside(loop, other.GetPos()))
+                other.Caught();
+        }
+
+        player.ClearLasso();
+    }
+    std::erase_if(m_animals, [](Animal const& a) { return a.IsCaught(); });
 }

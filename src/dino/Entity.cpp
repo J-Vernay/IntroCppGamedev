@@ -1,4 +1,5 @@
 ﻿#include <dino/Entity.h>
+#include <math.h>
 
 void dino::Entity::ResolveCollision(Entity& a, Entity& b)
 {

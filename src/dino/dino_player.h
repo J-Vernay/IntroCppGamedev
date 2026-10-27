@@ -26,7 +26,21 @@ namespace dino
         Player& operator=(Player const& b) = delete;
 
         /// Déplace le joueur et met à jour son animation.
-        void Update(double absTime, float deltaTime);
+        void Update(double absTime, float deltaTime, Terrain const& terrain);
+
+        void LassoUpdate();
+        void LassoDraw() const;
+        bool FindLassoLoop(std::vector<Vec2>& outLoop) const;
+        void ClearLasso()
+        {
+            m_lasso.clear();
+        }
+        int GetId() const
+        {
+            return id;
+        }
+
+        void Caught() override;
 
         /// Affiche le joueur
         void Draw() const;
@@ -36,6 +50,14 @@ namespace dino
            
 
     private:
+
+        static constexpr size_t kLassoMaxPoints = 100;
+        static constexpr float kLassoMinStep = 4.f;
+        static constexpr float kLassoWidth = 4.f;
+        Vec2 m_lassoPrevAnchor = {0, 0};
+        jv::util::Color m_playerColor;
+
+        jv::util::Color m_playersColors[4] = {Color_BLUE, Color_RED, Color_YELLOW, Color_GREEN};
         int32_t m_idxPlayer;
         jv::input::GamepadIdx m_gamepadIdx;
         
@@ -45,6 +67,10 @@ namespace dino
         double m_absTime = 0;
         bool m_bRunning = false;
         bool m_bLeft = false;
+
+        int id;
+
+        std::vector<Vec2> m_lasso;
 
     };
 

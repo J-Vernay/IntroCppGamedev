@@ -169,7 +169,7 @@ des dinosaures, aux couleurs des dinosaures.
 B) Implémenter : "Les suites de points sont tronquées à une longueur maximale de deux secondes."
 Quelle méthode de std::vector utiliser ?
 
-‍...
+‍la méthode erase() pour supprimer les points les plus anciens lorsque la longueur maximale est atteinte.	
 
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?

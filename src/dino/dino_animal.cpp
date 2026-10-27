@@ -3,24 +3,20 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, jv::gpu::Texture* m_pTexture, double absTime)
+dino::Animal::Animal(Vec2 pos, jv::gpu::Texture* pTexture, double absTime)
 {
     m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-
-    //appliquer un ptr sur la texture
-    m_pTexture = dino::LoadImageAsset("animals.bmp");
-    m_pTextureptr = m_pTexture;
+    m_pTextureptr = pTexture;
 }
 
 dino::Animal::~Animal()
 {
-    jv::gpu::DestroyTexture(m_pTextureptr);
 }
 
-void dino::Animal::Update(double absTime, float deltaTime)
+void dino::Animal::Update(double absTime, float deltaTime, Terrain const& terrain)
 {
     float speed = 30;
     m_pos.x += m_dir.x * deltaTime * speed;
@@ -32,7 +28,7 @@ void dino::Animal::Update(double absTime, float deltaTime)
     if (aliveTime < 1)
         m_alpha = uint8_t(UINT8_MAX * aliveTime);
 
-    
+    CheckTerrain(terrain);
 }
 
 void dino::Animal::_ReactTerrain()
@@ -79,4 +75,11 @@ void dino::Animal::Draw() const
     jv::gpu::DestroyVertexBuffer(pVBuf);
 
     
+}
+
+void dino::Animal::Caught()
+{
+    if (m_state == catched)
+        return;
+    m_state = catched;
 }

@@ -32,6 +32,8 @@ private:
     void _UpdateAnimals(double absTime, float deltaTime);
 
     void _UpdatePlayer(double absTime, float deltaTime);
+
+    void LassoCollisionCheck();
 };
 
 } // namespace dino

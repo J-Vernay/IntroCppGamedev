@@ -26,3 +26,16 @@ bool dino::IntersectSegment(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
     else
         return 0 <= dot_AB_AC && dot_AB_AD <= dot_AB_AB;
 }
+
+bool dino::isInside(std::vector<Vec2> const& poly, Vec2 point)
+{
+    Vec2 const outside = {0, 0};
+
+    bool inside = false;
+    for (size_t i = 0, j = poly.size() - 1; i < poly.size(); j = i++)
+    {
+        if (IntersectSegment(poly[i], poly[j], point, outside))
+            inside = !inside;
+    }
+    return inside;
+}

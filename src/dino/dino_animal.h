@@ -15,19 +15,31 @@ public:
     Animal(Vec2 pos,jv::gpu::Texture* m_pTexture, double absTime);
     
     /// Déplace l'animal et met à jour son animation.
-    void Update(double absTime, float deltaTime);
+    void Update(double absTime, float deltaTime, Terrain const& terrain);
 
     /// Affiche l'animal
     void Draw() const;
 
     void _ReactTerrain() override;
 
+    void Caught() override;
+    bool IsCaught() const
+    {
+        return m_state == AnimalState::catched;
+    }
+
+    enum AnimalState
+    {
+        Alive,
+        catched,
+    };
+
     /// Détruit les ressources associées à l'animal.
     ~Animal();
 
 
 private:
-    Vec2 m_pos;
+    AnimalState m_state = Alive;
     double m_timeStart;
     uint8_t m_alpha = 0;
     Vec2 m_dir;

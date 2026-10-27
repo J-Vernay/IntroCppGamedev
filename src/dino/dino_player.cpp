@@ -1,6 +1,7 @@
 ﻿#include <dino/dino_draw_utils.h>
 #include <dino/dino_player.h>
 #include <dino/dino_terrain.h>
+#include <dino/dino_geometry.h>
 #include <math.h>
 
 dino::Player::Player(
@@ -10,6 +11,9 @@ dino::Player::Player(
     m_idxPlayer = idxPlayer;
     m_gamepadIdx = gamepadIdx;
     m_pTexture = pTexture;
+    id = static_cast<int>(gamepadIdx);
+
+    m_playerColor = m_playersColors[m_idxPlayer % 4];
 }
 
 
@@ -17,7 +21,7 @@ dino::Player::~Player()
 {
 }
 
-void dino::Player::Update(double absTime, float deltaTime)
+void dino::Player::Update(double absTime, float deltaTime, Terrain const& terrain)
 {
     float speed = 100;
     jv::input::Gamepad padInput;
@@ -63,10 +67,121 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     if (m_dir.x != 0)
         m_bLeft = m_dir.x < 0;
+
+    CheckTerrain(terrain);
+    LassoUpdate();
+}
+
+void dino::Player::Caught()
+{
+    if (m_hitTime > 0)
+        return;
+
+    m_hitTime = 3;
+    m_lasso.clear();
+}
+
+void dino::Player::LassoUpdate()
+{
+    Vec2 anchor = {m_pos.x, m_pos.y - 8};
+
+    // On ajoute un point seulement si on s'est assez éloigné du dernier.
+    if (m_lasso.empty())
+    {
+        m_lasso.push_back(anchor);
+        return;
+    }
+
+    float dx = anchor.x - m_lasso.back().x;
+    float dy = anchor.y - m_lasso.back().y;
+    if (sqrtf(dx * dx + dy * dy) >= kLassoMinStep)
+        m_lasso.push_back(anchor);
+
+    if (m_lasso.size() > kLassoMaxPoints)
+        m_lasso.erase(m_lasso.begin());
+}
+
+void dino::Player::LassoDraw() const
+{
+    if (m_lasso.empty())
+        return;
+
+    // Points fixes + position actuelle, pour que le lasso colle toujours au joueur.
+    std::vector<Vec2> pts = m_lasso;
+    pts.push_back({m_pos.x, m_pos.y - 8});
+
+    std::vector<jv::gpu::Vertex> vs;
+    float h = kLassoWidth / 2;
+
+    for (size_t i = 0; i + 1 < pts.size(); ++i)
+    {
+        Vec2 a = pts[i];
+        Vec2 b = pts[i + 1];
+
+        float dx = b.x - a.x;
+        float dy = b.y - a.y;
+        float len = sqrtf(dx * dx + dy * dy);
+        if (len == 0)
+            continue;
+
+        // Normale du segment, de longueur h.
+        float nx = -dy / len * h;
+        float ny = dx / len * h;
+
+        Vec2 a1 = {a.x + nx, a.y + ny};
+        Vec2 a2 = {a.x - nx, a.y - ny};
+        Vec2 b1 = {b.x + nx, b.y + ny};
+        Vec2 b2 = {b.x - nx, b.y - ny};
+
+        // Un quad par segment = 2 triangles.
+        vs.push_back({a1, Vec2{0, 0}, m_playerColor});
+        vs.push_back({a2, Vec2{0, 0}, m_playerColor});
+        vs.push_back({b1, Vec2{0, 0}, m_playerColor});
+
+        vs.push_back({a2, Vec2{0, 0}, m_playerColor});
+        vs.push_back({b2, Vec2{0, 0}, m_playerColor});
+        vs.push_back({b1, Vec2{0, 0}, m_playerColor});
+    }
+
+    if (vs.empty())
+        return;
+
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Lasso", vs);
+    jv::gpu::Draw(pVBuf, nullptr);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+bool dino::Player::FindLassoLoop(std::vector<Vec2>& outLoop) const
+{
+    std::vector<Vec2> pts = m_lasso;
+    pts.push_back({m_pos.x, m_pos.y - 8});
+
+    size_t n = pts.size();
+    if (n < 4)
+        return false;
+
+    for (size_t s = n - 1; s + 2 >= n && s >= 1; --s)
+    {
+        Vec2 c = pts[s - 1];
+        Vec2 d = pts[s];
+        if (c.x == d.x && c.y == d.y)
+            continue;
+
+        for (size_t i = 0; i + 2 < s; ++i)
+        {
+            if (IntersectSegment(pts[i], pts[i + 1], c, d))
+            {
+                outLoop.assign(pts.begin() + i + 1, pts.begin() + s + 1);
+                return outLoop.size() >= 3;
+            }
+        }
+    }
+    return false;
 }
 
 void dino::Player::Draw() const
 {
+    LassoDraw();
     float u1, u2, v1 = 0, v2 = 24;
 
     if (m_hitTime > 0)
@@ -77,7 +192,7 @@ void dino::Player::Draw() const
         u2 = 336 + 24 + 24 * idxFrame;
     }
 
-    if (m_bRunning)
+    else if (m_bRunning)
     {
         // Course
         int32_t idxFrame = int32_t(m_absTime * 16) % 6;
