@@ -42,19 +42,18 @@ et les exemples dans le code :
 > IV. `Pong`
 > V. `Pong::Pong`
 
-a -> 2 -> IV
-b -> 4 -> II
-c -> 5 -> I
-d -> 3 -> III
-e -> 1 -> V
+> a -> 2 -> IV  
+b -> 4 -> II  
+c -> 5 -> I  
+d -> 3 -> III  
+e -> 1 -> V  
 
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> 
-Le compilateur le refuse car Pong::Draw() est une fonction const, elle ne peut donc pas modifier ses attributs (seulement les lires).
+> Le compilateur le refuse car Pong::Draw() est une fonction const, elle ne peut donc pas modifier ses attributs (seulement les lires).  
 Cette fonctionnalité est désirable car elle apporte une indication claire sur la nature "lecture seule" de la méthode.
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
@@ -72,19 +71,20 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> À controler l'accès aux attributs et méthodes d'une class. 
-'public' défini les membres accesssibles partout où la class existe. 'private' défini les membres accessibles uniquement depuis l'interieure de la class elle-meme.
+> À controler l'accès aux attributs et méthodes d'une class.  
+'public' défini les membres accesssibles partout où la class existe.  
+'private' défini les membres accessibles uniquement depuis l'interieure de la class elle-meme.
 
 I) Définissez les termes suivants :
 
 > Encapsulation : 
-C'est un principe de programmation en POO. Il consiste d'abord à regrouper les attributs et methodes en class de maniere cohérente.
-Cela permet par la suite de masquer et proteger l'état interne de l'objet (attributs private). 
+C'est un principe de programmation en POO. Il consiste d'abord à regrouper les attributs et methodes en class de maniere cohérente.  
+Cela permet par la suite de masquer et proteger l'état interne de l'objet (attributs private).  
 Le reste du programme n'interagie avec lui seulement par une interface controlée (methodes public).
 
 > Invariant d'une classe : 
-Ce sont des conditions toujours vraies sur l'état interne d'un objet.
-Il doit etre définis à sa création (constructeur).
+Ce sont des conditions toujours vraies sur l'état interne d'un objet.  
+Il doit etre définis à sa création (constructeur).  
 Il doit etre maintenu après l'execution de chaque méthode public.
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,

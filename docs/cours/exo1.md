@@ -42,27 +42,27 @@ dans les fichiers `jv_win64_main.cpp` et `jv_win64_window.cpp`:
 
 C) Quelles sont les 4 fonctions qu'un jeu doit fournir au moteur de jeu JV ?
 
-> Le contrat jv::game contraint à définir Init(), Update(), Draw() et Shut()
+> Le contrat jv::game contraint à implémenter Init(), Update(), Draw() et Shut()
 
 D) Dans la fonction DrawRect(), que représente 'pos' et 'size' ?
 
-> pos représente la position du coin supérieur gauche du rectangle et size représente ses dimensions(largeur, hauteur).
+> pos représente la position du coin supérieur gauche du rectangle et size représente ses dimensions(largeur, hauteur).  
 La fonction utilise ces informations pour connaitre la position du premier point (vertex) et placer les suivants par rapport aux dimensions.
 
 E) Qu'est-ce qu'un Vertex ? Que fait `jv::gpu::CreateVertexBuffer()` ?
 Que fait `jv::gpu::Draw()` ?
 
-> Un Vertex désigne un sommet d'une géométrie en rendu graphique. 
-"jv::gpu::CreateVertexBuffer()" sert à récuperer des struct Vertex de la RAM pour les envoyer à la VRAM sous la forme d'un Vertex Buffer.
-L'espace mémoire Vertex Buffer sur la VRAM est optimisé pour le rendu de géométrie.
+> Un Vertex désigne un sommet d'une géométrie en rendu graphique.  
+"jv::gpu::CreateVertexBuffer()" sert à récuperer des struct Vertex de la RAM pour les envoyer à la VRAM sous la forme d'un Vertex Buffer.  
+L'espace mémoire Vertex Buffer sur la VRAM est optimisé pour le rendu de géométrie.  
 "jv::gpu::Draw()" est l'implémentation du DrawCall. À chaque fois que cette fonction est effectuée, le GPU rend la géométrie du Vertex Buffer.
 
 F) La balle se dirige vers la droite, à une vitesse de 300 pixels par seconde.
 Le temps entre deux frames est 20 millisecondes. Quelle distance en pixel a été parcourue entre ces deux frames ?
 
-> V = d/t
-300 pix/s = d/0,02s
-d = 300 * 0,02 = 6
+> V = d/t  
+300 pix/s = d/0,02s  
+d = 300 * 0,02 = 6  
 La distance parcourue est de 6 pixels.
 
 G) Le temps entre deux frames est 10 millisecondes. Pendant ce temps, la balle s'est dirigée
@@ -70,30 +70,31 @@ suivant le vecteur (-30, 40) (en pixels). Dans quelle direction s'est-elle dépl
 À quelle vitesse, en pixels par seconde, cela correspond-il ?
 
 > Selon le repére utilisé (x croissant vers la droite et y croissant vers le bas), la balle se déplace en diagonale vers le bas à gauche.
-
-On calcul la distance parcourue avec le théoreme de Pythagore :
-distance = sqrt((-30)au carré + 40 au carré)
+>
+> On calcul la distance parcourue avec le théoreme de Pythagore :  
+distance = sqrt((-30)au carré + 40 au carré)  
 distance = 50 pixels
-
-V = 50pix / 0,01s = 5000pix/s
+>
+> V = 50pix / 0,01s = 5000pix/s
 
 H) La balle est à la position (100, 200). Elle se dirige en diagonale droite-haut,
 à la vitesse de 100 pixels par seconde. À quelle position la balle est-elle au bout d'une seconde ?
 
-> On considére une diagonale droite-haut de 100pix distDiagonale. On cherche le déplacement en X et Y (distX et distY).
-Si on considére un triangle rectangle à partir du repére distX, distY dont l'hypothénuse est distDiagonale.
-
-D'après le théorème de Pythagore:
-distX carré + distY carré = distDiagonale carré = 100 au carré
-
-C'est une diagonale parfaite donc la distance horizontale et verticale parcourue est la meme. distX = distY donc,
-distX carré + distX carré = 100 au carré
-2distX carré = 10000
-distX carré = 5000
-distX = sqrt(5000) ≈ 70,7
-
-On ajoute ce déplacement aux coordonnées de départ (en prenant compte de l'axe Y inversé par rapport à un repére orthonormé).
-nouvelle position ≈ (171, 129)
+> On considére une diagonale droite-haut de 100pix distDiagonale.  
+On cherche le déplacement en X et Y (distX et distY).  
+On imagine un triangle rectangle à partir du repére distX, distY dont l'hypothénuse est distDiagonale.  
+>
+> D'après le théorème de Pythagore:  
+distX carré + distY carré = distDiagonale carré = 100 au carré  
+>
+> C'est une diagonale parfaite donc la distance horizontale et verticale parcourue est la meme. distX = distY donc,  
+distX carré + distX carré = 100 au carré  
+2distX carré = 10000  
+distX carré = 5000  
+distX = sqrt(5000) ≈ 70,7  
+>
+> On ajoute ce déplacement aux coordonnées de départ (en prenant compte de l'axe Y inversé par rapport à un repére orthonormé).  
+nouvelle position ≈ (171, 129)  
 
 I) Modifier le code pour que la balle se déplace, dépendamment de sa vitesse, de sa direction, et du temps écoulé.
 

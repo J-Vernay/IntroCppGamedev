@@ -80,7 +80,7 @@ Dans Visual Studio, dans la fenêtre "Explorateur de solutions" à droite :
 K) Quels sont les liens entre :
 
 > **Fichiers `.h` et `.cpp` :
-Le .h déclare un contrat que les .cpp doivent suivre s'ils l'incluent.
+Le .h déclare un contrat d'implémentation que les .cpp doivent suivre s'ils l'incluent.
 
 > **Fichiers `.cpp` et `.obj` : 
 Les .cpp sont compilés individuellement en .obj par le compilateur.
