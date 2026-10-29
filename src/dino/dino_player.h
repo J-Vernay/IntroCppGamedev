@@ -1,8 +1,10 @@
-﻿#pragma once
+﻿
+#pragma once
 
 #include <dino/Entity.h>
 #include <dino/dino_main.h>
 #include <dino/dino_terrain.h>
+#include <dino/Entity.h>
 
 #include <vector>
 
@@ -16,10 +18,22 @@ public:
     Player(
         Vec2 pos, int32_t idxPlayer, jv::input::GamepadIdx gamepadIdx, jv::gpu::Texture* pTexture);
 
+    /// Constructeur d'un Player à partir d'un autre Player par copie
+    ///
+    /// "Player a = b;" ou "Player a{b};" (on construit "a" à partir de "b")
     Player(Player const& other) = delete;
     Player& operator=(Player const& other) = delete;
 
+    /// Opérateur d'assignement par copie
+    ///
+    /// Player a, b;
+    /// a = b; // Pas un constructeur, car 'a' et 'b' existe déjà ; c'est une affectation
+    Player& operator=(Player const& b) = delete;
+
+    /// Déplace le joueur et met à jour son animation.
     void Update(double absTime, float deltaTime);
+
+    /// Affiche le joueur
     void Draw() const override;
 
     void Join(Vec2 pos);

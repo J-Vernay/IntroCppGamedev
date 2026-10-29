@@ -4,6 +4,7 @@
 #include <dino/dino_main.h>
 #include <dino/dino_player.h>
 #include <dino/dino_terrain.h>
+#include <dino/dino_player.h>
 
 #include <array>
 #include <deque>

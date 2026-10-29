@@ -86,6 +86,13 @@ dino::Scene::~Scene()
     jv::gpu::DestroyTexture(m_pTextureWhite);
 }
 
+
+dino::Scene::~Scene()
+{
+    jv::gpu::DestroyTexture(m_pTexturePlayer);
+    jv::gpu::DestroyTexture(m_pTextureAnimal);
+}
+
 void dino::Scene::Update(double absTime, float deltaTime)
 {
     m_lastDeltaTime = deltaTime;

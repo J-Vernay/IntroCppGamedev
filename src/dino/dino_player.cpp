@@ -118,10 +118,11 @@ void dino::Player::Update(double absTime, float deltaTime)
             dirx -= 1;
         if (gamepad.dpad_right)
             dirx += 1;
-
+        
         m_dir = {dirx, diry};
         m_bRunning = gamepad.btn_right;
 
+        m_bRunning = keyboard.btn_right;
         if (m_bRunning)
             speed *= 2;
 
@@ -239,7 +240,7 @@ void dino::Player::_UpdateLasso(double absTime)
         float dx = m_pos.x - intersection.x;
         float dy = m_pos.y - intersection.y;
         if (dx * dx + dy * dy > 1)
-        {
+{
             remainingPoints.push_back(m_pos);
             remainingTimes.push_back(absTime);
         }
@@ -262,6 +263,7 @@ void dino::Player::Draw() const
 
     if (m_hitTime > 0)
     {
+        // Degat
         int32_t idxFrame = int32_t(m_absTime * 8) % 3;
         u1 = 336 + 24 * idxFrame;
         u2 = 336 + 24 + 24 * idxFrame;
@@ -283,10 +285,13 @@ void dino::Player::Draw() const
         int32_t idxFrame = int32_t(m_absTime * 8) % 4;
         u1 = 24 * idxFrame;
         u2 = 24 + 24 * idxFrame;
+
     }
 
     if (m_goingLeft)
+    {
         std::swap(u1, u2);
+    }
 
     v1 += 24 * m_idxPlayer;
     v2 += 24 * m_idxPlayer;
