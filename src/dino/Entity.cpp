@@ -2,7 +2,7 @@
 #include <dino/Entity.h>
 
 
-
+// Sépare deux entités qui se chevauchent.
 void dino::Entity::ResolveEntityCollision(Entity& a, Entity& b)
 {
     // On ne peut pas accéder à m_pos car méthode statique = pas d'état implicite
@@ -22,7 +22,7 @@ void dino::Entity::ResolveEntityCollision(Entity& a, Entity& b)
         b.m_pos.y += depl.y;
     }
 }
-
+// Contraint l'entité aux limites du terrain.
 void dino::Entity::CheckTerrain(Terrain const& terrain)
 {
     Vec2 oldPos = m_pos;
@@ -31,10 +31,11 @@ void dino::Entity::CheckTerrain(Terrain const& terrain)
         _ReactTerrain();
 }
 
+// comportement par défaut au contact du terrain
 void dino::Entity::_ReactTerrain()
 {
 }
-
+// Compare deux entités selon leur position verticale.
 bool dino::Entity::OrderByPosY(Entity const* a, Entity const* b)
 {
     return a->m_pos.y < b->m_pos.y;

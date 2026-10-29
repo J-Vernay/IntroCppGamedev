@@ -33,7 +33,14 @@ void dino::Animal::Update(double absTime, float deltaTime)
 
 void dino::Animal::CheckTerrain(Terrain const& terrain)
 {
-    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+    Vec2 oldPos = m_pos;
+    m_pos = terrain.ClampPos(m_pos);
+
+    if (m_pos.x != oldPos.x)
+        m_dir.x = -m_dir.x;
+
+    if (m_pos.y != oldPos.y)
+        m_dir.y = -m_dir.y;
 }
 
 void dino::Animal::_ReactTerrain()

@@ -17,6 +17,8 @@ public:
     /// S'assurer que la position du joueur reste sur le terrain.
     void CheckTerrain(Terrain const& terrain);
 
+    Vec2 GetPosition() const { return m_pos; }
+
 protected:
     Vec2 m_pos;
 
