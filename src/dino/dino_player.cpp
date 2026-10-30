@@ -3,6 +3,7 @@
 #include <dino/dino_terrain.h>
 #include <dino/dino_geometry.h>
 #include <math.h>
+#include <windows.h>
 
 dino::Player::Player(
     Vec2 pos, int32_t idxPlayer, jv::input::GamepadIdx gamepadIdx, jv::gpu::Texture* pTexture)
@@ -243,4 +244,24 @@ void dino::Player::Draw() const
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+bool dino::Player::PollPauseToggle()
+{
+    bool down = false;
+
+    if (m_gamepadIdx == jv::input::GamepadIdx::Keyboard)
+    {
+        down = (GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
+    }
+    else
+    {
+        jv::input::Gamepad pad;
+        if (jv::input::GetGamepad(m_gamepadIdx, pad))
+            down = pad.start;
+    }
+
+    bool pressed = down && !m_bPauseWasDown;
+    m_bPauseWasDown = down;
+    return pressed;
 }

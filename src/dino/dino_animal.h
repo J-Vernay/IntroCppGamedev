@@ -16,6 +16,11 @@ public:
     
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime, Terrain const& terrain);
+    bool IsExpired(float lifetime) const
+    {
+        return m_age >= lifetime;
+    }
+
 
     /// Affiche l'animal
     void Draw() const;
@@ -45,8 +50,8 @@ private:
     Vec2 m_dir;
     int32_t m_kind;
     int32_t m_idxFrame;
-    jv::gpu::Texture* m_pTextureptr
-;
+    jv::gpu::Texture* m_pTextureptr;
+    double m_age = 0;
 };
 
 } // namespace dino

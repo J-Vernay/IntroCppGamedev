@@ -40,6 +40,9 @@ namespace dino
             return id;
         }
 
+        bool PollPauseToggle();
+
+
         void Caught() override;
 
         /// Affiche le joueur
@@ -56,6 +59,7 @@ namespace dino
         static constexpr float kLassoWidth = 4.f;
         Vec2 m_lassoPrevAnchor = {0, 0};
         jv::util::Color m_playerColor;
+        bool m_bPauseWasDown = false;
 
         jv::util::Color m_playersColors[4] = {Color_BLUE, Color_RED, Color_YELLOW, Color_GREEN};
         int32_t m_idxPlayer;

@@ -17,12 +17,15 @@ public:
     void Update(double absTime, float deltaTime);
     void Draw() const;
 
+
 private:
     jv::gpu::Texture* m_pTextureText = nullptr;
     jv::gpu::Texture* m_pTextureAnimal = nullptr;
     jv::gpu::Texture* m_pTexturePlayer = nullptr;
     float m_lastDeltaTime = 0;
     float m_timer = 60.0f;
+    bool m_bPaused = false;
+
     jv::util::Vec2 m_tmerPos = Vec2(480 / 2, 10);
 
     Terrain m_Terrain;
@@ -36,6 +39,9 @@ private:
     void _UpdatePlayer(double absTime, float deltaTime);
 
     void LassoCollisionCheck();
+
+
+    void PauseGame() const;
 };
 
 } // namespace dino

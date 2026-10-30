@@ -18,6 +18,8 @@ dino::Animal::~Animal()
 
 void dino::Animal::Update(double absTime, float deltaTime, Terrain const& terrain)
 {
+    m_age += deltaTime;
+
     float speed = 30;
     m_pos.x += m_dir.x * deltaTime * speed;
     m_pos.y += m_dir.y * deltaTime * speed;

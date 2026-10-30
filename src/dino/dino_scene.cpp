@@ -5,6 +5,7 @@
 #include <dino/dino_geometry.h>
 #include <string>
 #include <format>
+#include <algorithm>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
@@ -33,6 +34,13 @@ dino::Scene::~Scene() {
 void dino::Scene::Update(double absTime, float deltaTime)
 {
     m_lastDeltaTime = deltaTime;
+
+    for (Player& player : m_players)
+        if (player.PollPauseToggle())
+            m_bPaused = !m_bPaused;
+
+    if (m_bPaused)
+        return;
 
     m_timer -= deltaTime;
 
@@ -74,6 +82,14 @@ void dino::Scene::_UpdateAnimals(double absTime, float deltaTime)
 
     for (Animal& animal : m_animals)
         animal.Update(absTime, deltaTime, m_Terrain);
+
+    constexpr float kTimerStart = 60.f;
+    //ca prend en compte le timer pour faire varier la durée de vie des animaux
+    float ratio = std::clamp(m_timer / kTimerStart, 0.f, 1.f);
+    //durée de vie des animaux , 15 sec si timer est a fond et 0.5 si a 0
+    float lifetime = 0.5f + 15.f * ratio;
+
+    std::erase_if(m_animals, [lifetime](Animal const& a) { return a.IsExpired(lifetime); });
 }
 
 void dino::Scene::Draw() const
@@ -134,4 +150,19 @@ void dino::Scene::LassoCollisionCheck()
         player.ClearLasso();
     }
     std::erase_if(m_animals, [](Animal const& a) { return a.IsCaught(); });
+}
+
+void dino::Scene::PauseGame() const
+{
+    std::string text = "PAUSE";
+    std::vector<jv::gpu::Vertex> vs;
+
+    
+    jv::util::Vec2 size = jv::gpu::GetRenderSize();
+    dino::GenVertices_Text(vs, text, Color_WHITE, Color_GREY, Vec2(size.x / 2 - 40, size.y / 2));
+
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Pause", vs);
+    jv::gpu::Draw(pVBuf, m_pTextureText);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+
 }
