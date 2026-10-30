@@ -26,6 +26,9 @@ private:
     float m_timer = 60.0f;
     bool m_bPaused = false;
 
+    bool m_bDeleteWasDown = false;
+    void _ReturnToLobby(double absTime);
+
     jv::util::Vec2 m_tmerPos = Vec2(480 / 2, 10);
 
     Terrain m_Terrain;
@@ -40,8 +43,20 @@ private:
 
     void LassoCollisionCheck();
 
-
     void PauseGame() const;
+
+    enum class GameState{Lobby, Playing};
+    GameState m_state = GameState::Lobby;
+    static constexpr float kTimerStart = 60.f;
+
+    jv::util::Vec2 _LobbyTreePos(int32_t idxSeason) const;
+    void _StartGame(int32_t idxSeason, double absTime);
+
+    //on defini on écart enttre les arbres
+    static constexpr float kTreeSpacing = 72.f;
+    static constexpr float kTreeTriggerRadius = 14.f;
+
+    int32_t _LobbyLassoCheck();
 };
 
 } // namespace dino

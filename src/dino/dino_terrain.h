@@ -21,6 +21,14 @@ public:
     /// Affiche le terrain de jeu.
     void Draw() const;
 
+    // retourne la position du centre du terrain de jeu (en pixels)
+    Vec2 GetCenter() const
+    {
+        return {m_spawnOffset.x + m_spawnSize.x / 2, m_spawnOffset.y + m_spawnSize.y / 2};
+    }
+
+    void DrawSeasonTree(int32_t idxSeason, Vec2 foot) const;
+
     /// Génère une position aléatoire dans le terrain.
     Vec2 GenerateRandomSpawn() const;
 

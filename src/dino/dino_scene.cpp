@@ -6,6 +6,8 @@
 #include <string>
 #include <format>
 #include <algorithm>
+#define NOMINMAX
+#include <windows.h>
 
 dino::Scene::Scene() : m_Terrain{24, 16}
 {
@@ -35,12 +37,52 @@ void dino::Scene::Update(double absTime, float deltaTime)
 {
     m_lastDeltaTime = deltaTime;
 
+    if (m_timer <= 0)
+    {
+        _ReturnToLobby(absTime);
+        return;
+    }
+
+    bool startPressed = false;
+    bool pausePressed = false;
     for (Player& player : m_players)
-        if (player.PollPauseToggle())
-            m_bPaused = !m_bPaused;
+    {
+        startPressed |= player.PollStartPressed();
+        pausePressed |= player.PollPauseToggle();
+    }
+
+    if (m_state == GameState::Lobby)
+    {
+        m_Terrain.Update(absTime, deltaTime);
+        for (Player& player : m_players)
+            player.Update(absTime, deltaTime, m_Terrain);
+        for (size_t i = 0; i < m_players.size(); ++i)
+            for (size_t j = i + 1; j < m_players.size(); ++j)
+                Entity::ResolveCollision(m_players[i], m_players[j]);
+
+        int32_t season = _LobbyLassoCheck();
+        if (season >= 0)
+            _StartGame(season, absTime);
+        return;
+    }
+
+    bool deleteDown = GetAsyncKeyState(VK_DELETE) < 0;
+    bool deletePressed = deleteDown && !m_bDeleteWasDown;
+    m_bDeleteWasDown = deleteDown;
+
+    if (deletePressed && m_state == GameState::Playing)
+    {
+        _ReturnToLobby(absTime);
+        return;
+    }
+
+    if (pausePressed)
+        m_bPaused = !m_bPaused;
 
     if (m_bPaused)
         return;
+
+    m_timer -= deltaTime;
 
     m_timer -= deltaTime;
 
@@ -96,6 +138,12 @@ void dino::Scene::Draw() const
 {
     m_Terrain.Draw();
 
+    if (m_state == GameState::Lobby)
+    {
+        for (int32_t s = 0; s < 4; ++s)
+            m_Terrain.DrawSeasonTree(s, _LobbyTreePos(s));
+    }
+
     for (Animal const& animal : m_animals)
         animal.Draw();
 
@@ -111,6 +159,20 @@ void dino::Scene::Draw() const
         jv::gpu::Draw(pVBuf, m_pTextureText);
         jv::gpu::DestroyVertexBuffer(pVBuf);
     }
+
+    if (m_state == GameState::Playing)
+    {
+        std::string timeText = std::to_string(int(m_timer));
+        std::vector<jv::gpu::Vertex> vsTimer;
+        dino::GenVertices_Text(
+            vsTimer, timeText, Color_BLACK, Color_TRANSPARENT, Vec2(m_tmerPos.x, m_tmerPos.y));
+        jv::gpu::VertexBuffer* pVBufTimer = jv::gpu::CreateVertexBuffer("Timer", vsTimer);
+        jv::gpu::Draw(pVBufTimer, m_pTextureText);
+        jv::gpu::DestroyVertexBuffer(pVBufTimer);
+    }
+
+    if (m_bPaused)
+        PauseGame();
 
     std::string timeText = std::to_string(int(m_timer));
     std::string_view time = timeText;
@@ -165,4 +227,63 @@ void dino::Scene::PauseGame() const
     jv::gpu::Draw(pVBuf, m_pTextureText);
     jv::gpu::DestroyVertexBuffer(pVBuf);
 
+}
+
+void dino::Scene::_ReturnToLobby(double absTime)
+{
+    m_state = GameState::Lobby;
+    m_bPaused = false;
+    m_timer = kTimerStart;
+    m_animals.clear();
+    m_animalSpawnTime = absTime;
+
+    for (Player& player : m_players)
+        player.ResetState();
+}
+
+jv::util::Vec2 dino::Scene::_LobbyTreePos(int32_t idxSeason) const
+{
+    Vec2 c = m_Terrain.GetCenter();
+    return {c.x + (idxSeason - 1.5f) * kTreeSpacing, c.y + 24.f};
+}
+
+void dino::Scene::_StartGame(int32_t idxSeason, double absTime)
+{
+    m_Terrain.SetSeason(idxSeason);
+    m_state = GameState::Playing;
+    m_timer = kTimerStart;
+    m_animals.clear();
+    m_animalSpawnTime = absTime;
+    for (Player& player : m_players)
+        player.ClearLasso();
+}
+
+int32_t dino::Scene::_LobbyLassoCheck()
+{
+    std::vector<Vec2> loop;
+
+    for (Player& player : m_players)
+    {
+        loop.clear();
+        if (!player.FindLassoLoop(loop))
+            continue;
+
+        int32_t found = -1;
+        int32_t count = 0;
+
+        for (int32_t s = 0; s < 4; ++s)
+        {
+            Vec2 tree = _LobbyTreePos(s);
+            if (isInside(loop, Vec2{tree.x, tree.y - 24.f}))
+            {
+                found = s;
+                ++count;
+            }
+        }
+        player.ClearLasso();
+
+        if (count == 1)
+            return found;
+    }
+    return -1;
 }

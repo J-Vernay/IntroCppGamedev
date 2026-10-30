@@ -31,17 +31,18 @@ namespace dino
         void LassoUpdate();
         void LassoDraw() const;
         bool FindLassoLoop(std::vector<Vec2>& outLoop) const;
-        void ClearLasso()
-        {
-            m_lasso.clear();
-        }
-        int GetId() const
-        {
-            return id;
-        }
+        bool PollStartPressed();
+        void ClearLasso(){ m_lasso.clear(); }
+        int GetId() const{ return id; }
 
         bool PollPauseToggle();
 
+        void ResetState()
+        {
+            m_lasso.clear();
+            m_hitTime = 0;
+          
+        }
 
         void Caught() override;
 
@@ -59,7 +60,9 @@ namespace dino
         static constexpr float kLassoWidth = 4.f;
         Vec2 m_lassoPrevAnchor = {0, 0};
         jv::util::Color m_playerColor;
+        bool m_bStartWasDown = false;
         bool m_bPauseWasDown = false;
+
 
         jv::util::Color m_playersColors[4] = {Color_BLUE, Color_RED, Color_YELLOW, Color_GREEN};
         int32_t m_idxPlayer;
