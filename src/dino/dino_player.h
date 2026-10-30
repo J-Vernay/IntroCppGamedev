@@ -41,7 +41,7 @@ namespace dino
         {
             m_lasso.clear();
             m_hitTime = 0;
-          
+            m_score = 0;
         }
 
         void AddScore(int32_t points){ m_score += points;}
