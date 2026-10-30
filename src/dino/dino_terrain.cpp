@@ -151,4 +151,5 @@ void dino::Terrain::DrawSeasonTree(int32_t idxSeason, Vec2 foot, uint8_t alpha) 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Tree", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
+
 }

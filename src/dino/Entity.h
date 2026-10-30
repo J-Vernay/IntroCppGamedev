@@ -20,6 +20,8 @@ public:
         return m_pos;
     }
 
+    void PushOutOfCircle(Vec2 center, float radius);
+
     virtual void Caught(){}
 
 protected:

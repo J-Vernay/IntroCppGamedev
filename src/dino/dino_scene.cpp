@@ -62,6 +62,16 @@ void dino::Scene::Update(double absTime, float deltaTime)
             for (size_t j = i + 1; j < m_players.size(); ++j)
                 Entity::ResolveCollision(m_players[i], m_players[j]);
 
+        // collision entre les joueurs et les arbres
+        for (int32_t s = 0; s < 4; ++s)
+        {
+            Vec2 tree = _LobbyTreePos(s);
+            for (Player& player : m_players)
+                player.PushOutOfCircle(tree, kTreeCollisionRadius);
+        }
+        for (Player& player : m_players)
+            player.CheckTerrain(m_Terrain);
+
         int32_t season = _LobbyLassoCheck();
         if (m_lobbyLock <= 0.f && season >= 0)
             _StartGame(season, absTime);

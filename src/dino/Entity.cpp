@@ -29,6 +29,27 @@ void dino::Entity::CheckTerrain(Terrain const& terrain)
         _ReactTerrain();
 }
 
+void dino::Entity::PushOutOfCircle(Vec2 center, float radius)
+{
+    float dx = m_pos.x - center.x;
+    float dy = m_pos.y - center.y;
+    float dist = sqrtf(dx * dx + dy * dy);
+
+    if (dist >= radius)
+        return;
+
+    //centre de larbre
+    if (dist == 0)
+    {
+        dx = 0;
+        dy = 1;
+        dist = 1;
+    }
+
+    m_pos.x = center.x + dx / dist * radius;
+    m_pos.y = center.y + dy / dist * radius;
+}
+
 void dino::Entity::_ReactTerrain()
 {
 }

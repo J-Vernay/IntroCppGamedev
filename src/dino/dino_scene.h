@@ -42,6 +42,7 @@ private:
     void _UpdatePlayer(double absTime, float deltaTime);
 
     void LassoCollisionCheck();
+    static constexpr float kTreeCollisionRadius = 10.f;
 
     void PauseGame() const;
 
