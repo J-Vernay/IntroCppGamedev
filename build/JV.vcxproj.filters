@@ -7,11 +7,41 @@
     <Filter Include="x64-windows">
       <UniqueIdentifier>{1FE8313F-8B9D-AA34-1492-A40B8046A138}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{ad0d0516-608f-4016-ae36-70dd7627ee0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="physics">
+      <UniqueIdentifier>{84fcfd67-ea05-4924-943b-eaeda21b87ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\jv\jv.h" />
     <ClInclude Include="..\src\jv\x64-windows\jv_win64_impl.h">
       <Filter>x64-windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\core\jv_gameobject.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\core\jv_scene.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\physics\jv_collider.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\physics\jv_circle_collider.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\physics\jv_restricted_space.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\physics\jv_physics_system.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\core\jv_vfx_system.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jv\core\jv_ui_text.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -32,6 +62,24 @@
     </ClCompile>
     <ClCompile Include="..\src\jv\x64-windows\jv_win64_window.cpp">
       <Filter>x64-windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jv\core\jv_gameobject.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jv\core\jv_scene.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jv\physics\jv_circle_collider.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jv\physics\jv_physics_system.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jv\core\jv_vfx_system.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jv\core\jv_ui_text.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -153,11 +153,25 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\jv\core\jv_gameobject.h" />
+    <ClInclude Include="..\src\jv\core\jv_scene.h" />
+    <ClInclude Include="..\src\jv\core\jv_ui_text.h" />
+    <ClInclude Include="..\src\jv\core\jv_vfx_system.h" />
     <ClInclude Include="..\src\jv\jv.h" />
+    <ClInclude Include="..\src\jv\physics\jv_circle_collider.h" />
+    <ClInclude Include="..\src\jv\physics\jv_collider.h" />
+    <ClInclude Include="..\src\jv\physics\jv_physics_system.h" />
+    <ClInclude Include="..\src\jv\physics\jv_restricted_space.h" />
     <ClInclude Include="..\src\jv\x64-windows\jv_win64_impl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\jv\common\jv_random.cpp" />
+    <ClCompile Include="..\src\jv\core\jv_gameobject.cpp" />
+    <ClCompile Include="..\src\jv\core\jv_scene.cpp" />
+    <ClCompile Include="..\src\jv\core\jv_ui_text.cpp" />
+    <ClCompile Include="..\src\jv\core\jv_vfx_system.cpp" />
+    <ClCompile Include="..\src\jv\physics\jv_circle_collider.cpp" />
+    <ClCompile Include="..\src\jv\physics\jv_physics_system.cpp" />
     <ClCompile Include="..\src\jv\x64-windows\jv_win64_file.cpp" />
     <ClCompile Include="..\src\jv\x64-windows\jv_win64_main.cpp" />
     <ClCompile Include="..\src\jv\x64-windows\jv_win64_renderer.cpp" />

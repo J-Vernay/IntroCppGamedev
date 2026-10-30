@@ -26,3 +26,27 @@ bool dino::IntersectSegment(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
     else
         return 0 <= dot_AB_AC && dot_AB_AD <= dot_AB_AB;
 }
+
+bool dino::IsPointInPolygon(Vec2 point, std::vector<Vec2> const& polygon)
+{
+    if (polygon.size() < 3)
+        return false;
+
+    Vec2 rayEnd = {point.x + 10000.0f, point.y + 0.001f};
+    int intersections = 0;
+    size_t n = polygon.size();
+
+    for (size_t i = 0; i < n; ++i)
+    {
+        Vec2 A = polygon[i];
+        Vec2 B = polygon[(i + 1) % n];
+
+        if (IntersectSegment(point, rayEnd, A, B))
+        {
+            intersections++;
+        }
+    }
+
+    // Impair = à l'intérieur / Pair = à l'exterieur
+    return (intersections % 2) != 0;
+}

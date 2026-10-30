@@ -4,9 +4,11 @@
 
 #include <random>
 
-dino::Terrain::Terrain(int32_t tileCountX, int32_t tileCountY)
+dino::Terrain::Terrain(int32_t tileCountX, int32_t tileCountY, jv::gpu::Texture* pTexture) 
+    : jv::core::GameObject({0, 0})
 {
-    m_pTexture = dino::LoadImageAsset("terrain.bmp");
+    m_pTexture = pTexture;
+    SetSortingOrder(0);
 
     Vec2 rdrSize = jv::gpu::GetRenderSize();
 

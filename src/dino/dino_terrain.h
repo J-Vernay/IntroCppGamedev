@@ -1,34 +1,34 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include <jv/core/jv_gameobject.h>
+#include <jv/physics/jv_restricted_space.h>
 
 namespace dino
 {
 
 /// Représente le terrain de jeu.
-class Terrain
+class Terrain : public jv::core::GameObject, public jv::physics::IRestrictedSpace
 {
 public:
     /// Initialise le terrain.
-    Terrain(int32_t tileCountX, int32_t tileCountY);
+    Terrain(int32_t tileCountX, int32_t tileCountY, jv::gpu::Texture* pTexture);
     
     /// Change la saison du terrain (0 à 3 : printemps, été, automne, hiver)
     void SetSeason(int32_t idxSeason);
 
-    /// Met à jour le terrain (déroulement de l'animation).
-    void Update(double absTime, float deltaTime);
-    
-    /// Affiche le terrain de jeu.
-    void Draw() const;
+    // GAMEOBJECT
+    /// Implémente la boucle logique d'un GameObject
+    void Update(double absTime, float deltaTime) override;
+    /// Implémente la boucle de rendu d'un GameObject
+    void Draw() const override;
 
-    /// Génère une position aléatoire dans le terrain.
-    Vec2 GenerateRandomSpawn() const;
-
-    /// Transforme la position 'pos' pour s'assurer qu'elle reste sur le terrain.
-    Vec2 ClampPos(Vec2 pos) const;
+    // Implémente sa propre définition d'un espace restreint
+    Vec2 GenerateRandomSpawn() const override;
+    Vec2 ClampPos(Vec2 pos) const override;
 
     /// Libère les ressources.
-    ~Terrain();
+    ~Terrain() override;
 
 private:
     // Position in pixels
@@ -40,7 +40,6 @@ private:
     size_t m_idxVertexNonAnimatedEnd;
 
     jv::gpu::Texture* m_pTexture = nullptr;
-
     std::vector<jv::gpu::Vertex> m_vertices;
 };
 

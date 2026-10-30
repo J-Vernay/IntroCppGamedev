@@ -1,26 +1,26 @@
-﻿#include <dino/dino_scene.h>
+﻿#include <dino/dino_game.h>
 
-dino::Scene* g_pDinoScene;
+dino::DinoGame* g_pDinoGame;
 
 void jv::game::Init()
 {
     jv::util::Vec2 rdrSize = {480, 360};
     jv::gpu::SetRenderSize(rdrSize);
 
-    g_pDinoScene = new dino::Scene;
+    g_pDinoGame = new dino::DinoGame();
 }
 
 void jv::game::Update(double absTime, float deltaTime)
 {
-    g_pDinoScene->Update(absTime, deltaTime);
+    g_pDinoGame->Update(absTime, deltaTime);
 }
 
 void jv::game::Draw()
 {
-    g_pDinoScene->Draw();
+    g_pDinoGame->Draw();
 }
 
 void jv::game::Shut()
 {
-    delete g_pDinoScene;
+    delete g_pDinoGame;
 }
