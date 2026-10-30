@@ -44,6 +44,12 @@ namespace dino
           
         }
 
+        void AddScore(int32_t points){ m_score += points;}
+        void ResetScore(){ m_score = 0;}
+        int32_t GetScore() const{ return m_score;}
+        jv::util::Color GetColor() const{ return m_playerColor;}
+        int32_t GetIdxPlayer() const{ return m_idxPlayer;}
+
         void Caught() override;
 
         /// Affiche le joueur
@@ -55,10 +61,14 @@ namespace dino
 
     private:
 
+        //playerLasso
         static constexpr size_t kLassoMaxPoints = 100;
         static constexpr float kLassoMinStep = 4.f;
         static constexpr float kLassoWidth = 4.f;
         Vec2 m_lassoPrevAnchor = {0, 0};
+        std::vector<Vec2> m_lasso;
+
+        //PlayerIDX
         jv::util::Color m_playerColor;
         bool m_bStartWasDown = false;
         bool m_bPauseWasDown = false;
@@ -67,7 +77,9 @@ namespace dino
         jv::util::Color m_playersColors[4] = {Color_BLUE, Color_RED, Color_YELLOW, Color_GREEN};
         int32_t m_idxPlayer;
         jv::input::GamepadIdx m_gamepadIdx;
-        
+
+        int32_t m_score = 0;
+
         Vec2 m_dir;
         jv::gpu::Texture* m_pTexture;
         double m_hitTime = 0;
@@ -76,8 +88,6 @@ namespace dino
         bool m_bLeft = false;
 
         int id;
-
-        std::vector<Vec2> m_lasso;
 
     };
 

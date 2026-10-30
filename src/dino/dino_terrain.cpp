@@ -131,19 +131,22 @@ jv::util::Vec2 dino::Terrain::ClampPos(Vec2 pos) const
         pos.y = m_spawnOffset.y + m_spawnSize.y;
     return pos;
 }
-void dino::Terrain::DrawSeasonTree(int32_t idxSeason, Vec2 foot) const
+void dino::Terrain::DrawSeasonTree(int32_t idxSeason, Vec2 foot, uint8_t alpha) const
 {
     float u1 = 48.f + 80.f * idxSeason;
     float u2 = u1 + 32;
     float v1 = 16, v2 = 64;
 
+    jv::util::Color color = Color_WHITE;
+    color.a = alpha;
+
     std::vector<jv::gpu::Vertex> vs;
-    vs.emplace_back(Vec2{foot.x - 16, foot.y - 48}, Vec2{u1, v1});
-    vs.emplace_back(Vec2{foot.x + 16, foot.y - 48}, Vec2{u2, v1});
-    vs.emplace_back(Vec2{foot.x - 16, foot.y}, Vec2{u1, v2});
-    vs.emplace_back(Vec2{foot.x + 16, foot.y - 48}, Vec2{u2, v1});
-    vs.emplace_back(Vec2{foot.x - 16, foot.y}, Vec2{u1, v2});
-    vs.emplace_back(Vec2{foot.x + 16, foot.y}, Vec2{u2, v2});
+    vs.emplace_back(Vec2{foot.x - 16, foot.y - 48}, Vec2{u1, v1}, color);
+    vs.emplace_back(Vec2{foot.x + 16, foot.y - 48}, Vec2{u2, v1}, color);
+    vs.emplace_back(Vec2{foot.x - 16, foot.y}, Vec2{u1, v2}, color);
+    vs.emplace_back(Vec2{foot.x + 16, foot.y - 48}, Vec2{u2, v1}, color);
+    vs.emplace_back(Vec2{foot.x - 16, foot.y}, Vec2{u1, v2}, color);
+    vs.emplace_back(Vec2{foot.x + 16, foot.y}, Vec2{u2, v2}, color);
 
     jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Tree", vs);
     jv::gpu::Draw(pVBuf, m_pTexture);

@@ -49,8 +49,15 @@ private:
     GameState m_state = GameState::Lobby;
     static constexpr float kTimerStart = 60.f;
 
+    //le lobby locké
+    float m_lobbyLock = 0.f;
+    static constexpr float kLobbyLockTime = 5.f;
+    void _ReturnToLobby(double absTime, bool bTimerExpired = false);
+
     jv::util::Vec2 _LobbyTreePos(int32_t idxSeason) const;
     void _StartGame(int32_t idxSeason, double absTime);
+
+    void _DrawScores() const;
 
     //on defini on écart enttre les arbres
     static constexpr float kTreeSpacing = 72.f;

@@ -37,9 +37,9 @@ void dino::Scene::Update(double absTime, float deltaTime)
 {
     m_lastDeltaTime = deltaTime;
 
-    if (m_timer <= 0)
+     if (m_timer <= 0)
     {
-        _ReturnToLobby(absTime);
+        _ReturnToLobby(absTime, true);
         return;
     }
 
@@ -53,6 +53,8 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     if (m_state == GameState::Lobby)
     {
+        m_lobbyLock = std::max(0.f, m_lobbyLock - deltaTime);
+
         m_Terrain.Update(absTime, deltaTime);
         for (Player& player : m_players)
             player.Update(absTime, deltaTime, m_Terrain);
@@ -61,7 +63,7 @@ void dino::Scene::Update(double absTime, float deltaTime)
                 Entity::ResolveCollision(m_players[i], m_players[j]);
 
         int32_t season = _LobbyLassoCheck();
-        if (season >= 0)
+        if (m_lobbyLock <= 0.f && season >= 0)
             _StartGame(season, absTime);
         return;
     }
@@ -72,7 +74,7 @@ void dino::Scene::Update(double absTime, float deltaTime)
 
     if (deletePressed && m_state == GameState::Playing)
     {
-        _ReturnToLobby(absTime);
+        _ReturnToLobby(absTime, false);
         return;
     }
 
@@ -140,8 +142,9 @@ void dino::Scene::Draw() const
 
     if (m_state == GameState::Lobby)
     {
+        uint8_t alpha = (m_lobbyLock > 0.f) ? 90 : 255;
         for (int32_t s = 0; s < 4; ++s)
-            m_Terrain.DrawSeasonTree(s, _LobbyTreePos(s));
+            m_Terrain.DrawSeasonTree(s, _LobbyTreePos(s), alpha);
     }
 
     for (Animal const& animal : m_animals)
@@ -171,6 +174,8 @@ void dino::Scene::Draw() const
         jv::gpu::DestroyVertexBuffer(pVBufTimer);
     }
 
+    _DrawScores();
+
     if (m_bPaused)
         PauseGame();
 
@@ -187,6 +192,7 @@ void dino::Scene::Draw() const
 
 void dino::Scene::LassoCollisionCheck()
 {
+    constexpr int32_t kPointsPerAnimal = 10;
     std::vector<Vec2> loop;
 
     for (Player& player : m_players)
@@ -195,11 +201,16 @@ void dino::Scene::LassoCollisionCheck()
         if (!player.FindLassoLoop(loop))
             continue;
 
+        int32_t caughtCount = 0;
         for (Animal& animal : m_animals)
         {
-            if (isInside(loop, animal.GetPos()))
+            if (!animal.IsCaught() && isInside(loop, animal.GetPos()))
+            {
                 animal.Caught();
+                ++caughtCount;
+            }
         }
+        player.AddScore(caughtCount * kPointsPerAnimal);
 
         for (Player& other : m_players)
         {
@@ -229,13 +240,14 @@ void dino::Scene::PauseGame() const
 
 }
 
-void dino::Scene::_ReturnToLobby(double absTime)
+void dino::Scene::_ReturnToLobby(double absTime, bool bTimerExpired)
 {
     m_state = GameState::Lobby;
     m_bPaused = false;
     m_timer = kTimerStart;
     m_animals.clear();
     m_animalSpawnTime = absTime;
+    m_lobbyLock = bTimerExpired ? kLobbyLockTime : 0.f;
 
     for (Player& player : m_players)
         player.ResetState();
@@ -286,4 +298,21 @@ int32_t dino::Scene::_LobbyLassoCheck()
             return found;
     }
     return -1;
+}
+void dino::Scene::_DrawScores() const
+{
+    float y = 24.f;
+
+    for (Player const& player : m_players)
+    {
+        std::string text = std::format("J{} {}", player.GetIdxPlayer() + 1, player.GetScore());
+
+        std::vector<jv::gpu::Vertex> vs;
+        dino::GenVertices_Text(vs, text, player.GetColor(), Color_TRANSPARENT, Vec2(4.f, y));
+        jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Score", vs);
+        jv::gpu::Draw(pVBuf, m_pTextureText);
+        jv::gpu::DestroyVertexBuffer(pVBuf);
+
+        y += 14.f;
+    }
 }
