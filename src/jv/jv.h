@@ -3,6 +3,7 @@
 #include <span>
 #include <stdint.h>
 #include <string_view>
+#include <string>
 #include <vector>
 
 namespace jv

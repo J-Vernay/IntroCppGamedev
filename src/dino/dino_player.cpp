@@ -18,6 +18,8 @@ dino::Player::~Player()
 
 void dino::Player::Update(double absTime, float deltaTime)
 {
+    if (!m_bActive)
+        return;
     float speed = 100;
 
     // Calcul de la direction du joueur, en utilisant les flèches du clavier.
@@ -60,12 +62,33 @@ void dino::Player::Update(double absTime, float deltaTime)
 
     m_absTime = absTime;
 
+    float distSinceLast = hypotf(m_pos.x - m_lastTrailPos.x, m_pos.y - m_lastTrailPos.y); 
+    if (distSinceLast > 5.0f) // ajout du nouveau point si le player s'est deplace de 5 pixels
+    {
+        m_trail.push_back({m_pos, absTime});
+        m_lastTrailPos = m_pos;
+    }
+
+    while (!m_trail.empty()) // faire disparaitre la trail apres 2 sec
+    {
+        double age = absTime - m_trail.front().time;
+        if (age > 2.0)
+        {
+            m_trail.pop_front();
+        }
+        else
+        {
+            break;
+        }
+    }
+
     if (m_dir.x != 0)
         m_bLeft = m_dir.x < 0;
 }
 
 void dino::Player::Draw() const
 {
+    // player
     float u1, u2, v1 = 0, v2 = 24;
 
     if (m_hitTime > 0)
@@ -102,6 +125,8 @@ void dino::Player::Draw() const
 
     v1 += 24 * m_idxPlayer;
     v2 += 24 * m_idxPlayer;
+
+    jv::util::Color color = GetColor();
 
     std::vector<jv::gpu::Vertex> vs;
     vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1});

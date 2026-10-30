@@ -27,6 +27,11 @@ public:
     /// Transforme la position 'pos' pour s'assurer qu'elle reste sur le terrain.
     Vec2 ClampPos(Vec2 pos) const;
 
+    jv::gpu::Texture* GetTexture() const
+    {
+        return m_pTexture;
+    }
+
     /// Libère les ressources.
     ~Terrain();
 

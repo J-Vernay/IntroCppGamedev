@@ -24,6 +24,9 @@ public:
     /// Animal a, b;
     /// a = b; // Pas un constructeur, car 'a' et 'b' existe déjà ; c'est une affectation
     Animal& operator=(Animal const& b) = delete;
+
+    Animal(Animal&& other) noexcept = default;
+    Animal& operator=(Animal&& other) noexcept = default;
     
     /// Déplace l'animal et met à jour son animation.
     void Update(double absTime, float deltaTime);

@@ -3,10 +3,15 @@
 #include <dino/dino_main.h>
 #include <dino/dino_terrain.h>
 #include <dino/dino_entity.h>
+#include <deque>
 
 namespace dino
 {
-
+struct TrailPoint
+{
+    Vec2 pos;
+    double time;
+};
 // Représente un joueur.
 class Player : public Entity
 {
@@ -35,6 +40,57 @@ public:
     /// Détruit les ressources associées au joueur.
     ~Player();
 
+
+    
+    // trail
+    
+    std::deque<TrailPoint> const& GetTrail() const
+    {
+        return m_trail;
+    }
+    void ClearTrail()
+    {
+        m_trail.clear();
+    }
+    void SetTrail(std::deque<TrailPoint> const& newTrail)
+    {
+        m_trail = newTrail;
+    }
+
+    bool IsActive() const
+    {
+        return m_bActive;
+    }
+    void SetActive(bool active)
+    {
+        m_bActive = active;
+    }
+
+    // score
+    int GetScore() const
+    {
+        return m_score;
+    }
+    void AddScore(int pts)
+    {
+        m_score += pts;
+    }
+    void ResetScore()
+    {
+        m_score = 0;
+    }
+
+    jv::util::Color GetColor() const
+    {
+        constexpr jv::util::Color playerColors[4] = {
+            Color_BLUE,
+            Color_RED,
+            Color_YELLOW,
+            Color_GREEN
+        };
+        return playerColors[m_idxPlayer % 4];
+    }
+
 private:
     int32_t m_idxPlayer;
     jv::input::GamepadIdx m_gamepadIdx;
@@ -44,6 +100,10 @@ private:
     double m_absTime = 0;
     bool m_bRunning = false;
     bool m_bLeft = false;
+    std::deque<TrailPoint> m_trail;
+    Vec2 m_lastTrailPos = {-1000, -1000};
+    bool m_bActive = false;
+    int m_score = 0;
 };
 
 } // namespace dino

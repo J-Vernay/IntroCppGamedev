@@ -54,7 +54,7 @@ dans le dossier `Documents`.
 I) En lisant le code de `TestContainer`, de quel code étudie-t-on les performances ?
 Combien de mesures sont prises à chaque fois ? Comment sont-elles agrégées ?
 
-> ...
+> On étudie les performances du parcours à travers tous les éléments du conteneur. On prends 3 mesures. On conserve la valeur minimale.
  
 I) Mettre "Container" en légende à droite, "TestName" en abscisse, et "IterTimeMs" en ordonnée.
 Quel type de conteneur semble particulièrement peu efficace ?
@@ -73,7 +73,9 @@ Double-cliquer sur "vector-char" dans la légende pour n'afficher que cette cour
 Puis cliquer sur "vector-Struct256", "vector-Struct1024", "vector-Struct4096".
 Pourquoi les performances de l'itération sur `vector` dépendent du type stocké ?
 
-> ...
+> Les doonnées d'un std::vector sont stockées a la suite dans la mémoire. Plus le type stocké est volumineux, plus la quantité de données a transférer vers
+les caches est grande ce qui entraine une saturation de la bande passante et davantage de cache miss.
+
 
 L) Mettre "TestKind" en légende à droite, "Count" en abscisse, et "IterTimeMS" en ordonnée.
 Double-cliquer sur "vector-Struct4096" dans la légende pour n'afficher que cette courbe.

@@ -121,12 +121,13 @@ Quand ils atteignent le bord du terrain, ils prennent une nouvelle direction al�
 
 C) Comment détecter si deux cercles à des positions données sont en collision ?
 
-> ...
+> On vérifie si la distance au carré entre leurs centres est inférieure ou égale à la somme de leurs rayons au carré
 
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> ...
+> On décale chaque cercle de la moitié du vecteur de chevauchement le long de l'axe reliant leurs centres. 
+Le cas non résoluble est quand les deux cercles ont exactement le même centre la direction de répulsion est indéterminée.
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
@@ -143,18 +144,18 @@ L'appliquer dans la base de code.
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.
 
-> ...
+> Le polymorphisme
 
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
 
-> ...
+> Les méthodes Update et Draw
 
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?
 
-> ...
-
+> Stocker des pointeurs vers une classe de base commune dans un tableau unique
+et utiliser std::sort avec une fonction de comparaison basée sur la position verticale
 
 
 
@@ -166,19 +167,20 @@ des dinosaures, aux couleurs des dinosaures.
 B) Implémenter : "Les suites de points sont tronquées à une longueur maximale de deux secondes."
 Quelle méthode de std::vector utiliser ?
 
-‍...
+Utiliser std::vector::erase() avec un parcours temporel pour supprimer les points dont l'âge dépasse 2 secondes
 
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?
 
-‍...
+‍Chaque joueur teste son segment actuel contre ses segments précédents. 
+Pour 4 joueurs, cela représente un total d'environ 4 * n tests par frame
 
 D) Implémenter : "Quand un joueur passe par dessus le lasso d'un autre joueur, le début du lasso est détruit jusqu'à l'intersection."
 Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' interagir entre elles.
 
 E) Comment détecter qu'une position est à l'intérieur d'un contour fermé définis par des segments ?
 
-‍...
+On trace une demi-droite depuis le point et on compte le nombre d'intersections avec les segments du contour (si le nombre est impair le point est à l'intérieur)
 
 F) Implémenter via une logique commune, comme mentionné dans (3.H) : 
 - Quand un dinosaure est dans une boucle de lasso, il se prend des dégâts (= immobilisation 3 secondes + animation).
