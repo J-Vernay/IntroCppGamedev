@@ -98,7 +98,7 @@ void dino::Scene::_UpdateTimer(double absTime, float deltaTime)
     m_timer -= deltaTime;
     if (m_timer <= 0)
     {
-    
+        ReturnToLobby();
     }
 }
 
@@ -147,7 +147,7 @@ void dino::Scene::HandleLassoColisions()
 
                         std::vector<Vec2> loopPoints(lassoPoints->begin() + h + 1, lassoPoints->end());
 
-                        CheckEntitysInLoop(loopPoints);
+                        CheckEntitysInLoop(loopPoints, i);
 
                         m_players[i].HandleLassoColision(lassoPoints->size() - h);
                         break;
@@ -172,17 +172,20 @@ void dino::Scene::HandleLassoColisions()
     CleanEntitys();
 }
 
-void dino::Scene::CheckEntitysInLoop(std::vector<Vec2> lassoPoints)
+void dino::Scene::CheckEntitysInLoop(std::vector<Vec2> lassoPoints, int playerIndex)
 {
     int n = 0;
+    int points = 0;
     for (Entity& e : m_animals)
     {
         n = e.RayCastCollisionCheck(lassoPoints);
         if (n % 2 != 0)
         {
             e.HandleCapture();
+            points += 10;
         }
     }
+    m_players[playerIndex].points += points;
     for (Entity& e : m_players)
     {
         n = e.RayCastCollisionCheck(lassoPoints);
@@ -197,6 +200,9 @@ void dino::Scene::CheckEntitysInLoop(std::vector<Vec2> lassoPoints)
         if (n % 2 != 0)
         {
             e.HandleCapture();
+
+            Tree& t = static_cast<Tree&>(e);
+            m_Terrain.SetSeason(t.m_TreeType);
             StartGame();
         }
     }
@@ -269,9 +275,33 @@ void dino::Scene::StartGame()
     {
         t.isAlive = false;
     }
+
+    for (Player& p : m_players)
+    {
+        p.points = 0;
+    }
     CleanEntitys();
     m_timer = 60;
     m_SceneState = Game;
+}
+
+void dino::Scene::ReturnToLobby()
+{
+    m_SceneState = Lobby;
+
+    for (Animal& a : m_animals)
+    {
+        a.isAlive = false;
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        Vec2 pos = {140 + i * 80, 200};
+        m_trees.emplace_back(pos, (float)0, i, m_pTextureTerrain);
+        m_entitys.push_back(&m_trees.back());
+    }
+
+    CleanEntitys();
 }
 
 
@@ -300,6 +330,7 @@ void dino::Scene::Draw() const
         jv::gpu::DestroyVertexBuffer(pVBuf);
     }
     DrawTimer();
+    DrawScore();
 }
 
 void dino::Scene::DrawTimer () const
@@ -311,6 +342,22 @@ void dino::Scene::DrawTimer () const
     jv::gpu::Draw(pVBuf, m_pTextureText);
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
+
+void dino::Scene::DrawScore() const
+{
+    for (int i = 0; i < m_players.size(); i++)
+    {
+        std::string text = std::format("Score = {:} points", m_players[i].points);
+        std::vector<jv::gpu::Vertex> vs;
+        dino::GenVertices_Text(
+            vs, text, Color_WHITE, m_players[i].GetColor(), Vec2{0, (float)i * 50 + 100});
+        jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("dScore", vs);
+        jv::gpu::Draw(pVBuf, m_pTextureText);
+        jv::gpu::DestroyVertexBuffer(pVBuf);
+    }
+}
+
+
 
 void dino::Scene::SwitchPauseState()
 {

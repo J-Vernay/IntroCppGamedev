@@ -85,6 +85,11 @@ dino::Vec2 dino::Player::GetLastPos()
 }
 
 
+dino::Color dino::Player::GetColor() const
+{
+    return m_color;
+}
+
 int dino::Player::GetId()
 {
     return m_playerIndex;

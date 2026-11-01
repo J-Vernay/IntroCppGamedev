@@ -15,7 +15,7 @@ public:
 
     Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, int color);
 
-
+    Color GetColor() const;
     void Update(double absTime, float deltaTime) override;
 
 
@@ -42,6 +42,7 @@ public:
     bool Join();
     bool Leave();
 
+    int points = 0;
 
     ~Player();
 
@@ -56,6 +57,8 @@ public:
     };
 
     playerSceneState SceneState = Lobby;
+
+    
 
     int GetId();
 
@@ -81,6 +84,8 @@ private:
 
     int m_playerIndex;
     Color m_color;
+
+    
 
     Vec2 m_lastPos;
 

@@ -31,6 +31,7 @@ private:
     float m_lastDeltaTime = 0;
 
 
+
     float m_spawnTime = 0.3;
     float m_timer = 60;
     float m_timeScale = 1;
@@ -51,13 +52,15 @@ private:
     void HandleLassoColisions();
 
     void DrawTimer() const;
+    void DrawScore() const;
 
-    void CheckEntitysInLoop(std::vector<Vec2> lassoPoints);
+    void CheckEntitysInLoop(std::vector<Vec2> lassoPoints, int playerIndex);
 
     void CleanEntitys();
 
     void PlayerJoin();
     void StartGame();
+    void ReturnToLobby();
 
     enum SceneState
     {
