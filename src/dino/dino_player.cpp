@@ -30,9 +30,15 @@ dino::Player::~Player()
 
 void dino::Player::Update(double absTime, float deltaTime)
 {
+
+    if (!isActive)
+    {
+        
+        return;
+    }
+
     UpdateInputs(absTime, deltaTime);
     UpdateFrameRate(absTime);
-
     HandleLasso();
     
     //DetectLassoColision();
@@ -79,6 +85,12 @@ dino::Vec2 dino::Player::GetLastPos()
 }
 
 
+int dino::Player::GetId()
+{
+    return m_playerIndex;
+}
+
+
 void dino::Player::UpdateFrameRate(double absTime)
 {
     if (m_state == run)
@@ -99,9 +111,28 @@ void dino::Player::UpdateFrameRate(double absTime)
     }
 }
 
+void dino::Player::PauseInput()
+{
+    if (SceneState == Lobby)
+        return;
+    jv::input::Gamepad gamepad;
+    if (jv::input::GetGamepad(m_gamepad, gamepad))
+    {
+        if (gamepad.start)
+        {
+            hasPaused = true;
+        }
+        else
+        {
+            hasPaused = false;
+        }
+    }
+    
+}
+
 void dino::Player::UpdateInputs(double absTime, float deltaTime)
 {
-    float speed = 60;
+    float speed = 100;
 
     jv::input::Gamepad gamepad;
 
@@ -112,6 +143,8 @@ void dino::Player::UpdateInputs(double absTime, float deltaTime)
 
     if (jv::input::GetGamepad(m_gamepad, gamepad))
     {
+        
+
         if (gamepad.btn_left)
         {
             TakeDamage(absTime);
@@ -158,6 +191,46 @@ void dino::Player::DetectLassoColision()
 void dino::Player::HandleLassoColision(int n)
 {
     m_lassoPoints.erase(m_lassoPoints.end() - n, m_lassoPoints.end());
+}
+
+bool dino::Player::Join()
+{
+    if (isActive)
+        return false;
+
+    jv::input::Gamepad gamepad;
+
+    if (jv::input::GetGamepad(m_gamepad, gamepad))
+    {
+        if (gamepad.start)
+        {
+            isActive = true;
+
+            m_lassoPoints.clear();
+            m_lastPos = m_pos;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool dino::Player::Leave()
+{
+    if (!isActive)
+        return false;
+    jv::input::Gamepad gamepad;
+    if (jv::input::GetGamepad(m_gamepad, gamepad))
+    {
+        if (gamepad.select)
+        {
+            isActive = false;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void dino::Player::HandleLassoOpponentCollision(int n)

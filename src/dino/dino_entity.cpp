@@ -24,14 +24,14 @@ void dino::Entity::HandlePhysics(std::vector<Entity*> entitys)
     }
 }
 
-int dino::Entity::RayCastCollisionCheck(std::vector<Vec2> lassoPoints, int startIndex)
+int dino::Entity::RayCastCollisionCheck(std::vector<Vec2>& lassoPoints)
 {
     int n = 0;
-    Vec2 a = {1000, 0};
+    Vec2 a = {0, 0};
 
-    if (lassoPoints.size() < 11)
+    if (lassoPoints.size() < 1)
         return 0;
-    for (int i = lassoPoints.size() - startIndex; i < lassoPoints.size() - 10; i++)
+    for (int i = 0; i < lassoPoints.size() - 2; i++)
     {
         if (dino::IntersectSegment(lassoPoints.at(i), lassoPoints.at(i+1), m_pos, a))
         {

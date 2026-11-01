@@ -11,6 +11,8 @@ class Player : public Entity
 {
 public:
 
+    bool hasPaused = false;
+
     Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx, int color);
 
 
@@ -29,18 +31,36 @@ public:
 
     void HandleLasso();
 
+    void PauseInput();
+
     Vec2 GetPos();
     Vec2 GetLastPos();
 
     void HandleLassoOpponentCollision(int n);
     void HandleLassoColision(int n);
 
+    bool Join();
+    bool Leave();
+
 
     ~Player();
 
-    Player(const Player&) = delete;
+    //Player(const Player&) = delete;
+
+    
+
+    enum playerSceneState
+    {
+        Lobby,
+        Game
+    };
+
+    playerSceneState SceneState = Lobby;
+
+    int GetId();
 
 private:
+    bool isActive = false;
     void UpdateFrameRate(double absTime);
     void UpdateInputs(double absTime, float deltaTime);
     void DrawLasso() const;

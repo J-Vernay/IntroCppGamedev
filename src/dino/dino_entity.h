@@ -15,7 +15,7 @@ public:
 
     virtual ~Entity() {};
 
-    Entity(const Entity&) = delete;
+    //Entity(const Entity&) = delete;
 
     Vec2 GetPosition()
     {
@@ -37,7 +37,7 @@ public:
 
     virtual void HandleTerrainClamp(dino::Terrain* terrain) = 0;
 
-    int RayCastCollisionCheck(std::vector<Vec2> lassoPoints, int startIndex);
+    int RayCastCollisionCheck(std::vector<Vec2>& lassoPoints);
 
     virtual void HandleCapture() = 0;
 
