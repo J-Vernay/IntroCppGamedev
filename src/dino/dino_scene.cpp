@@ -281,7 +281,7 @@ void dino::Scene::SetupGame()
 
     for (int i = 0; i < 4; i++)
     {
-        Vec2 spawnPos = m_Terrain.GenerateRandomSpawn();
+        Vec2 spawnPos = {120 + i * 80, 200};
 
         m_trees.emplace_back(spawnPos, 0.0, i, this);
 
