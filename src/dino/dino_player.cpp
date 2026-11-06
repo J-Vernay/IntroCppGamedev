@@ -1,0 +1,303 @@
+﻿
+#include <dino/dino_player.h>
+#include <dino/dino_draw_utils.h>
+#include <dino/dino_geometry.h>
+#include <math.h>
+#include <algorithm>
+#include <string>
+
+
+
+dino::Player::Player(Vec2 pos, double absTime, jv::input::GamepadIdx gamepadIdx,
+    jv::gpu::Texture* pMainTex, jv::gpu::Texture* pTextureText)
+    : Entity(pos, absTime), m_pTextureText(pTextureText)
+{
+
+    m_gamepadIdx = gamepadIdx;
+
+    id = static_cast<int>(gamepadIdx);
+    
+    m_playerColorIndex = id;
+
+    m_playerColor = m_playersColors[id];
+
+    m_dir = Vec2{0, 0}; 
+
+    m_timeStart = absTime;
+
+    m_pTexture = pMainTex;
+
+    m_currentPlayerState = Lobby;
+}
+
+dino::Player::~Player()
+{
+    
+}
+
+void dino::Player::Update(double absTime, float deltaTime)
+{
+    UpdateInput();
+    UpdatePosition(deltaTime);
+    UpdatePlayerState(deltaTime);
+    UpdateIndexFrame(absTime);
+    double aliveTime = absTime - m_timeStart;
+    if (aliveTime < 1)
+        m_alpha = uint8_t(UINT8_MAX * aliveTime);
+}
+
+void dino::Player::UpdateInput()
+{
+    jv::input::Gamepad gamepad;
+
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad))
+    {
+
+        UpdateDirection(
+            gamepad.dpad_right - gamepad.dpad_left,
+            gamepad.dpad_down - gamepad.dpad_up);
+
+        UpdateSpeed(gamepad.btn_right == 1);
+    }
+}
+
+void dino::Player::UpdateDirection(float x, float y)
+{
+    m_dir = Vec2{x, y};
+}
+
+void dino::Player::UpdatePosition(float deltaTime)
+{
+    if (m_currentPlayerState == Hurt) return;
+
+    m_pos.x += m_dir.x * deltaTime * m_speedData.CurrentSpeed;
+    m_pos.y += m_dir.y * deltaTime * m_speedData.CurrentSpeed;
+}
+
+void dino::Player::UpdatePlayerState(float deltaTime)
+{
+    if (m_currentPlayerState == Lobby) return;
+
+    if (m_currentPlayerState == Hurt)
+    {
+        UpdateHurtState(deltaTime);
+        return;
+    }
+
+    if (isMoving())
+    {
+        m_currentPlayerState = m_speedData.IsRunning() ? PlayerState::Running : PlayerState::Walking;
+    }
+    else
+    {
+        m_currentPlayerState = PlayerState::Idle;
+    }
+}
+
+void dino::Player::UpdateLobbyState()
+{
+    jv::input::Gamepad gamepad;
+
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad) && gamepad.start)
+    {
+        m_currentPlayerState = Idle;
+    }
+
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad) && gamepad.select)
+    {
+        m_currentPlayerState = Lobby;
+    }
+}
+
+void dino::Player::UpdateIndexFrame(double absTime)
+{
+    if (m_currentPlayerState == Idle)
+    {
+        m_idxFrame = int32_t(absTime * 8) % 4;
+    }
+    else if (m_currentPlayerState == Walking)
+    {
+        m_idxFrame = int32_t(absTime * 8) % 10;
+    }
+    else if (m_currentPlayerState == Running)
+    {
+        m_idxFrame = int32_t(absTime * 16) % 7;
+    }
+    else
+    {
+        m_idxFrame = int32_t(absTime * 8) % 3;
+    }
+}
+
+void dino::Player::UpdateSpeed(bool isRunning)
+{
+    m_speedData.CurrentSpeed = isRunning ? m_speedData.SpeedRunning : m_speedData.SpeedWalking;
+}
+
+void dino::Player::RequestPause(bool& gamePaused, float deltaTime)
+{
+    jv::input::Gamepad gamepad;
+
+    if (m_timerPause > 0)
+    {
+        m_timerPause -= deltaTime;
+    }
+
+    if (jv::input::GetGamepad(m_gamepadIdx, gamepad) && gamepad.start && m_timerPause <= 0)
+    {
+        gamePaused = !gamePaused;
+        m_timerPause = 0.25f;
+    }
+}
+
+std::vector<dino::Vec2> dino::Player::UpdateLasso()
+{
+    std::vector<Vec2> result;
+    if (m_lassoVector.size() > 2)
+    {
+        for (int i = 0; i < m_lassoVector.size() - 2; i++)
+        {
+            if (i == m_lassoVector.size() - 1)
+                continue;
+
+            bool isIntersecting = IntersectSegment(
+                m_pos, m_lassoVector.back(), m_lassoVector[i], m_lassoVector[i + 1]);
+
+            if (isIntersecting)
+            {
+                result.insert(result.end(),m_lassoVector.begin() + i, m_lassoVector.end());
+                m_lassoVector.erase(m_lassoVector.begin() + i, m_lassoVector.end());
+                return result;
+            }
+        }
+    }
+
+    if (m_lassoVector.size() > 120)
+    {
+        m_lassoVector.erase(m_lassoVector.begin());
+    }
+    else
+    {
+        m_lassoVector.push_back(m_pos);
+    }
+
+    return result;
+}
+
+void dino::Player::ResolveTerrainPos(Terrain& terrain)
+{
+    m_pos = terrain.ClampPos(m_pos);
+}
+
+void dino::Player::HandleHit()
+{
+    if (m_currentPlayerState == Hurt) return;
+
+    m_currentPlayerState = Hurt;
+    m_timerHit = 3;
+}
+
+void dino::Player::UpdateHurtState(float deltaTime)
+{
+    if (m_timerHit <= 0)
+    {
+        m_currentPlayerState = Idle;
+    }
+    else
+    {
+        m_timerHit -= deltaTime;
+    }
+}
+
+void dino::Player::Draw() const
+{
+    if (m_currentPlayerState == Lobby)
+        return;
+
+    DrawLasso();
+    DrawPlayer();
+    DrawScore();
+}
+
+void dino::Player::DrawLasso() const
+{
+    std::vector<jv::gpu::Vertex> vs;
+    GenVertices_Polyline(vs, m_lassoVector, 4, m_playerColor);
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Lasso", vs);
+    jv::gpu::Draw(pVBuf, nullptr);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Player::DrawPlayer() const
+{
+    float u1 = 0;
+    float u2 = 24;
+    float v1 = 0 + m_playerColorIndex * 24;
+    float v2 = 24 + m_playerColorIndex * 24;
+
+    float decal = 0;
+
+    if (m_currentPlayerState == Hurt)
+    {
+        decal = 14;
+    }
+
+    if (isMoving() && m_currentPlayerState != Hurt)
+    {
+        if (m_currentPlayerState == PlayerState::Walking)
+        {
+            decal = 4;
+        }
+        else if (m_currentPlayerState == PlayerState::Running)
+        {
+            decal = 17;
+        }
+    }
+
+    if (m_dir.x < 0)
+    {
+        float tempU = u2;
+        u2 = u1;
+        u1 = tempU;
+    }
+
+    u1 += 24 * m_idxFrame + decal * 24;
+    u2 += 24 * m_idxFrame + decal * 24;
+
+    jv::util::Color color = Color_WHITE;
+
+    color.a = 255;
+
+    std::vector<jv::gpu::Vertex> vs;
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y - 32}, Vec2{u1, v1}, color);
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y - 32}, Vec2{u2, v1}, color);
+    vs.emplace_back(Vec2{m_pos.x - 16, m_pos.y}, Vec2{u1, v2}, color);
+    vs.emplace_back(Vec2{m_pos.x + 16, m_pos.y}, Vec2{u2, v2}, color);
+
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Player", vs);
+    jv::gpu::Draw(pVBuf, m_pTexture);
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+
+void dino::Player::DrawScore() const
+{
+    std::string scoreText = std::to_string(m_score);
+
+    Vec2 pos = {10, 125 + id * 25};
+
+    std::vector<jv::gpu::Vertex> vs;
+
+    jv::util::Color colorBackground;
+    colorBackground.a = 0;
+
+    GenVertices_Text(vs, scoreText, Color_BLACK, colorBackground, Vec2{m_pos.x, m_pos.y - 40});
+
+    jv::gpu::VertexBuffer* pVBuf = jv::gpu::CreateVertexBuffer("Score", vs);
+
+    jv::gpu::Draw(pVBuf, m_pTextureText);
+
+    jv::gpu::DestroyVertexBuffer(pVBuf);
+}
+

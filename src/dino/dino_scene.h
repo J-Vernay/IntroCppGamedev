@@ -3,6 +3,8 @@
 #include <dino/dino_main.h>
 #include <dino/dino_animal.h>
 #include <dino/dino_terrain.h>
+#include <dino/dino_player.h>
+#include <dino/dino_tree.h>
 
 #include <deque>
 
@@ -16,17 +18,43 @@ public:
     ~Scene();
     void Update(double absTime, float deltaTime);
     void Draw() const;
+    void StartGame(int index);
+    void StopGame();
+    void SetupGame();
 
 private:
     jv::gpu::Texture* m_pTextureText = nullptr;
+    jv::gpu::Texture* m_pTextureAnimal = nullptr;
+    jv::gpu::Texture* m_pTexturePlayer = nullptr;
+
     float m_lastDeltaTime = 0;
+    float m_chrono = 0;
 
     Terrain m_Terrain;
 
+    std::deque<Player> m_players;
     std::deque<Animal> m_animals;
+    std::deque<Tree> m_trees;
+    std::vector<Entity*> m_entities;
+
     double m_animalSpawnTime = 0;
 
-    void _UpdateAnimals(double absTime, float deltaTime);
+    void SpawnAnimals(double absTime, float deltaTime);
+
+    void LassoCollisionCheck();
+
+    void UpdateEntiy(double absTime, float deltaTime);
+    void UpdateEntiyCollision();
+    void UpdateEntityOrderInLayer();
+    void UpdatePlayerLassoCollision();
+    void RebuildEntityList();
+
+    void UpdateChrono(float deltaTime);
+    void DrawChrono() const;
+
+    bool m_isPaused = false;
+    bool m_isGameRunning = false;
+
 };
 
 } // namespace dino

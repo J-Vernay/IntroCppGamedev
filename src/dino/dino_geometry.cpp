@@ -26,3 +26,25 @@ bool dino::IntersectSegment(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
     else
         return 0 <= dot_AB_AC && dot_AB_AD <= dot_AB_AB;
 }
+
+
+bool dino::isInside(std::vector<Vec2>& arr, Vec2 targetPoint)
+{
+    int n = arr.size();
+
+    bool inside = false;
+
+    Vec2 max = {0,0};
+
+    for (int i = 0, j = n - 1; i < n; j = i++)
+    {
+        Vec2 A = {arr[i].x, arr[i].y};
+        Vec2 B = {arr[j].x, arr[j].y};
+
+        bool intersect = IntersectSegment(A, B, targetPoint, max);
+
+        if (intersect) inside = !inside;    
+    }
+
+    return inside;
+}

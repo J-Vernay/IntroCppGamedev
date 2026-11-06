@@ -26,7 +26,7 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> Animal peux se mouvoir, Terrain represente le terrain de jeux, Scene regroupe element terrain et texture.
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,34 +34,36 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> 34 buffers et les type sont Terrain Animal dTime
+> 35 textures et les types sont White Terrain Monogram Animals
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
 
-> ...
+> C'est un destructor c'est une methode qui est appeler quand l'object/class est detruit. 
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
-> ...
+> Ce n'est plus une reference mais une copy ainsi appel destructor qui libere le pointeur tex hors notre reference en a encore besoins
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ...
+> Modifier le constructeur par copie, Animal(const Animal&) = delete;
 
 Remettre l'esperluette.
 
 G) Comment faire pour qu'il n'y ait qu'une unique texture `animal.bmp` chargée en VRAM ?
 Le faire.
 
-> ...
+> Passer un pointer vers cette texture instancier une fois dans Scene. Et retirer du destructor la liberation du pointer
+> C'est la scene qui la libere.
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
 
-> ...
+> Elles correspondent au coordonnes de la texture
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.
@@ -121,39 +123,43 @@ Quand ils atteignent le bord du terrain, ils prennent une nouvelle direction al�
 
 C) Comment détecter si deux cercles à des positions données sont en collision ?
 
-> ...
+> Si cercle 1 et cercle 2 sont en collision si la distance entre les deux centres est inférieure à la somme de leurs rayons.
 
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> ...
+> Division risque par zéro si les deux cercles sont exactement au même endroit.
+> Il faut gérer ce cas particulier en donnant une direction aléatoire à l'un des deux cercles.
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
 F) Implémenter : "Les animaux se repoussent entre eux, et aussi les animaux et les dinosaures entre eux."
 Pourquoi y a-t-il duplication de code ?
 
-> ...
+> Car la logique de collision est la même mais les types sont différents. Il faudrait factoriser le code.
 
 G) Quelle fonctionnalité du C++ permet de dédupliquer la logique commune entre `dino::Player` et `dino::Animal` ?
 L'appliquer dans la base de code.
 
-> ...
+> L'héritage permet de factoriser la logique commune entre Player et Animal. On peut créer une classe de base DinoEntity 
+> qui contient les méthodes et attributs communs, puis faire hériter Player et Animal de cette classe.
 
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.
 
-> ...
+> On peut utiliser le polymorphisme et les fonctions virtuelles pour gérer différemment un point de logique commune.
+> On peut définir une méthode virtuelle dans la classe de base DinoEntity, puis la redéfinir dans les classes dérivées.
 
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
 
-> ...
+> Update, Draw, ResolvePhysicConflict, ResolveTerrainPos
 
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?
 
-> ...
+> J'ai un vector de pointer de DinoEntity, je peux trier ce vector en utilisant une fonction de comparaison qui compare les
+> positions verticales des entités grace a un getter.
 
 
 
@@ -166,19 +172,20 @@ des dinosaures, aux couleurs des dinosaures.
 B) Implémenter : "Les suites de points sont tronquées à une longueur maximale de deux secondes."
 Quelle méthode de std::vector utiliser ?
 
-‍...
+‍On peut utiliser la méthode `erase` de `std::vector` pour supprimer les points les plus anciens lorsque la longueur maximale est dépassée.
 
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?
 
-‍...
+‍> Il y a 4j et 120 points, donc 4*120 = 480 intersections de segments sont calculés.
 
 D) Implémenter : "Quand un joueur passe par dessus le lasso d'un autre joueur, le début du lasso est détruit jusqu'à l'intersection."
 Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' interagir entre elles.
 
 E) Comment détecter qu'une position est à l'intérieur d'un contour fermé définis par des segments ?
 
-‍...
+‍> Je prend le point et je trace un rayon horizontal vers la droite, je compte le nombre d'intersections avec les segments du contour.
+> Si le nombre d'intersections est impair, le point est à l'intérieur du contour, sinon il est à l'extérieur.
 
 F) Implémenter via une logique commune, comme mentionné dans (3.H) : 
 - Quand un dinosaure est dans une boucle de lasso, il se prend des dégâts (= immobilisation 3 secondes + animation).
