@@ -29,11 +29,11 @@ et les exemples dans le code :
 > e) Constructeur
 > 
 > DEFINITIONS :
-> 1. Fonction membre responsable d'initialiser l'état
-> 2. Type encapsulant un comportement et l'état nécessaire à ce comportement
-> 3. Zone mémoire allouée pour stocker l'état d'une classe
-> 4. Fonction membre qui peut accéder implicitement à l'état d'une classe
-> 5. Variable membre faisant partie de l'état d'une classe
+> 1. Fonction membre responsable d'initialiser l'état, Constructeur  `Pong::Pong`
+> 2. Type encapsulant un comportement et l'état nécessaire à ce comportement, Classe `Pong`
+> 3. Zone mémoire allouée pour stocker l'état d'une classe, Instance `g_Pong`
+> 4. Fonction membre qui peut accéder implicitement à l'état d'une classe, Méthode `Pong::Update`
+> 5. Variable membre faisant partie de l'état d'une classe,  Attribut  `Pong::m_color`
 > 
 > EXEMPLES :
 > I. `Pong::m_color`
@@ -48,13 +48,13 @@ C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> ...
+> m_color est une variable privée_
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
 
-> ...
+> La fonction n'est pas implémentée et exo2_draw.h n'est pas include
 
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
@@ -65,13 +65,14 @@ G) Découper `Pong::Update()` en trois sous-fonctions :
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> ...
+> Les variables et fonctions private d'une classe ne peuvent être utilisés que par l'objet de cette classe.
+Les privées peuvent être utilisés par n'importe qui.
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : permet de protéger des variables ou méthodes en changeant leur visibilité (public, private, protected...)
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : condition qui doit être vrai pour qu'une fonction puisse continuer
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.

@@ -24,25 +24,30 @@ B) Quelle est la taille du type `jv::util::Color` ?
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
 
-> ...
+> Color fait 4 octets. Struct est un type de data "custom", qui peut par exemple stocker
+plusieurs float, mais a des adresses mémoires différentes. Union permet de stocker tout ces
+float a la même adresse.
 
 C) À quoi correspond un `std::vector<unsigned char>`?
 
-> ...
+> un unsigned char est une valeur entre 0 et 255, un vector d'unsigned char est une liste de ceux ci.
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
 
-> ...
+> pFile est un pointeur a l'adresse mémoire de l'objet retourné par file.data()
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : permet de faire un "décallage" dans la mémoire, pFile a sa case mémoire,
+ en ajoutant la valeur hexadécimale 0x0012 qui est égale a 18, on accède a la case mémoire qui
+ est située 18 octets plus loin.
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : permet de cast une valeur a un type.
 >
-> `*pointeur` : ...
+> `*pointeur` : récupère la valeur de l'objet pointé?
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : récupère la valeur pointé par un pointeur, après l'avoir
+cast en pointeur de uint32_t.
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
@@ -55,31 +60,31 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : BMN-
 >
-> `pFile + 1` : ...
+> `pFile + 1` : MN-
 >
-> `pPixels` : ...
+> `pPixels` : 0x000001edeac55b40 {r=128 '€' g=135 '‡' b=254 'þ' ...}
 >
-> `pPixels + 1` : ...
+> `pPixels + 1` : 0x000001edeac55b44 {r=253 'ý' g=253 'ý' b=253 'ý' ...}
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
 
-> ...
+> car ce sont des pointeurs, ajouter 1 pointe a une autre case mémoire.
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
 
-> ...
+> c'est équivalent a faire *(pointeur + nombre).
 
 I)  Prenez connaissance de la spécification du format de fichier BMP.
 
 J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : Largeur de l'image
 >
-> `v2` : ...
+> `v2` : Hauteur de l'image
 >
-> `v3` : ...
+> `v3` : nombre de Bits par pixels
 
 Renommer ces variables de façon appropriée.
 

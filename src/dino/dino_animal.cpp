@@ -3,18 +3,35 @@
 #include <dino/dino_draw_utils.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* tex) : dino::Entity(pos, absTime)
 {
     m_pos = pos;
+    m_idxFrame = 0;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-    m_pTexture = dino::LoadImageAsset("animals.bmp");
+    m_pTexture = tex;
+
 }
 
 dino::Animal::~Animal()
 {
-    jv::gpu::DestroyTexture(m_pTexture);
+    //jv::gpu::DestroyTexture(m_pTexture);
+}
+
+void dino::Animal::HandleTerrainClamp(dino::Terrain* terrain)
+{
+    Vec2 clampedPos = terrain->ClampPos(m_pos);
+    if (clampedPos.x != m_pos.x || clampedPos.y != m_pos.y)
+    {
+        m_pos = clampedPos;
+        m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+    }
+}
+
+void dino::Animal::HandleCapture()
+{
+    isAlive = false;
 }
 
 void dino::Animal::Update(double absTime, float deltaTime)
@@ -36,6 +53,28 @@ void dino::Animal::Draw() const
 
     u1 += 32 * m_idxFrame + 128 * m_kind;
     u2 += 32 * m_idxFrame + 128 * m_kind;
+
+    if (abs(m_dir.x) > abs(m_dir.y))
+    {
+        if (m_dir.x > 0)
+        {
+            int temp = u1;
+            u1 = u2;
+            u2 = temp;        
+        }
+
+    }
+    else if (m_dir.y < 0)
+    {
+        v1 = 64;
+        v2 = 96;
+    }
+    else
+    {
+        v1 = 32;
+        v2 = 64;
+    }
+
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;

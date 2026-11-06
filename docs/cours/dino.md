@@ -26,7 +26,14 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> Animal créée les animaux qui se déplacent et les affiche avec leur animation.
+
+Terrain affiche le terrain, ses animations et ses changement d'état (saison) et permet aux autres objets de clamp
+leur position pour rester sur le terrain.
+
+scene appelle les fonctions de animal et terrain pour les initialiser, appeler leur update (pour l'animal le déplacement)
+et leur fonctions d'affichage.
+
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,34 +41,39 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> il y en a 53, 1 pour le terrain, 1 pour les stats de delta time et 1 pour chaque animal.
+il y a 54 textures, "white" pour la couleur du texte,"monogram bitmap" pour la police d'écriture, "terrain" pour le terrain, 1 "animal" pour chaque animal
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
 
-> ...
+> C'est le destructor, la fonction appelé a la destruction de l'objet.
+Il n'est appelé que quand on arrête le programme.
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
-> ...
+> L'esperluette fait un passage par référence, l'enlever donne a la place une copie. Lorsque la copie est détruite,
+elle appelle son destructeur qui ici, détruit le pointeur de la texture qui est le même pour la copie et
+l'objet original, ce qui provoque un crash.
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ...
+> On peut supprimer le constructeur de copie de Animal, ce qui nous donnera une erreur si on essaye de faire une copie
+ de Animal.
 
 Remettre l'esperluette.
 
 G) Comment faire pour qu'il n'y ait qu'une unique texture `animal.bmp` chargée en VRAM ?
 Le faire.
 
-> ...
+> Il faut charger la texture dans la scene, puis passer en parametre du constructeur des animaux cette texture.
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
 
-> ...
+> Elles représentent les coordonnées des textures.
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.
@@ -121,39 +133,41 @@ Quand ils atteignent le bord du terrain, ils prennent une nouvelle direction al�
 
 C) Comment détecter si deux cercles à des positions données sont en collision ?
 
-> ...
+> on calcule la distance entre le centre des deux cercles, si cette distance est inférieure
+a la somme de leur rayon, les cercles se touchent.
 
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> ...
+> On les repoussent vers le vecteur opposé de leur différence de position. Si l'un des deux
+est contre un mur cela pose problème.
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
 F) Implémenter : "Les animaux se repoussent entre eux, et aussi les animaux et les dinosaures entre eux."
 Pourquoi y a-t-il duplication de code ?
 
-> ...
+> player et animals sont de classes différentes
 
 G) Quelle fonctionnalité du C++ permet de dédupliquer la logique commune entre `dino::Player` et `dino::Animal` ?
 L'appliquer dans la base de code.
 
-> ...
+> l'héritage
 
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.
 
-> ...
+> Polymorphisme
 
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
 
-> ...
+> Le clamp de position par rapport au terrain
 
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?
 
-> ...
+> Trier une liste d'entity par rapport a leur position y puis les draw dans l'ordre.
 
 
 
@@ -166,19 +180,19 @@ des dinosaures, aux couleurs des dinosaures.
 B) Implémenter : "Les suites de points sont tronquées à une longueur maximale de deux secondes."
 Quelle méthode de std::vector utiliser ?
 
-‍...
+‍erase et begin
 
 C) Implémenter : "Quand deux segments se coupent et sont du même joueur, la boucle est retirée du lasso"
 (mais la partie avant la boucle existe toujours). Combien d'intersections de segments sont calculés (en comptant les 4 joueurs) ?
 
-‍...
+‍Avec 120 segments par lasso, 120*4 = 480 calculs par frame
 
 D) Implémenter : "Quand un joueur passe par dessus le lasso d'un autre joueur, le début du lasso est détruit jusqu'à l'intersection."
 Faire en sorte que les instances de la classe DinoPlayer n'ont pas besoin d' interagir entre elles.
 
 E) Comment détecter qu'une position est à l'intérieur d'un contour fermé définis par des segments ?
 
-‍...
+‍On envoie un rayon dans une direction, si le rayon touche un nombre de segments impair, c'est qu'il est a l'intérieur.
 
 F) Implémenter via une logique commune, comme mentionné dans (3.H) : 
 - Quand un dinosaure est dans une boucle de lasso, il se prend des dégâts (= immobilisation 3 secondes + animation).
