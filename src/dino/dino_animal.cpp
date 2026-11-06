@@ -1,21 +1,19 @@
 ﻿
 #include <dino/dino_animal.h>
+
+#include <algorithm>
 #include <dino/dino_draw_utils.h>
+#include <dino/dino_terrain.h>
 #include <math.h>
 
-dino::Animal::Animal(Vec2 pos, double absTime)
+dino::Animal::Animal(Vec2 pos, double absTime, jv::gpu::Texture* pTexture) : Entity{pos, 8.f}
 {
-    m_pos = pos;
     m_kind = jv::util::RandomInt32(0, 7);
     m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
     m_timeStart = absTime;
-    m_pTexture = dino::LoadImageAsset("animals.bmp");
+    m_pTexture = pTexture;
 }
 
-dino::Animal::~Animal()
-{
-    jv::gpu::DestroyTexture(m_pTexture);
-}
 
 void dino::Animal::Update(double absTime, float deltaTime)
 {
@@ -25,17 +23,53 @@ void dino::Animal::Update(double absTime, float deltaTime)
 
     m_idxFrame = int32_t(absTime * 8) % 4;
 
-    double aliveTime = absTime - m_timeStart;
-    if (aliveTime < 1)
-        m_alpha = uint8_t(UINT8_MAX * aliveTime);
+    const double aliveTime = absTime - m_timeStart;
+    const double opacity = std::clamp(aliveTime, 0.0, 1.0);
+
+    m_alpha = static_cast<uint8_t>(255.0 * opacity);
+}
+
+void dino::Animal::OnCaptured()
+{
+    MarkForRemoval();
+}
+
+void dino::Animal::OnTerrainCollision(Vec2 correction)
+{
+    m_dir = jv::util::RandomRotate({1, 0}, 0, 360);
+
+    if (correction.x > 0.f)
+        m_dir.x = std::abs(m_dir.x);
+    else if (correction.x < 0.f)
+        m_dir.x = -std::abs(m_dir.x);
+
+    if (correction.y > 0.f)
+        m_dir.y = std::abs(m_dir.y);
+    else if (correction.y < 0.f)
+        m_dir.y = -std::abs(m_dir.y);
 }
 
 void dino::Animal::Draw() const
 {
-    float u1 = 0, u2 = 32, v1 = 0, v2 = 32;
+    float u1 = 32 * m_idxFrame + 128 * m_kind;
+    float u2 = u1 + 32;
 
-    u1 += 32 * m_idxFrame + 128 * m_kind;
-    u2 += 32 * m_idxFrame + 128 * m_kind;
+    float v1 = 0;
+
+    if (std::abs(m_dir.y) > std::abs(m_dir.x))
+    {
+        if (m_dir.y > 0)
+            v1 = 32;
+        else
+            v1 = 64;
+    }
+    else
+    {
+        if (m_dir.x > 0)
+            std::swap(u1, u2);
+    }
+
+    float v2 = v1 + 32;
 
     jv::util::Color color = Color_WHITE;
     color.a = m_alpha;
@@ -52,3 +86,5 @@ void dino::Animal::Draw() const
     jv::gpu::Draw(pVBuf, m_pTexture);
     jv::gpu::DestroyVertexBuffer(pVBuf);
 }
+
+

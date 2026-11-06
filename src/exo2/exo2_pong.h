@@ -12,7 +12,7 @@ public:
 
     void Update(double absTime, float deltaTime);
 
-    void Draw() const;
+    void Draw();
 
 private:
     using Vec2 = jv::util::Vec2;
@@ -20,6 +20,18 @@ private:
 
     // VARIABLES
     Color m_color;
+    Vec2 g_playerPos;
+    Vec2 g_aiPos;
+    Vec2 g_ballPos;
+    Vec2 g_ballDir;
+    float g_ballSpeed;
+    int m_scoreplayer = 0;
+    int m_scoreia = 0;
+
+
+    void _UpdateAI(double absTime, float deltaTime);
+    void _UpdatePlayer(double absTime, float deltaTime);
+    void _UpdateBall(double absTime, float deltaTime);
 
 };
 

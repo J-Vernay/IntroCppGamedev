@@ -26,6 +26,8 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
+	A classe animal :
+	A 
 > ...
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
@@ -33,6 +35,8 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 (sur la ligne de l'accolade fermante). Dans la fenêtre "Espion 1 / Watch 1",
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
+	A jv :: gpu :: vertex :: buffer :
+	A il y a 468 vertex buffer si 168 triangle sur le terrain, et si chaque animal est a 6 vertices donc 2 triangle. on a aussi un texte de 78
 
 > ...
 
@@ -40,37 +44,45 @@ D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
+	A c'est un destructeur, une methode qui permet de libérer les ressource, il est appeller a la fin du programme a la ligne "shut line 25" puis "destruceur de scene" puis"destructeur deque" puis enfin appelle le destructeur de animal (on parle de owner ship / responcabiliter, qui est responcable de libérer les ressource  )
 
 > ...
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
+	A 
+	A animal sans &, la variable local et du premier obj ne parle pas des meme emplacement mémoire, on a une pris par valeur/copie car tout les membre sont egaux 
 
 > ...
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
-
-> ...
+	A sois, l'operateur par défaut (copie constructeur et opécteur=) ne sont s'attisfesant, on peux l'implémenter sois meme ou interdire les fonction de copie ( avec un = delete)
 
 Remettre l'esperluette.
 
 G) Comment faire pour qu'il n'y ait qu'une unique texture `animal.bmp` chargée en VRAM ?
 Le faire.
 
+on cree une reference au pointeur de la bonne texture en public dans dino scene, puis l'assigne en parametre dans le contructeur de nos animaux
+
 > ...
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
+
+elle indique ou dessinner le sommet d'un triangle  et sur quelle point de la texture appliquer se sommet
 
 > ...
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.
 
+il faut inverser le sommet U1 et U2
+
 J) Appliquer les animations de mouvement vers le haut et vers le bas quand les animaux
 se déplacent principalement verticalement.
 Pour modifier les coordonnées UV, se référer à [dino_uv_ref.md](dino_uv_ref.md)
 
-
+on prend les valeur absolu de la direction y > direction x
 
 
 

@@ -1,12 +1,13 @@
 [
 	{
-		"is_closed":1,
-		"window_x":563,
-		"window_y":184,
-		"window_wide":794,
-		"window_high":664,
+		"is_closed":0,
+		"window_x":1901,
+		"window_y":114,
+		"window_wide":1118,
+		"window_high":504,
 		"maximized":0,
 		"ontop":0,
+		"order":0,
 		"filters_visible":0,
 		"filters_wide":128,
 		"filters_right_align":1,
@@ -42,7 +43,7 @@
 		[
 			{
 				"is_closed":0,
-				"search":"IntroCppGamedev *.exe !tools",
+				"search":"IntroCppGamedev !tools *.exe",
 				"match_case":0,
 				"match_path":1,
 				"match_whole_word":0,
@@ -53,8 +54,8 @@
 				"ignore_whitespace":0,
 				"match_regex":0,
 				"filter":"",
-				"sort":"Date Modified",
-				"sort_ascending":0,
+				"sort":"Name",
+				"sort_ascending":1,
 				"secondary_sort":"",
 				"secondary_sort_ascending":1,
 				"tertiary_sort":"",
@@ -69,7 +70,7 @@
 				"is_secondary_sort_folders_first":0,
 				"omit_results":0,
 				"temp_omit_results":0,
-				"listview_item_focus":"",
+				"listview_item_focus":"C:\\Users\\sulki\\Fork\\IntroCppGamedev\\build\\x64-windows\\Debug\\Exo5.exe",
 				"listview_selection":[],
 				"folders_sidebar_expanded":[],
 				"folders_sidebar_item_focus":"",
@@ -85,7 +86,7 @@
 				"filelist_slot7":[],
 				"filelist_slot8":[],
 				"filelist_slot9":[],
-				"columns":[{"name":"Name","width":256},{"name":"Path","width":256},{"name":"Size","width":96},{"name":"Date Modified","width":153}]
+				"columns":[{"name":"Name","width":256},{"name":"Path","width":507},{"name":"Size","width":96},{"name":"Date Modified","width":153}]
 			}
 		]
 	}
