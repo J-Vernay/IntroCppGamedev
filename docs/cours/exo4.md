@@ -21,28 +21,30 @@ A) Prendre connaissance des fichiers fournis et exécutez le programme.
 Vous devriez pouvoir utiliser les flèches gauche et droite pour faire défiler des carrés colorés.
 
 B) Quelle est la taille du type `jv::util::Color` ?
+	4bytes
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
+	les membres d'un struct on une case memoire / union case mémoire partagée.
 
 > ...
 
 C) À quoi correspond un `std::vector<unsigned char>`?
 
-> ...
+> c'est une liste d'octets vides non négatifs
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
 
-> ...
+> a définir un pointeur de type char sur ma var pFile.
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : avoir une incrémentation en adresse mémoire 
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : c'est un cast de la valeur en Type
 >
-> `*pointeur` : ...
+> `*pointeur` : récupère la valeur stocké par le pointeur
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : on récupère la valeur passé en cast en pointeur (type uint32_t*) de la var pointeur
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
@@ -55,31 +57,31 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : 0x000001a772ab0080
 >
-> `pFile + 1` : ...
+> `pFile + 1` : 0x000001a772ab0081
 >
-> `pPixels` : ...
+> `pPixels` : 0x000001a7728d0120
 >
-> `pPixels + 1` : ...
+> `pPixels + 1` : 0x000001a7728d0124
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
 
-> ...
+> +1 fait un offset sur la prochaine value en mémoire, et tout dépend du nombre byte utilisé
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
 
-> ...
+> indique que le ptr pointe vers un array de x éléments
 
 I)  Prenez connaissance de la spécification du format de fichier BMP.
 
 J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : largeur de la bitmap
 >
-> `v2` : ...
+> `v2` : hauteur bitmap
 >
-> `v3` : ...
+> `v3` : bite/pixl
 
 Renommer ces variables de façon appropriée.
 

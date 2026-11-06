@@ -16,19 +16,19 @@ Vous devez compléter ce fichier au fur et à mesure du cours.
 
 A) Résumez en une phrase le rôle des fichiers suivants :
 
-> `jv.h` : 
+> `jv.h` : est utilisé en tant qu'interface de programmation
 >
-> `jv_win64_impl.h` :
+> `jv_win64_impl.h` : API Interne pour que les fichiers d'implémentation parlent entre eux
 > 
-> `jv_win64_main.cpp` : 
+> `jv_win64_main.cpp` : contient l'implémentation
 >
-> `jv_win64_window.cpp` : 
+> `jv_win64_window.cpp` : contient l'implémentation
 >
-> `jv_win64_renderer.cpp` :
+> `jv_win64_renderer.cpp` :contient l'implémentation
 >
-> `jv_win64_file.cpp` : 
+> `jv_win64_file.cpp` : contient l'implémentation
 >
-> `exo1_pong.cpp` : 
+> `exo1_pong.cpp` : Utilisateur / appelant pour l'exercice 1
 
 B) Remettez les commentaires ci-dessous aux bons endroits,
 dans les fichiers `jv_win64_main.cpp` et `jv_win64_window.cpp`:
@@ -102,33 +102,37 @@ H) La balle est à la position (100, 200). Elle se dirige en diagonale droite-ha
 > ...
 
 I) Modifier le code pour que la balle se déplace, dépendamment de sa vitesse, de sa direction, et du temps écoulé.
+	
+	//done
 
 J) D'après l'image ci-dessous, exprimez les coordonnées suivantes suivant les variables du code C++ :
 
 ![exo1_coords.png](exo1_coords.png)
 
-> `x1 = ...`
+> `x1 = kPlayerSizex`
 >
-> `x2 = ...`
+> `x2 = g_ballPos.x`
 >
-> `x3 = ...`
+> `x3 = g_ballPos.x`
 > 
-> `x4 = ...`
+> `x4 = g_aiPos.x = kArenaSize.x - kAiSize.x`
 >
-> `y1 = ...`
+> `y1 = g_PlayerPos.y`
 >
-> `y2 = ...`
+> `y2 = g_PlayerPos.y + kPlayerSize.y`
 >
-> `y3 = ...`
+> `y3 = g_aiPos.y`
 >
-> `y4 = ...`
+> `y4 = ballPos.y`
 >
-> `y5 = ...`
+> `y5 = ballPos.y + kBallSize.y`
 >
-> `y6 = ...`
+> `y6 = g_aiPos.y + kAiSize.y`
 
 
 K) Implémenter les conditions de détections de collisions.
+	
+	
 
 L) Implémenter les conditions de victoire du joueur et de l'IA.
 
