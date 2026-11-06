@@ -42,36 +42,41 @@ et les exemples dans le code :
 > IV. `Pong`
 > V. `Pong::Pong`
 > 
-> ...
+> a) 2. IV.
+> b) 4. II.
+> c) 5. I.
+> d) 3. III.
+> e) 1. V.
 
 C) Changer le code de `Pong::Draw()` pour modifier `m_color`.
 Pourquoi le compilateur émet une erreur ?
 Pourquoi cette fonctionnalité du C++ est désirable ?
 
-> ...
+> Le compilateur émet une erreur car la méthode est `const`. Cette fonctionnalité du C++ permet la const-correctness, ce qui peut éviter des bugs où une méthode qui n'est
+> pas sensée modifier l'état d'une classe le fasse sans erreur.
 
 D) Appeler la fonction `exo2::DrawRect()` depuis la fonction `Pong::Draw()`.
 Pourquoi le compilateur émet une erreur ?
 Qu'est-ce qu'il manque ?
 
-> ...
+> Le compilateur émet une erreur car `exo2::DrawRect()` est déclaré mais jamais implémenté. Il manque une implémentation dans `exo2_draw.cpp`.
 
 E) Modifier `exo2_draw.cpp` pour que cela fonctionne.
 
-F) Migrer le code de l'exercice 1 `exo1_main.cpp` vers l'exercice 2 dans `exo2_pong.cpp`.
+F) Migrer le code de l'exercice 1 `exo1_pong.cpp` vers l'exercice 2 dans `exo2_pong.cpp`.
 
 G) Découper `Pong::Update()` en trois sous-fonctions :
 `_UpdateAI()`, `_UpdatePlayer()` et `_UpdateBall()`.
 
 H) À quoi servent les modificateurs d'accès `public` et `private` ?
 
-> ...
+> `public` autorise l'accès d'un attribut hors de la classe, `private` le restreint au sein de la classe.
 
 I) Définissez les termes suivants :
 
-> Encapsulation : ...
+> Encapsulation : Définition d'accès des différents membres d'une classe.
 >
-> Invariant d'une classe : ...
+> Invariant d'une classe : Une condition qui devrait toujours être vraie, sinon la classe est considérée comme invalide.
 
 J) Implémentez la fonction `exo2::DrawScore()` dans `exo2_draw.cpp`,
 puis servez-vous en pour afficher le score du joueur et de l'IA.

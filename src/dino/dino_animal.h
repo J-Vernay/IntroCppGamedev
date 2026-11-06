@@ -1,34 +1,41 @@
 ﻿#pragma once
 
 #include <dino/dino_main.h>
+#include <dino/dino_terrain.h>
+#include <dino/dino_entity.h>
 
 namespace dino
 {
 
 // Représente un animal.
-class Animal
+class Animal : public Entity
 {
 public:
     /// Initialise l'animal avec un type au hasard.
-    Animal(Vec2 pos, double absTime);
+    Animal(Vec2 pos, double absTime, jv::gpu::Texture* texture);
     
     /// Déplace l'animal et met à jour son animation.
-    void Update(double absTime, float deltaTime);
+    void Update(double absTime, float deltaTime, Terrain& terrain) override;
 
     /// Affiche l'animal
-    void Draw() const;
+    void Draw() const override;
+
+    int32_t OnCaughtInLoop(float absTime) override;
 
     /// Détruit les ressources associées à l'animal.
     ~Animal();
 
 private:
-    Vec2 m_pos;
+    static constexpr int32_t OnCaughtScore = 10;
     double m_timeStart;
     uint8_t m_alpha = 0;
     Vec2 m_dir;
     int32_t m_kind;
-    int32_t m_idxFrame;
+    int32_t m_idxFrame = 0;
     jv::gpu::Texture* m_pTexture;
+
+protected:
+    void OnOutsideTerrain() override;
 };
 
 } // namespace dino

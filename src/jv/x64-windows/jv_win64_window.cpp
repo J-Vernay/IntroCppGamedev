@@ -1,6 +1,6 @@
 ﻿#include <jv/x64-windows/jv_win64_impl.h>
 
-// COMMENTAIRE
+// Fonction qui implémente de la logique de création de la fenêtre de jeu.
 HWND jv::win64::InitWindow(HINSTANCE hInstance, jv::util::Vec2 windowInitSize)
 {
     WNDCLASSEXA wcx{};
@@ -19,7 +19,7 @@ HWND jv::win64::InitWindow(HINSTANCE hInstance, jv::util::Vec2 windowInitSize)
     int32_t width = windowRect.right - windowRect.left;
     int32_t height = windowRect.bottom - windowRect.top;
 
-    // COMMENTAIRE
+    // Appel au système d'exploitation pour créer la fenêtre de jeu.
     HWND hWindow = CreateWindowExA(0, "IntroCppGamedev", "IntroCppGamedev", WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, width, height, nullptr, nullptr, hInstance, nullptr);
     if (hWindow == nullptr)
@@ -30,7 +30,7 @@ HWND jv::win64::InitWindow(HINSTANCE hInstance, jv::util::Vec2 windowInitSize)
     return hWindow;
 }
 
-// COMMENTAIRE
+// Fonction appelée par le système d'exploitation pour transmettre les événements liés à la fenêtre.
 LRESULT CALLBACK jv::win64::HandleEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (uMsg == WM_DESTROY)

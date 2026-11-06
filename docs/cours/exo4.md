@@ -24,25 +24,25 @@ B) Quelle est la taille du type `jv::util::Color` ?
 Revoir la défintion du type dans `jv/jv.h`.
 En déduire la différence entre les mots-clés `struct` et `union`.
 
-> ...
+> `union` ne stocke qu'une valeur, représentée de manière différente selon les membres qui la compose.
 
 C) À quoi correspond un `std::vector<unsigned char>`?
 
-> ...
+> Une liste de valeurs allant de 0 à 255.
 
 D) À quoi correspond l'astérisque dans la ligne `unsigned char* pFile = file.data()` ?
 
-> ...
+> À un pointeur.
 
 E) Expliquer la syntaxe `uint32_t v1 = *(uint32_t*)(pFile + 0x0012)` ?
 
-> `pFile + 0x0012` : ...
+> `pFile + 0x0012` : l'adresse du pointeur pFile décalée de 0x0012 octets (18 en décimal).
 >
-> `(Type)(valeur)` : ...
+> `(Type)(valeur)` : un cast.
 >
-> `*pointeur` : ...
+> `*pointeur` : la valeur qui est pointée par le pointeur.
 >
-> `*(uint32_t*)(pointeur)` : ...
+> `*(uint32_t*)(pointeur)` : la valeur du cast en pointeur d'entier non signé de pointeur.
 
 Quand le programme est à l'arrêt, passer la souris sur le type `jv::util::Color`,
 puis dans la fenêtre qui apparaît, cliquer sur "Disposition de la mémoire".
@@ -55,31 +55,31 @@ Lancer le programme, jusqu'à qu'il s'interrompe à ce point d'arrêt.
 F) Dans la fenêtre "Espion 1 / Watch 1" en bas, affichez les valeurs numéraires
 des expressions suivantes :
 
-> `pFile` : ...
+> `pFile` : 66
 >
-> `pFile + 1` : ...
+> `pFile + 1` : 77
 >
-> `pPixels` : ...
+> `pPixels` : 4280078464
 >
-> `pPixels + 1` : ...
+> `pPixels + 1` : 4261281277
 
 G) Pourquoi l'addition `+ 1` donne des résultats différents sur `pFile` et `pPixels` ?
 
-> ...
+> Car leurs classes sont de tailles différentes.
 
 H) À quoi correspond la syntaxe `pointeur[nombre]` ?
 
-> ...
+> équivalent à *(pointeur + nombre)
 
 I)  Prenez connaissance de la spécification du format de fichier BMP.
 
-J) Dans le fichier `exo3_image.cpp`, à quoi correspondent les variables :
+J) Dans le fichier `exo4_image.cpp`, à quoi correspondent les variables :
 
-> `v1` : ...
+> `v1` : La largeur de l'image en pixels.
 >
-> `v2` : ...
+> `v2` : La hauteur de l'image en pixels. 
 >
-> `v3` : ...
+> `v3` : Le nombre de bits par pixels.
 
 Renommer ces variables de façon appropriée.
 
