@@ -6,32 +6,32 @@
 #include <winuser.h>
 #include <xinput.h>
 
-// COMMENTAIRE
+// Variable globale.
 HWND g_hWindow;
 
-// COMMENTAIRE
+// Fonction d'entrée du programme, contient le code qui sera appelé par le système d'exploitation Windows quand le programme est lancé.
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
-    // COMMENTAIRE
+    // Appel au système d'exploitation pour créer la fenêtre de jeu.
     g_hWindow = jv::win64::InitWindow(hInst, {640, 480});
     jv::win64::InitRenderer(g_hWindow);
 
-    // COMMENTAIRE
+    // Initialisation du moteur de jeu.
     LARGE_INTEGER tickPeriod, tickStart;
     QueryPerformanceFrequency(&tickPeriod);
     QueryPerformanceCounter(&tickStart);
     double tickFrequency = 1.0 / tickPeriod.QuadPart;
     double lastAbsTime = 0;
 
-    // COMMENTAIRE
+    //Initialisation de la logique de jeu.
     jv::game::Init();
 
-    // COMMENTAIRE
+    // Met à jour la logique de jeu.
     bool bContinue = true;
     while (bContinue)
     {
 
-        // COMMENTAIRE
+        // Boucle principale d'événements, qui traite les messages que le système d'exploitation nous envoit. Tourne en boucle tant que le programme continue.
         MSG msg;
         BOOL fGotMessage;
         while ((fGotMessage = PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE)))
@@ -45,7 +45,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
             }
             else if (msg.hwnd == g_hWindow && msg.message == WM_SIZE)
             {
-                // COMMENTAIRE
+                // L'utilisateur redimensionne la fenêtre, il faut transmettre l'information au rendu.
                 jv::util::Vec2 windowSize(LOWORD(msg.lParam), HIWORD(msg.lParam));
                 OutputDebugStringA("ResizeRenderer\n");
                 jv::win64::ResizeRenderer(windowSize);
@@ -59,33 +59,33 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
         if (!bContinue)
             break;
 
-        // COMMENTAIRE
+        // Initialisation de la mesure du temps.
         LARGE_INTEGER tickNow;
         QueryPerformanceCounter(&tickNow);
         double absTime = (tickNow.QuadPart - tickStart.QuadPart) * tickFrequency;
         float deltaTime = std::min(absTime - lastAbsTime, 0.033);
         lastAbsTime = absTime;
 
-        // COMMENTAIRE
+        // On mesure le temps écoulé.
         jv::game::Update(absTime, deltaTime);
 
-        // COMMENTAIRE
+        // Déclenche l'affichage d'une frame.
         jv::win64::BeginRendererDraw();
         jv::game::Draw();
         jv::win64::EndRendererDraw();
     }
 
-    // COMMENTAIRE
+    // Finalisation de la logique de jeu.
     jv::game::Shut();
 
-    // COMMENTAIRE
+    // Finalisation du moteur de jeu.
     jv::win64::ShutRenderer();
     jv::win64::ShutWindow(g_hWindow);
 
     return EXIT_SUCCESS;
 }
 
-// COMMENTAIRE
+// Fonction qui implémente de la récupération des entrées : manettes, clavier, souris.
 bool jv::input::GetGamepad(GamepadIdx idx, Gamepad& outGamepad) noexcept
 {
     outGamepad = {};
@@ -162,7 +162,7 @@ bool jv::input::GetGamepad(GamepadIdx idx, Gamepad& outGamepad) noexcept
     return true;
 }
 
-// COMMENTAIRE
+// Fonction appelée en cas de bug pour interrompre le programme et afficher un message d'erreur.
 [[noreturn]] void jv::util::Panic(std::string_view errorMessage) noexcept
 {
     std::string msg{errorMessage};

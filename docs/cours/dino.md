@@ -26,7 +26,7 @@ B) Dans la documentation, dans l'onglet "Espace de nommage", cliquer sur "Liste 
 Puis cliquer sur le namespace `dino`. Parcourir la page pour prendre connaissance de ce qui est déjà fourni.
 Quelles classes sont déjà définies et que font-elles ?
 
-> ...
+> Animal / Scene / Terrain : Initialise un animal au hasard / Permet de gerer les scenes / Init le terrain
 
 C) Lancer le programme en configuration "Debug", attendre quelques secondes,
 puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
@@ -34,23 +34,23 @@ puis mettre un point d'arrêt (= breakpoint) à la fin de `jv::game::Draw()`
 regarder "g_rdr". Combien de vertex buffers y a-t-il, et de quels types ?
 Combiend de textures y a-t-il, et de quels types ?
 
-> ...
+> Il y a 31 textures , majoritairement des animaux mais aussi dTime , terrain , etc ... . De type jv::gpu::VertexBuffer
 
 D) Dans `dino_animal.cpp`, que veut dire la syntaxe `dino::Animal::~Animal()` ?
 Mettre un breakpoint dans cette fonction, puis une fois le programme en pause,
 afficher la fenêtre "Pile d'appel / Callstack" en bas.
 Qui appelle cette méthode ? Si besoin, clic-droit > "Show external code"
 
-> ...
+> C'est le destructeur pour l'objet Animal , chaque animal va detruire sa propre texture
 
 E) Dans `dino::Scene::_UpdateAnimals()`, dans la syntaxe `for (Animal& animal : m_animals)`,
 enlever l'esperluette `&`. Quel impact cela a-t-il et pourquoi ?
 
-> ...
+> Au lieu de passer par reference on va cree une copie ce qui va causer des probleme de memoire
 
 F) Comment prévenir cette erreur à la compilation ? Quelle bonne pratique est associée à cela ?
 
-> ...
+> On peut faire un constructeur par copie ou un assignement par copie , la regle de 0/3/5
 
 Remettre l'esperluette.
 
@@ -61,7 +61,7 @@ Le faire.
 
 H) Dans `dino::Animal::Draw()`, à quoi servent les coordonnées `uv` des `jv::gpu::Vertex` ?
 
-> ...
+> il servent a connaitre la ou sont les coins du sprite
 
 I) Faire en sorte que les animaux aient la tête vers la droite quand ils se déplacent vers la droite,
 en mettant leurs sprites en miroir.
@@ -121,34 +121,35 @@ Quand ils atteignent le bord du terrain, ils prennent une nouvelle direction al�
 
 C) Comment détecter si deux cercles à des positions données sont en collision ?
 
-> ...
+> il faut vérifier si la distance entre leurs centres est inférieure à la somme de leurs rayons
 
 D) Comment repousser deux cercles en collision de façon minimale et qu'il ne soient plus en collision ?
 Quel cas particulier n'est pas résoluble ?
 
-> ...
+> il faut calculer la distance et déplacer les cercles le long de la droite reliant leurs centres
+> Si les deux cercle sont exactement au meme endroit
 
 E) Implémenter : "Quand les dinosaures sont en collision (distance < 16 pixels), ils se repoussent."
 
 F) Implémenter : "Les animaux se repoussent entre eux, et aussi les animaux et les dinosaures entre eux."
 Pourquoi y a-t-il duplication de code ?
 
-> ...
+> Car on a la logique de collsion dans chaque classe qui l'utilise
 
 G) Quelle fonctionnalité du C++ permet de dédupliquer la logique commune entre `dino::Player` et `dino::Animal` ?
 L'appliquer dans la base de code.
 
-> ...
+> L'Heritage
 
 H) Quelle fonctionnalité du C++ permet de gérer différemment un point de logique commune,
 comme la réaction à un événement du type "limite du terrain" ? L'appliquer dans la base de code.
 
-> ...
+> la surchage
 
 I) Quelles méthodes de classes pourraient être mises en commune suivant le même principe ?
 L'appliquer dans la base de code.
 
-> ...
+> Draw()
 
 J) Implémenter : "Les dinosaures et les animaux sont affichés les uns derrière les autres, suivant leur position verticale."
 Cela implique de trier un tableau qui peut contenir à la fois des DinoPlayer et des DinoAnimal. Comment faire ?

@@ -22,25 +22,25 @@ Vous devriez avoir la console qui apparaît avec diverses informations pour plus
 B) Quelle est la particularité de la fonction `TestContainer` ?
 Que déclare le code `template <int N> struct Struct` ?
 
-> ...
+> Template declare un modele de structure
 
 C) Quelle méthode `TestContainer` teste sur chaque conteneur étudié ?
 
-> ...
+> testContainer test la fonction Resize
 
 D) Que signifie la syntaxe `&v` ?
 
-> ...
+> C'est l'adresse de v
 
 E) Analyser la sortie `=== vector-char ===` (première section).
 À chaque fois, soustrayez l'adresse de la dernière valeur par l'adresse de la première valeur.
 Quel motif observez-vous ?
 
-> ...
+> sa passe de 1 a 99 puis 999 puis 9999
 
 F) Retrouvez-vous ce motif avec `deque<char>`, `list<char>`, `string` ?
 
-> ...
+> 
 
 G) Retrouvez-vous ce motif avec `vector<Struct<4096>>` ? Quelle différence ?
 
