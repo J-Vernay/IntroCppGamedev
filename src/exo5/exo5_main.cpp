@@ -40,6 +40,7 @@ std::string GetUserDocumentsFolder()
 #else
     std::string path = getenv("XDG_DOCUMENTS_DIR");
 #endif
+
     for (char& c : path)
         if (c == '\\')
             c = '/';
